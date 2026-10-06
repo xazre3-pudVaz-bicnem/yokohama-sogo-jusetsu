@@ -1,0 +1,110 @@
+name: コラムの自動投稿
+
+# 1日1本、コラムを書いて content/blog/ に追加し、main へ push する（push を受けて Vercel が本番を更新する）。
+# 題材は lib/blog-generator/topics.ts から順に選ぶ。機械の検査と読み直しの両方に通った日だけ公開する。
+# くわしい説明は README の「コラムの自動投稿」。
+on:
+  schedule:
+    # 毎日 9:20（日本時間）。GitHub の cron は UTC。混み合う毎時 0 分は避けている
+    - cron: "20 0 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "試し書き（生成と検査だけ行い、保存・公開しない）"
+        type: boolean
+        default: false
+      topic:
+        description: "題材の slug（空欄なら自動で選ぶ）"
+        type: string
+        required: false
+      model:
+        description: "書くモデル（空欄なら既定）"
+        type: string
+        required: false
+      review_model:
+        description: "読み直すモデル（空欄なら既定）"
+        type: string
+        required: false
+
+permissions:
+  contents: write
+
+# 同時に2つ走らせない（同じ日に2本書くのを防ぐ）
+concurrency:
+  group: daily-blog
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # API キーを登録するまでは、失敗にせず、何もしないで終わる
+      - name: API キーの確認
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY が登録されていないため、何もせずに終わります（README の「コラムの自動投稿」を参照）。" >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.key.outputs.ready == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.key.outputs.ready == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 依存パッケージの導入
+        if: steps.key.outputs.ready == 'true'
+        run: npm ci
+
+      - name: 検査の仕組みを確かめる（API は呼ばない）
+        if: steps.key.outputs.ready == 'true'
+        run: npm run blog:selftest
+
+      - name: 記事を書く
+        id: generate
+        if: steps.key.outputs.ready == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ inputs.model || vars.ANTHROPIC_MODEL }}
+          ANTHROPIC_REVIEW_MODEL: ${{ inputs.review_model || vars.ANTHROPIC_REVIEW_MODEL }}
+          ANTHROPIC_FALLBACKS: ${{ vars.ANTHROPIC_FALLBACKS }}
+          TOPIC: ${{ inputs.topic }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+        run: npm run blog:generate
+
+      # ここから下は、記事を保存したときだけ。1つでも通らなければ push しない（本番は前の状態のまま）
+      - name: 公開済みの記事をすべて点検する
+        if: steps.generate.outputs.published == 'true'
+        run: npm run blog:audit
+
+      - name: サイトをビルドして、全ページを検査する
+        if: steps.generate.outputs.published == 'true'
+        run: |
+          npm run build
+          npm run site:check
+
+      - name: コミットして push する
+        if: steps.generate.outputs.published == 'true'
+        env:
+          # 記事の題名はモデルが書いた文字列なので、コマンドに直接埋め込まず、環境変数で渡す
+          TITLE: ${{ steps.generate.outputs.title }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/blog
+          if git diff --cached --quiet; then
+            echo "追加する記事はありません"
+            exit 0
+          fi
+          git commit -m "コラムを追加：${TITLE}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

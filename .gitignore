@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+npm-debug.log*
+/_shots/
+/.lighthouse/
+
+# 元画像（担当者の連絡先が載ったチラシを含むため、リポジトリに入れない）
+/assets/

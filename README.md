@@ -1,0 +1,221 @@
+# 株式会社 横浜総合住設 公式サイト
+
+横浜市戸塚区を中心に住宅設備・リフォームを行う「株式会社 横浜総合住設（愛称：ヨコジュウ）」の公式サイトです。
+会社案内に加えて、サービス別ページ・施工事例・対応エリア・コラム（1日1本の自動投稿）を持ち、
+今後つくる専門サイト（給湯器・外壁塗装・太陽光など）の親サイトになる前提で組んであります。
+
+- Next.js 16（App Router）／TypeScript／Tailwind CSS v4
+- 全ページを静的に書き出します（お問い合わせの送信だけがサーバー側の処理）
+- GitHub に push すると Vercel が公開します
+
+**公開の前に、[docs/TODO.md](docs/TODO.md) の「未確認の情報」を必ず確認してください。**
+
+---
+
+## はじめかた
+
+```bash
+npm ci
+npm run dev        # http://localhost:3000
+npm run build      # 本番用のビルド
+npm run start      # ビルドしたものを手元で確認
+```
+
+Node.js は 20.9 以上。
+
+## 検査のコマンド
+
+| コマンド | 内容 |
+| --- | --- |
+| `npm run typecheck` | 型の検査 |
+| `npm run lint` | ESLint |
+| `npm run build && npm run site:check` | 全ページの title・description・h1・リンク切れ・alt・JSON-LD・noindex / canonical |
+| `npm run blog:audit` | 公開済みのコラムを、自動投稿と同じ基準で点検 |
+| `npm run blog:selftest` | コラムの検査の仕組みが正しく働いているか（API は呼ばない） |
+| `npx tsx scripts/phrase-check.ts` | 見出しの折り返し位置（文節の区切り）が、語の途中になっていないか |
+
+文章やデータを直したら、`build` と `site:check` を通してから push してください。
+
+---
+
+## 公開までの手順
+
+1. [docs/TODO.md](docs/TODO.md) の項目を会社に確認し、`lib/site.ts` などに反映する
+2. GitHub にリポジトリを作って push し、Vercel に接続する
+3. 本番ドメインが決まったら、`lib/site.ts` の `productionUrl` に書く（例：`https://www.example.jp`）
+4. Vercel に環境変数を登録する（下の表）
+5. GitHub に `ANTHROPIC_API_KEY` を登録する（コラムの自動投稿を使う場合）
+6. 公開後、Google Search Console に sitemap（`/sitemap.xml`）を登録する
+
+### 公開前のサイトが検索に載らない仕組み
+
+`productionUrl`（または環境変数 `NEXT_PUBLIC_SITE_URL`）が空のあいだは、
+
+- 全ページに `noindex` が付く
+- `canonical`・OGP の URL・`sitemap.xml` の中身を出さない
+- `robots.txt` は `Disallow: /`
+
+になります。プレビューの URL（`*.vercel.app`）には、設定に関係なく常に `X-Robots-Tag: noindex` が付きます。
+本番ドメインを設定した時点で、はじめて検索エンジンに公開されます。
+
+## 環境変数
+
+`.env.example` に一覧があります。手元では `.env.local` に、本番は Vercel の Environment Variables に登録します。
+
+| 変数 | 置き場所 | 内容 |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Vercel（任意） | 本番 URL。`lib/site.ts` の `productionUrl` を書いてあれば不要 |
+| `RESEND_API_KEY` | Vercel | お問い合わせメールの送信（[Resend](https://resend.com/)） |
+| `CONTACT_TO_EMAIL` | Vercel | お問い合わせを受け取るアドレス（カンマ区切りで複数可） |
+| `CONTACT_FROM_EMAIL` | Vercel | 差出人。Resend で認証したドメインのアドレス |
+| `CONTACT_AUTOREPLY` | Vercel（任意） | `1` でお客様にも受付の控えを送る |
+| `ANTHROPIC_API_KEY` | GitHub の Secrets | コラムの自動投稿 |
+| `ANTHROPIC_MODEL` / `ANTHROPIC_REVIEW_MODEL` | GitHub の Variables（任意） | 書くモデル／読み直すモデル |
+| `ANTHROPIC_FALLBACKS` | GitHub の Variables（任意） | `off` で代替モデルへの切り替えを止める |
+| `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` | Vercel（任意） | 検索エンジンの所有確認 |
+
+`RESEND_API_KEY` と `CONTACT_TO_EMAIL` がそろうまで、本番の `/contact` はフォームを出さず、電話と Instagram の案内だけを出します
+（送れないフォームを公開しないため）。
+
+---
+
+## 情報の置き場所
+
+ページやコンポーネントに、電話番号・住所・サービス名を直接書かないでください。すべて下のファイルから出しています。
+
+| 内容 | ファイル |
+| --- | --- |
+| 会社名・電話番号・住所・受付時間・SNS・本番 URL | `lib/site.ts` |
+| サービス（13件）の内容 | `data/services/*.ts`（一覧と分類は `index.ts`） |
+| 施工事例 | `data/works.ts` |
+| 対応エリア（戸塚区・横浜市） | `data/areas.ts` |
+| 補助金・支援制度（出典と確認日つき） | `data/subsidies.ts` |
+| よくある質問 | `data/faq.ts` |
+| 特徴・工事の流れ・Instagram の投稿・写真のクレジット | `data/company.ts` |
+| メニュー | `lib/nav.ts` |
+| コラムのカテゴリ（19の SEO クラスタ） | `lib/blog-clusters.ts` |
+| コラムの題材 | `lib/blog-generator/topics.ts` |
+| コラムに書いてよい事実 | `docs/VERIFIED_FACTS.md` |
+| コラムの本文 | `content/blog/*.md` |
+
+### よくある作業
+
+**電話番号を変える** … `lib/site.ts` の `contact.companyPhone` を書き換えるだけで、ヘッダー・フッター・各ページのボタン・
+スマホの固定ボタン・構造化データのすべてに反映されます。携帯番号も併記するなら `showMobile` を `true` にします。
+
+**受付時間を確定する** … `contact.hours` / `hoursDays` を直し、`hoursConfirmed` を `true` にすると、構造化データ（営業時間）にも出ます。
+
+**会社概要を足す** … `lib/site.ts` の `company`（代表者・設立・資本金など）と `trust`（許認可・資格・保証・保険・取扱メーカー）に
+値を入れると、会社案内ページと構造化データに表示されます。`null` の項目は画面に出ません。**推測で埋めないでください。**
+
+**施工事例を足す** … 写真を `assets/` に置いて `scripts/prepare-images.mjs` の表に足し、`npm run images:prepare` を実行。
+`data/works.ts` に1件足します。施工地域（`area`）・時期・期間・使用機器は、分かったものだけ入れてください（空の項目は表示されません）。
+`area.areaSlug` に `totsuka` などを入れると、その地域ページにも事例が出ます。
+
+**対応エリアのページを足す**（泉区・栄区・港南区など） … `data/areas.ts` に1件足すと、ページ・メニュー・sitemap に反映されます。
+地域名だけを差し替えたページは作らないでください。その区の地形・住宅の特徴・制度・施工事例など、**そこにしか当てはまらない内容**が
+書けるようになってから追加します（`data/areas.ts` の冒頭に基準を書いてあります）。
+
+**専門サイトへのリンクを出す** … `data/services/<サービス>.ts` の `specialtySite` に `{ name, url, note }` を入れると、
+そのサービスページに「専門サイトを見る」の案内が出ます。親サイト側の文章は残したまま、専門サイトには別の内容を書いてください
+（同じ文章を両方に置かない）。
+
+**補助金の内容を更新する** … `data/subsidies.ts` と `docs/VERIFIED_FACTS.md` の**両方**を、公式ページを開き直してから書き換え、
+確認日（`checkedAt`／`確認日:`）も更新します。金額・期限・受付状況は年度の途中でも変わります。
+
+**写真を差し替える** … 元の画像は `assets/` に置き、`npm run images:prepare` で `public/images/` と
+`data/images.generated.json` を作り直します。`assets/` は Git に入れていません（担当者の連絡先が載ったチラシを含むため）。
+手元にしか無いので、別に保管しておいてください。
+
+---
+
+## コラムの自動投稿
+
+毎日 9:20（日本時間）に GitHub Actions（`.github/workflows/daily-blog.yml`）が動き、コラムを1本書いて `content/blog/` に追加し、
+`main` へ push します。push を受けて Vercel が本番を更新します。
+
+Vercel の Cron ではなく GitHub Actions を使っているのは、記事をリポジトリのファイルとして残すためです
+（Vercel の関数からはリポジトリに書き込めません）。
+
+### 仕組み
+
+1. **題材を選ぶ** … `lib/blog-generator/topics.ts` から、記事の少ないカテゴリを優先して1つ選びます。ランダムではありません。
+   1題材＝1つの検索意図で、すでにある記事と slug・検索意図が重なるものは選びません。
+2. **書く** … Claude に、題材と事実シート（`docs/VERIFIED_FACTS.md`）を渡して書かせます。
+3. **機械の検査**（`lib/blog-generator/validate.ts`）
+   - 「徹底解説」「いかがでしたか」などの決まり文句、「重要です」「おすすめです」の使いすぎ
+   - 「地域No.1」・施工件数・満足度・創業年・保証年数・資格・費用の相場など、根拠を示せない表現
+   - **数値の突き合わせ** … 記事の中の「数字＋単位」が、その題材で使ってよい事実シートの節に無ければ不合格
+   - リンク先が実在するか、親ページ（サービス・地域ページ）へのリンクがあるか
+   - 既存の記事と、題名・検索意図・本文が重なっていないか
+4. **読み直し** … 別の呼び出しで、原稿を1文ずつ事実シートと照らし合わせます。
+5. 3 と 4 の両方に通ったときだけ保存します。通らなければ指摘を渡して書き直させ（最大4回）、それでも通らなければ**その日は公開しません**。
+
+「毎日かならず公開する」より「基準を満たした日だけ公開する」を優先しています。公開しなかった日は、
+GitHub Actions の実行結果に理由と試行の記録が残ります。
+
+### はじめる
+
+GitHub のリポジトリ → Settings → Secrets and variables → Actions → **Secrets** に `ANTHROPIC_API_KEY` を登録します。
+登録するまでは、ワークフローは何もせずに終わります。止めたいときは、Actions の画面でワークフローを無効にします。
+
+記事を保存したあと、全記事の点検・サイトのビルド・全ページの検査を行い、すべて通ったときだけ push します。
+途中で1つでも通らなければ push せず、本番は前の状態のままです。
+
+### 手動で試す
+
+```bash
+npm run blog:selftest                 # 検査の仕組みの確認（API なし）
+npm run blog:dry-run                  # 書いて検査するが、保存しない（API を使う）
+TOPIC=ecocute-how-it-works npm run blog:generate   # 題材を指定して書く
+```
+
+GitHub の Actions 画面から「Run workflow」で、`dry_run`（試し書き）・題材・モデルを指定して実行することもできます。
+
+### モデルと費用
+
+- 書くモデル・読み直すモデルとも、既定は `claude-opus-5-5` です。費用を抑えるなら、書くモデルを
+  `claude-sonnet-5-5` にできます（GitHub の Variables に `ANTHROPIC_MODEL` を登録）。読み直しは事実確認の要なので、Opus のままを勧めます。
+- 費用の目安は、毎回の実行結果に表示されます（`lib/blog-generator/generate.ts` の料金表から計算。料金が変わったら表を直してください）。
+- モデルが安全上の理由で応答を断った場合に備えて、代替モデルへ自動で切り替える機能（fallbacks）を有効にしています。
+  切り替わったときは実行結果に記録されます。使いたくない場合は `ANTHROPIC_FALLBACKS=off` にしてください。
+
+### 題材と事実を足す
+
+- **題材** … `topics.ts` に足します。数値や制度に触れる題材は、先に `docs/VERIFIED_FACTS.md` に**出典と確認日つき**で事実を書き、
+  題材の `facts` にその節の名前を入れます。足したら `npm run blog:selftest` を実行してください。
+- **事実シート** … ここに無い数値は、記事に書けません。補助金のように変わる情報は、節ごとの「確認日」を更新しながら使います。
+- 残りの題材は `npm run blog:selftest` の最後に表示されます。無くなると、その日は「書く題材がありません」で終わります。
+
+### 公開された記事は、人の目でも読んでください
+
+機械の検査と読み直しは、明らかな誤りと決まり文句を止めるためのものです。内容の正しさを保証するものではありません。
+とくに補助金・制度に触れた記事は、公開後に一度読むことを勧めます。直すときは `content/blog/<slug>.md` を編集して push します。
+
+---
+
+## SEO の設計
+
+- **ページの役割分担** … トップ（会社名＋戸塚区の総合）／サービスページ（工事名×戸塚区）／地域ページ（地域の事情）／
+  施工事例（実績）／コラム（1記事1疑問）。同じ検索語を複数のページで取り合わないようにしています。
+- **内部リンク** … コラム → 親のサービス・地域ページ → お問い合わせ、の流れを全記事で守ります（検査で確認）。
+- **構造化データ** … Organization（本社）・HomeAndConstructionBusiness（戸塚オフィス）・WebSite・BreadcrumbList・Service・
+  BlogPosting・ItemList。FAQPage は、**そのページに表示している質問だけ**を出します。
+- **会社名・住所・電話番号（NAP）** … `lib/site.ts` の1か所から出すので、全ページで同じ表記になります。
+  Google ビジネスプロフィールの表記も、これに合わせてください。
+- コラムのカテゴリページは、記事が3本に満たないうちは `noindex` です（内容の薄い一覧を検索に出さないため）。
+
+## デザインの決まり
+
+- 色は濃紺・白・ブルー・シルバー。サービスごとのアクセント色（赤・緑・橙など）は、アイコンと細い帯だけに使います。
+- ロゴの平行四辺形の傾き（24度）を、小見出しの印・タグ・写真の切り口に繰り返し使っています。
+- 見出しは、文節の途中で折り返さないようにしています（`components/ui/Phrase.tsx`。サーバー側で区切るので、ブラウザに JS は増えません）。
+- 写真は `next/image`。各ページで最初に大きく見える1枚だけを先読みします。
+
+## 注意
+
+- `npm audit` に出る指摘は、ESLint の設定と Markdown の読み込み（ビルド時だけ使う部品）のものです。
+  勧められる「修正」は大きく古い版への入れ替えなので、実行しないでください。
+- 地域のページで使っている航空写真・夜景は、出典の表示が条件のライセンスです（`data/company.ts` の `photoCredits`。
+  会社案内ページの下部に表示しています）。表示を消さないでください。
+- サービス紹介のイメージ写真は生成画像です。実際の施工写真が増えたら、順に差し替えていくことを勧めます。

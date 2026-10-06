@@ -1,0 +1,477 @@
+{
+  "area/totsuka-aerial": {
+    "src": "/images/area/totsuka-aerial.webp",
+    "width": 2000,
+    "height": 1333
+  },
+  "area/yokohama-minatomirai": {
+    "src": "/images/area/yokohama-minatomirai.webp",
+    "width": 2000,
+    "height": 1047
+  },
+  "brand/logo-mark": {
+    "src": "/images/brand/logo-mark.png",
+    "width": 281,
+    "height": 240
+  },
+  "brand/logo-mark-dark": {
+    "src": "/images/brand/logo-mark-dark.png",
+    "width": 290,
+    "height": 240
+  },
+  "brand/logo-square": {
+    "src": "/images/brand/logo-square.png",
+    "width": 600,
+    "height": 600
+  },
+  "company/nameplate": {
+    "src": "/images/company/nameplate.webp",
+    "width": 820,
+    "height": 200
+  },
+  "company/stickers": {
+    "src": "/images/company/stickers.webp",
+    "width": 600,
+    "height": 450
+  },
+  "illust/people-couple-clipboard": {
+    "src": "/images/illust/people-couple-clipboard.webp",
+    "width": 720,
+    "height": 519
+  },
+  "illust/people-couple-happy": {
+    "src": "/images/illust/people-couple-happy.webp",
+    "width": 720,
+    "height": 514
+  },
+  "illust/people-couple-talk": {
+    "src": "/images/illust/people-couple-talk.webp",
+    "width": 720,
+    "height": 526
+  },
+  "illust/people-couple-think": {
+    "src": "/images/illust/people-couple-think.webp",
+    "width": 720,
+    "height": 557
+  },
+  "illust/people-family": {
+    "src": "/images/illust/people-family.webp",
+    "width": 720,
+    "height": 542
+  },
+  "illust/people-family-2": {
+    "src": "/images/illust/people-family-2.webp",
+    "width": 720,
+    "height": 554
+  },
+  "illust/people-staff-ok": {
+    "src": "/images/illust/people-staff-ok.webp",
+    "width": 720,
+    "height": 796
+  },
+  "illust/people-staff-point": {
+    "src": "/images/illust/people-staff-point.webp",
+    "width": 720,
+    "height": 682
+  },
+  "illust/people-staff-point-2": {
+    "src": "/images/illust/people-staff-point-2.webp",
+    "width": 720,
+    "height": 670
+  },
+  "illust/people-staff-point-3": {
+    "src": "/images/illust/people-staff-point-3.webp",
+    "width": 720,
+    "height": 587
+  },
+  "illust/people-staff-woman": {
+    "src": "/images/illust/people-staff-woman.webp",
+    "width": 720,
+    "height": 687
+  },
+  "illust/people-woman-think": {
+    "src": "/images/illust/people-woman-think.webp",
+    "width": 586,
+    "height": 853
+  },
+  "illust/pose-calc": {
+    "src": "/images/illust/pose-calc.webp",
+    "width": 289,
+    "height": 375
+  },
+  "illust/pose-chart": {
+    "src": "/images/illust/pose-chart.webp",
+    "width": 321,
+    "height": 379
+  },
+  "illust/pose-fist": {
+    "src": "/images/illust/pose-fist.webp",
+    "width": 290,
+    "height": 366
+  },
+  "illust/pose-idea": {
+    "src": "/images/illust/pose-idea.webp",
+    "width": 294,
+    "height": 398
+  },
+  "illust/pose-laptop": {
+    "src": "/images/illust/pose-laptop.webp",
+    "width": 348,
+    "height": 359
+  },
+  "illust/pose-ok": {
+    "src": "/images/illust/pose-ok.webp",
+    "width": 300,
+    "height": 375
+  },
+  "illust/pose-phone": {
+    "src": "/images/illust/pose-phone.webp",
+    "width": 297,
+    "height": 375
+  },
+  "illust/pose-think": {
+    "src": "/images/illust/pose-think.webp",
+    "width": 266,
+    "height": 371
+  },
+  "illust/pose-trust": {
+    "src": "/images/illust/pose-trust.webp",
+    "width": 269,
+    "height": 384
+  },
+  "instagram/banner-yokoju": {
+    "src": "/images/instagram/banner-yokoju.webp",
+    "width": 1536,
+    "height": 1024
+  },
+  "photos/demolition-cleared": {
+    "src": "/images/photos/demolition-cleared.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/demolition-excavator": {
+    "src": "/images/photos/demolition-excavator.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/demolition-site": {
+    "src": "/images/photos/demolition-site.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/ecocute-garden": {
+    "src": "/images/photos/ecocute-garden.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/ecocute-side": {
+    "src": "/images/photos/ecocute-side.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/ecocute-wall": {
+    "src": "/images/photos/ecocute-wall.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/garden-approach": {
+    "src": "/images/photos/garden-approach.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/garden-deck-terrace": {
+    "src": "/images/photos/garden-deck-terrace.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/garden-entrance-stone": {
+    "src": "/images/photos/garden-entrance-stone.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/gas-water-heater-side": {
+    "src": "/images/photos/gas-water-heater-side.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/gas-water-heater-wall": {
+    "src": "/images/photos/gas-water-heater-wall.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/hero-hillside-house": {
+    "src": "/images/photos/hero-hillside-house.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/house-dark-gray": {
+    "src": "/images/photos/house-dark-gray.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/house-modern-front": {
+    "src": "/images/photos/house-modern-front.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/house-solar-bayview": {
+    "src": "/images/photos/house-solar-bayview.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/house-solar-hill": {
+    "src": "/images/photos/house-solar-hill.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/house-white-gray": {
+    "src": "/images/photos/house-white-gray.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/kitchen-garden-view": {
+    "src": "/images/photos/kitchen-garden-view.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/kitchen-open": {
+    "src": "/images/photos/kitchen-open.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/kitchen-stove-hood": {
+    "src": "/images/photos/kitchen-stove-hood.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/living-aircon": {
+    "src": "/images/photos/living-aircon.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/living-aircon-garden": {
+    "src": "/images/photos/living-aircon-garden.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/old-unit-and-tank": {
+    "src": "/images/photos/old-unit-and-tank.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/painting-masking": {
+    "src": "/images/photos/painting-masking.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/painting-roof-gutter": {
+    "src": "/images/photos/painting-roof-gutter.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/painting-scaffold": {
+    "src": "/images/photos/painting-scaffold.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/reform-bathroom": {
+    "src": "/images/photos/reform-bathroom.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/reform-kitchen-wood": {
+    "src": "/images/photos/reform-kitchen-wood.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/reform-ldk": {
+    "src": "/images/photos/reform-ldk.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/toilet-counter": {
+    "src": "/images/photos/toilet-counter.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/toilet-luxury": {
+    "src": "/images/photos/toilet-luxury.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "photos/toilet-wood": {
+    "src": "/images/photos/toilet-wood.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "works/aircon-a-after-indoor": {
+    "src": "/images/works/aircon-a-after-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-a-after-outdoor": {
+    "src": "/images/works/aircon-a-after-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-a-before-indoor": {
+    "src": "/images/works/aircon-a-before-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-a-before-outdoor": {
+    "src": "/images/works/aircon-a-before-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-b-after-indoor": {
+    "src": "/images/works/aircon-b-after-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-b-after-outdoor": {
+    "src": "/images/works/aircon-b-after-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-b-before-indoor": {
+    "src": "/images/works/aircon-b-before-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-b-before-outdoor": {
+    "src": "/images/works/aircon-b-before-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-cover-after-indoor": {
+    "src": "/images/works/aircon-cover-after-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-cover-after-outdoor": {
+    "src": "/images/works/aircon-cover-after-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-cover-before-indoor": {
+    "src": "/images/works/aircon-cover-before-indoor.webp",
+    "width": 1104,
+    "height": 832
+  },
+  "works/aircon-cover-before-outdoor": {
+    "src": "/images/works/aircon-cover-before-outdoor.webp",
+    "width": 1104,
+    "height": 1472
+  },
+  "works/aircon-high-place": {
+    "src": "/images/works/aircon-high-place.webp",
+    "width": 1211,
+    "height": 1600
+  },
+  "works/bath-dryer-after-remote": {
+    "src": "/images/works/bath-dryer-after-remote.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/bath-dryer-after-room": {
+    "src": "/images/works/bath-dryer-after-room.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/bath-dryer-after-unit": {
+    "src": "/images/works/bath-dryer-after-unit.webp",
+    "width": 1108,
+    "height": 831
+  },
+  "works/bath-dryer-before-remote": {
+    "src": "/images/works/bath-dryer-before-remote.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/bath-dryer-before-unit": {
+    "src": "/images/works/bath-dryer-before-unit.webp",
+    "width": 1108,
+    "height": 831
+  },
+  "works/bath-dryer-working": {
+    "src": "/images/works/bath-dryer-working.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/cupboard": {
+    "src": "/images/works/cupboard.webp",
+    "width": 1200,
+    "height": 1600
+  },
+  "works/floor-protection": {
+    "src": "/images/works/floor-protection.webp",
+    "width": 1200,
+    "height": 1600
+  },
+  "works/lagging-1": {
+    "src": "/images/works/lagging-1.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/lagging-2": {
+    "src": "/images/works/lagging-2.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/lagging-3": {
+    "src": "/images/works/lagging-3.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/lagging-4": {
+    "src": "/images/works/lagging-4.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/lagging-5": {
+    "src": "/images/works/lagging-5.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/painting-gable-after": {
+    "src": "/images/works/painting-gable-after.webp",
+    "width": 350,
+    "height": 330
+  },
+  "works/painting-process": {
+    "src": "/images/works/painting-process.webp",
+    "width": 1280,
+    "height": 1600
+  },
+  "works/painting-process-card": {
+    "src": "/images/works/painting-process-card.webp",
+    "width": 1128,
+    "height": 846
+  },
+  "works/painting-roof-after": {
+    "src": "/images/works/painting-roof-after.webp",
+    "width": 332,
+    "height": 336
+  },
+  "works/wood-deck-1-ground": {
+    "src": "/images/works/wood-deck-1-ground.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/wood-deck-2-sheet": {
+    "src": "/images/works/wood-deck-2-sheet.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/wood-deck-3-done": {
+    "src": "/images/works/wood-deck-3-done.webp",
+    "width": 1107,
+    "height": 830
+  },
+  "works/wood-deck-4-top": {
+    "src": "/images/works/wood-deck-4-top.webp",
+    "width": 1107,
+    "height": 830
+  }
+}
