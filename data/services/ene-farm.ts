@@ -11,13 +11,11 @@ export const eneFarm: Service = {
   category: "equipment",
   name: "エネファームからの交換",
   shortName: "エネファームからの交換",
-  icon: "swap",
-  accent: "heat",
   image: "photos/old-unit-and-tank",
   imageAlt: "住宅の横に並ぶ、年数のたった屋外設置の機器と新しい給湯タンク",
   subImage: "photos/gas-water-heater-side",
   subImageAlt: "住宅の外壁に新しく取り付けた壁掛けのガス給湯器と配管",
-  catch: "撤去から新しい給湯器の設置まで、ワンストップで。",
+  catch: "エネファームの撤去と、新しい給湯器への取り替え",
   summary:
     "エネファームの撤去と、新しい給湯器への取り替えを一括で行います。ガス・電気・配管の切り替えまでまとめて対応し、床暖房や浴室乾燥機を使い続けるための機種選びもご相談いただけます。",
   seo: {
@@ -27,7 +25,7 @@ export const eneFarm: Service = {
     keywords: ["エネファーム 交換", "エネファーム 撤去", "エネファーム 給湯器 交換", "横浜 エネファーム 撤去", "戸塚区 エネファーム"],
   },
   h1: "エネファームから給湯器への交換・撤去",
-  lead: "エネファームは、発電ユニットと貯湯ユニットが組み合わさった大きな設備です。調子が悪くなったとき、「同じものに入れ替える」以外の選択肢が見えにくく、撤去まで引き受ける業者も多くありません。横浜総合住設は、エネファームの取り替えを得意としています。撤去から新しい給湯器の設置まで、ひとつの窓口でお引き受けします。",
+  lead: "エネファームの撤去と、新しい給湯器への取り替えをまとめてお引き受けしています。取り替え先は、ガス給湯器、ハイブリッド給湯器、エコキュートから選べます。床暖房や浴室乾燥機を使い続けたい場合は、対応する機種に絞ってご提案します。",
   worries: [
     "エネファームの調子が悪くなってきた",
     "修理費用が高く、もう交換を考えている",
@@ -61,7 +59,7 @@ export const eneFarm: Service = {
   guides: [
     {
       id: "after",
-      heading: "エネファームの後に選べる3つの給湯器",
+      heading: "エネファームの後に選べる給湯器",
       intro: "「撤去した後、何にするか」で工事の内容が変わります。それぞれの向き・不向きを、いまの設備の使い方と照らして決めていきます。",
       items: [
         {
@@ -80,7 +78,7 @@ export const eneFarm: Service = {
     },
     {
       id: "life",
-      heading: "エネファームは、いつまで使えるのか",
+      heading: "エネファームの使用期間",
       intro:
         "エネファームは、発電を続けるために定期的な点検が必要な設備です。使える年数はメーカーと機種で違うため、取扱説明書か、点検の案内で確かめるのが確実です。公開されている情報では、次のように説明されています。",
       items: [
@@ -131,8 +129,8 @@ export const eneFarm: Service = {
       { title: "搬出の条件", body: "通路の幅、段差、隣地との距離。人手や養生が増える現場では、その分が費用に反映されます。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-ok",
+  note: {
+    label: "機種を選ぶ前に確認すること",
     text: "「床暖房を残せるか」が、機種選びのいちばんの分かれ目です。いまリモコンで使っている暖房の機能を、そのまま教えてください。",
   },
   local: {
@@ -163,6 +161,17 @@ export const eneFarm: Service = {
       q: "取り替えに補助金は使えますか？",
       a: "取り替え後の機種が、国や自治体の制度の対象になる場合があります。制度は年度ごとに内容が変わるため、お見積もりの時点で使えるものをお調べしてご案内します。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "life", variant: "columns" },
+    { type: "guide", id: "after", variant: "rows" },
+    { type: "menu", heading: "エネファームの撤去・交換の対応工事", variant: "photo" },
+    { type: "guide", id: "check", variant: "columns" },
+    { type: "signs", heading: "エネファームの交換を考えるとき" },
+    { type: "note" },
+    { type: "cost" },
+    { type: "subsidy" },
+    { type: "local" },
   ],
   related: ["water-heater", "eco-one", "storage-battery", "other"],
   blogClusters: ["ene-farm", "water-heater", "eco-one"],

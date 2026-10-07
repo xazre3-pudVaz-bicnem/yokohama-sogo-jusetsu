@@ -1,4 +1,3 @@
-import { Icon } from "@/components/ui/Icon";
 import { Phrase } from "@/components/ui/Phrase";
 
 /**
@@ -11,22 +10,24 @@ export function FaqList({ faqs, openFirst = false }: { faqs: { q: string; a: str
     <div className="rows">
       {faqs.map((f, i) => (
         <details key={f.q} className="group" open={openFirst && i === 0}>
-          <summary className="flex items-start gap-3 py-5 pr-1 sm:gap-4">
-            <span className="num mt-0.5 grid size-7 shrink-0 place-items-center rounded-sm bg-navy-900 text-sm font-semibold text-white" aria-hidden="true">
+          <summary className="flex items-start gap-3.5 py-5 sm:gap-5">
+            <span className="num w-4 shrink-0 text-base font-semibold leading-[1.9] text-ink-mute" aria-hidden="true">
               Q
             </span>
-            <h3 className="flex-1 text-[1.0313rem] font-bold leading-relaxed text-ink">
+            <h3 className="flex-1 text-base font-bold leading-[1.8] text-ink">
               <Phrase>{f.q}</Phrase>
             </h3>
-            <span className="mt-1 grid size-6 shrink-0 place-items-center rounded-full border border-silver-300 text-brand-700 transition-transform duration-300 group-open:rotate-45">
-              <Icon name="plus" className="size-3.5" />
+            {/* 開閉の印（＋ → −） */}
+            <span className="relative mt-[0.55rem] size-3.5 shrink-0 text-navy-900" aria-hidden="true">
+              <span className="absolute left-0 top-1/2 h-px w-full bg-current" />
+              <span className="absolute left-1/2 top-0 h-full w-px bg-current transition-transform duration-300 group-open:scale-y-0" />
             </span>
           </summary>
-          <div className="flex items-start gap-3 pb-6 pr-1 sm:gap-4">
-            <span className="num mt-0.5 grid size-7 shrink-0 place-items-center rounded-sm bg-brand-50 text-sm font-semibold text-brand-700" aria-hidden="true">
+          <div className="flex items-start gap-3.5 pb-6 sm:gap-5">
+            <span className="num w-4 shrink-0 text-base font-semibold leading-[1.95] text-ink-mute" aria-hidden="true">
               A
             </span>
-            <p className="flex-1 text-[0.9688rem] leading-[1.95]">{f.a}</p>
+            <p className="flex-1 text-[0.9375rem] leading-[1.95]">{f.a}</p>
           </div>
         </details>
       ))}

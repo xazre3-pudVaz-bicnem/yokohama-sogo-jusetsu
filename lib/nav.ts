@@ -28,7 +28,7 @@ export const serviceNav = serviceCategories.map((c) => ({
   id: c.id,
   name: c.name,
   description: c.description,
-  links: services.filter((s) => s.category === c.id).map((s) => ({ href: `/service/${s.slug}`, label: s.shortName, icon: s.icon })),
+  links: services.filter((s) => s.category === c.id).map((s) => ({ href: `/service/${s.slug}`, label: s.shortName })),
 }));
 
 /** フッターの「サイトの案内」 */

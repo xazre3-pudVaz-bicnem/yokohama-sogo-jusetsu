@@ -47,6 +47,13 @@ export const postFrontmatterSchema = z.object({
   sources: z.array(postSourceSchema).max(8).default([]),
   /** 自動生成の記事かどうか（手書きは false） */
   generated: z.boolean().default(false),
+  /**
+   * 記事の冒頭に出す写真（data/images.generated.json のキー。例：works/wood-deck-3-done）。
+   * 省略すると、カテゴリの写真が出る。当社の現場の写真がある記事では、それを指定する。
+   */
+  cover: z.string().optional(),
+  /** cover を指定したときの、写真の説明 */
+  coverAlt: z.string().optional(),
 });
 
 export type PostFrontmatter = z.infer<typeof postFrontmatterSchema>;

@@ -10,13 +10,11 @@ export const waterHeater: Service = {
   category: "equipment",
   name: "給湯器・エコキュート",
   shortName: "給湯器・エコキュート",
-  icon: "flame",
-  accent: "heat",
   image: "photos/gas-water-heater-wall",
   imageAlt: "住宅の外壁に取り付けた壁掛けのガス給湯器",
-  subImage: "photos/ecocute-garden",
+  subImage: "photos/ecocute-side",
   subImageAlt: "住宅の横に設置したエコキュートの貯湯タンクとヒートポンプユニット",
-  catch: "お湯が出ない、温度が安定しない。その日からご相談ください。",
+  catch: "ガス給湯器・エコジョーズ・エコキュートの交換と新設",
   summary:
     "ガス給湯器・エコジョーズ・エコキュートの交換と新設に対応します。いまの機種と設置場所を確認し、家族の人数とお湯の使い方に合う一台をご提案します。",
   seo: {
@@ -26,7 +24,7 @@ export const waterHeater: Service = {
     keywords: ["戸塚区 給湯器", "戸塚区 給湯器交換", "横浜 給湯器交換", "戸塚区 エコキュート", "給湯器 故障", "給湯器 交換 費用"],
   },
   h1: "横浜市戸塚区の給湯器交換・エコキュート工事",
-  lead: "給湯器は、止まってから困る設備です。お湯の温度が安定しない、リモコンにエラーが出る。そうした小さな変化のうちにご相談いただければ、機種を選ぶ時間が取れます。横浜総合住設は、ガス給湯器からエコキュートまで、設置場所と暮らし方を見てご提案します。",
+  lead: "お湯の温度が安定しない、リモコンにエラー番号が出る。こうした前ぶれの段階でご相談いただければ、機種を比べて選ぶ時間が取れます。ガス給湯器・エコジョーズ・エコキュートのどれが合うかは、設置場所とお湯の使い方を確認してからご提案します。",
   worries: [
     "お湯がぬるい、熱くなったりぬるくなったりする",
     "リモコンにエラー番号が何度も表示される",
@@ -60,7 +58,7 @@ export const waterHeater: Service = {
   guides: [
     {
       id: "sign",
-      heading: "給湯器を交換する時期の目安",
+      heading: "給湯器の交換時期の目安",
       intro:
         "給湯器は、ある日まったく動かなくなる前に、いくつかの前ぶれが出ることが多い設備です。次のような変化が続くときは、点検か交換を考える時期です。",
       items: [
@@ -84,7 +82,7 @@ export const waterHeater: Service = {
     },
     {
       id: "choose",
-      heading: "給湯器の選び方 ── 3つの軸で決める",
+      heading: "給湯器の種類と選び方",
       intro: "機種名を見比べる前に、次の3つを決めると候補が絞れます。現地調査の際に、いまの使い方をうかがいながら一緒に整理します。",
       items: [
         {
@@ -123,8 +121,8 @@ export const waterHeater: Service = {
       { title: "撤去する機器", body: "既存の給湯器やタンクの取り外しと処分。大きな機器ほど搬出の手間がかかります。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-idea",
+  note: {
+    label: "お問い合わせの前に、ご用意いただくとよいもの",
     text: "本体の正面に貼ってある銘板（型番のシール）と、設置場所の全体が分かる写真があると、お電話の時点で話が早く進みます。",
   },
   local: {
@@ -157,6 +155,15 @@ export const waterHeater: Service = {
       q: "エコキュートの補助金は使えますか？",
       a: "国や自治体の補助制度は年度ごとに内容と受付期間が変わります。お見積もりの時点で使える制度をお調べし、対象になる場合は申請の進め方までご案内します。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "sign", variant: "rows", signs: true },
+    { type: "guide", id: "choose", variant: "columns", table: true },
+    { type: "menu", heading: "給湯器・エコキュートの対応工事", variant: "photo" },
+    { type: "note" },
+    { type: "cost" },
+    { type: "subsidy" },
+    { type: "local" },
   ],
   related: ["ene-farm", "eco-one", "kitchen-equipment", "other"],
   blogClusters: ["water-heater", "ecocute", "subsidy"],

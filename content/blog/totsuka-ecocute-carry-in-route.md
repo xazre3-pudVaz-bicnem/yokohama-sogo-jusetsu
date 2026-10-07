@@ -15,6 +15,8 @@ faq:
     a: "ガス給湯器と配管を撤去するときは、ガス事業者への事前の連絡が必要です。ガスの使用を完全にやめる場合は、契約の解除の手続きも行います。"
   - q: "エコキュートの音は、近所の迷惑になりませんか？"
     a: "ヒートポンプは夜間に運転するため、置き場所への配慮が必要です。隣家の寝室の窓の近くを避けるなど、現地で向きと位置を検討します。"
+cover: "photos/ecocute-side"
+coverAlt: "住宅の横に設置したエコキュートの貯湯タンクとヒートポンプユニット"
 relatedServices: ["water-heater", "eco-one"]
 relatedArticles: ["water-heater-replacement-signs"]
 relatedAreas: ["totsuka"]

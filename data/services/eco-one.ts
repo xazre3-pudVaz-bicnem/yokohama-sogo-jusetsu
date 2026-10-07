@@ -13,13 +13,11 @@ export const ecoOne: Service = {
   category: "energy",
   name: "ECO ONE・ハイブリッド給湯暖房",
   shortName: "ECO ONE",
-  icon: "hybrid",
-  accent: "leaf",
   image: "photos/ecocute-wall",
   imageAlt: "住宅の外壁沿いに設置した、タンクユニットとヒートポンプユニットからなる給湯設備",
   subImage: "photos/living-aircon-garden",
   subImageAlt: "庭に面した明るいリビング",
-  catch: "ガスと電気のいいとこどり。お湯も暖房も一台で。",
+  catch: "リンナイのハイブリッド給湯・暖房システムの設置",
   summary:
     "リンナイのハイブリッド給湯・暖房システム「ECO ONE（エコワン）」の設置に対応します。ガス給湯器やエネファームからの入れ替え、補助金の申請までサポートします。",
   seo: {
@@ -29,7 +27,7 @@ export const ecoOne: Service = {
     keywords: ["ECO ONE 設置", "エコワン 交換", "ハイブリッド給湯器 横浜", "戸塚区 エコワン", "ECO ONE 補助金"],
   },
   h1: "ECO ONE（エコワン）・ハイブリッド給湯暖房の設置",
-  lead: "ECO ONE は、リンナイのハイブリッド給湯・暖房システムです。電気のヒートポンプで効率よくお湯をつくり、足りないときはガスが受け持ちます。ガスと電気のいいとこどりで、少ないエネルギーでたっぷりのお湯を使えるのが持ち味です。横浜総合住設は、設置工事から補助金の申請まで一貫してお手伝いします。",
+  lead: "ECO ONE（エコワン）は、リンナイのハイブリッド給湯・暖房システムです。ふだんは電気のヒートポンプでお湯をつくり、足りないときにガスが受け持ちます。設置工事とあわせて、補助金の申請もお手伝いします。",
   worries: [
     "光熱費を抑えたいが、お湯切れは避けたい",
     "エコキュートのタンクを置く場所が取れるか分からない",
@@ -63,7 +61,7 @@ export const ecoOne: Service = {
   guides: [
     {
       id: "mechanism",
-      heading: "ECO ONE の仕組み ── 2つの熱源を使い分ける",
+      heading: "ECO ONE の仕組み",
       intro:
         "ハイブリッド給湯器は、「ためて使う電気」と「その場で沸かすガス」を一台に収めた設備です。普段の使い方では、どちらが動いているかを意識する必要はありません。",
       items: [
@@ -83,7 +81,7 @@ export const ecoOne: Service = {
     },
     {
       id: "fit",
-      heading: "ECO ONE が向いている家・確認が必要な家",
+      heading: "ECO ONE が向いている家と設置の条件",
       items: [
         {
           title: "向いている家",
@@ -114,8 +112,8 @@ export const ecoOne: Service = {
       { title: "補助金の有無", body: "国や自治体の制度が使えるかどうかで、実質の負担が変わります。制度の内容と受付状況は年度ごとに変わります。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-chart",
+  note: {
+    label: "補助金を使う場合の注意",
     text: "補助金は、工事の契約や着工の時期に決まりがあるのが普通です。「入れ替えようかな」と思った段階で、先にご相談いただくのが確実です。",
   },
   local: {
@@ -150,6 +148,16 @@ export const ecoOne: Service = {
       q: "見積もりだけでも頼めますか？",
       a: "お見積もりは無料です。現地調査にうかがい、設置できる機種と工事の内容を確認したうえで見積書をお出しします。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "mechanism", variant: "columns" },
+    { type: "guide", id: "fit", variant: "rows" },
+    { type: "subsidy" },
+    { type: "note" },
+    { type: "menu", heading: "ECO ONE の対応工事", variant: "rows" },
+    { type: "signs", heading: "ECO ONE を検討するきっかけ" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["water-heater", "ene-farm", "solar", "storage-battery"],
   blogClusters: ["eco-one", "water-heater", "subsidy"],

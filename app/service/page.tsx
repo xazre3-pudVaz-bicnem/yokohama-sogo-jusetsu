@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ServicePhotoCard } from "@/components/cards/ServiceCard";
+import { ServiceThumbRow } from "@/components/cards/ServiceCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Icon } from "@/components/ui/Icon";
+import { FieldNote } from "@/components/ui/FieldNote";
 import { PageHero } from "@/components/ui/PageHero";
-import { StaffTip } from "@/components/ui/StaffTip";
 import { serviceCategories, servicesByCategory, services } from "@/data/services";
 import { reveal } from "@/lib/reveal";
 import { itemListSchema } from "@/lib/schema";
@@ -15,6 +14,7 @@ import { buildMetadata } from "@/lib/seo";
  * 役割：「この会社は何ができるのか」を分類ごとに見せ、各サービスページへ送る。
  * 担当する検索意図：横浜総合住設 事業内容／戸塚区 住宅設備 会社／住宅設備 工事 一覧
  * 書かないこと：個々の工事のくわしい説明（各サービスページに任せる）。
+ * 見せ方：分類名を左、サービスを右に、細い線で区切った行で並べる（カードにしない）。
  */
 export const metadata: Metadata = buildMetadata({
   title: "事業内容・サービス一覧｜住宅設備からリフォームまで",
@@ -28,21 +28,14 @@ export default function ServiceIndexPage() {
   return (
     <>
       <PageHero
-        eyebrow="事業内容"
-        title={
-          <>
-            <span className="ib">住宅設備から、</span>
-            <span className="ib">リフォーム・外まわりまで。</span>
-          </>
-        }
-        lead="横浜総合住設は、住まいに関わる工事を幅広くお引き受けしています。毎日使う設備の交換から、家の外まわりの手入れまで、5つの分野・13のサービスをご用意しています。"
+        title="事業内容・サービス一覧"
+        lead="横浜総合住設は、住まいに関わる工事を幅広くお引き受けしています。毎日使う設備の交換から、家の外まわりの手入れまで、5つの分野・13のサービスがあります。"
         crumbs={[{ name: "サービス", href: "/service" }]}
       >
-        <ul className="mt-7 flex flex-wrap gap-2 text-[0.8125rem] font-bold">
+        <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-1 border-t border-silver-200 pt-4 text-[0.8125rem] font-bold">
           {serviceCategories.map((c) => (
             <li key={c.id}>
-              <a href={`#${c.id}`} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/30 bg-white/5 px-4 transition-colors hover:bg-white hover:text-navy-900">
-                <Icon name="chevronDown" className="size-3.5" />
+              <a href={`#${c.id}`} className="inline-flex min-h-10 items-center text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
                 {c.name}
               </a>
             </li>
@@ -50,41 +43,34 @@ export default function ServiceIndexPage() {
         </ul>
       </PageHero>
 
-      {serviceCategories.map((cat, ci) => {
-        const list = servicesByCategory(cat.id);
-        return (
-          <section key={cat.id} aria-labelledby={cat.id} className={`${ci > 0 ? "cv" : ""} section ${ci % 2 === 0 ? "bg-white" : "bg-silver-50"}`}>
-            <div className="container-x">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between" {...reveal()}>
-                <div>
-                  <p className="num text-sm font-semibold tracking-[0.2em] text-brand-600">
-                    {String(ci + 1).padStart(2, "0")} <span className="text-silver-400">/ {String(serviceCategories.length).padStart(2, "0")}</span>
-                  </p>
-                  <h2 id={cat.id} className="h-section mt-1">
+      <div className="section bg-white">
+        <div className="container-x space-y-14 lg:space-y-20">
+          {serviceCategories.map((cat) => {
+            const list = servicesByCategory(cat.id);
+            return (
+              <section key={cat.id} aria-labelledby={cat.id} className="rule-top grid scroll-mt-28 gap-x-12 gap-y-5 pt-8 lg:grid-cols-12 lg:pt-10">
+                <div className="lg:col-span-3" {...reveal()}>
+                  <h2 id={cat.id} className="h-section">
                     {cat.name}
                   </h2>
+                  <p className="mt-3 text-[0.9375rem] leading-[1.95]">{cat.description}</p>
                 </div>
-                <p className="max-w-xl text-[0.9375rem] leading-[1.9] lg:text-right">{cat.description}</p>
-              </div>
-              <ul className={`mt-9 grid gap-5 sm:grid-cols-2 ${list.length >= 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {list.map((s, i) => (
-                  <li key={s.slug} {...reveal((i % 3) * 80)}>
-                    <ServicePhotoCard service={s} sizes={list.length >= 3 ? "(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 100vw" : "(min-width: 640px) 46vw, 100vw"} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        );
-      })}
+                <ul className="rows lg:col-span-9" {...reveal(60)}>
+                  {list.map((s) => (
+                    <li key={s.slug}>
+                      <ServiceThumbRow service={s} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })}
 
-      <section aria-label="ご相談の前に" className="cv section-tight bg-white">
-        <div className="container-narrow">
-          <StaffTip pose="illust/people-staff-point">
-            どのサービスに当てはまるか分からないときは、「こんなことで困っている」とそのままお伝えください。複数の工事にまたがるご相談も、ひとつの窓口でお受けします。
-          </StaffTip>
+          <FieldNote label="どのサービスに当てはまるか分からない場合" className="max-w-3xl">
+            困っていることを、そのままお知らせください。複数の工事にまたがるご相談も、ひとつの窓口でお受けします。
+          </FieldNote>
         </div>
-      </section>
+      </div>
 
       <CtaBand id="cta-service" />
       <JsonLd data={itemListSchema("横浜総合住設のサービス", services.map((s) => ({ name: s.name, href: `/service/${s.slug}` })))} />

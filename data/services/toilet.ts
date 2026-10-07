@@ -10,13 +10,11 @@ export const toilet: Service = {
   category: "equipment",
   name: "トイレ交換・トイレリフォーム",
   shortName: "トイレ",
-  icon: "toilet",
-  accent: "leaf",
   image: "photos/toilet-wood",
   imageAlt: "木目の収納と手洗いカウンターのある、明るいトイレ",
   subImage: "photos/toilet-counter",
   subImageAlt: "カウンターと間接照明のある落ち着いたトイレ空間",
-  catch: "毎日使う場所だから、清潔で、掃除がしやすく。",
+  catch: "便器・温水洗浄便座の交換、床や壁紙の張り替え",
   summary:
     "便器・温水洗浄便座の交換から、床や壁紙の張り替えを含むトイレリフォームまで対応します。排水の位置を現地で測り、取り付けられる機種をご提案します。",
   seo: {
@@ -26,7 +24,7 @@ export const toilet: Service = {
     keywords: ["戸塚区 トイレ交換", "戸塚区 トイレリフォーム", "横浜 トイレ交換", "トイレ 交換 費用", "トイレ 水漏れ"],
   },
   h1: "横浜市戸塚区のトイレ交換・トイレリフォーム",
-  lead: "トイレは、家の中で使う回数がもっとも多い設備のひとつです。水が止まらない、床が濡れる、掃除をしても汚れが落ちにくい。そう感じたら交換の頃合いです。便器だけを替える工事から、床や壁紙まで新しくするリフォームまで、横浜総合住設がまとめてお引き受けします。",
+  lead: "便器だけを替える工事から、床や壁紙まで新しくするトイレリフォームまでお引き受けします。水が止まらない、床が濡れるといった症状のご相談も、交換が必要かどうかの確認から対応します。",
   worries: [
     "タンクの中で水が流れ続けている音がする",
     "便器と床のすき間が濡れている",
@@ -79,7 +77,7 @@ export const toilet: Service = {
     },
     {
       id: "check",
-      heading: "交換の前に確認する3つの寸法",
+      heading: "交換の前に確認する寸法",
       intro: "「どの便器でも付く」わけではありません。現地調査では次の点を確認し、取り付けられる機種を絞り込みます。",
       items: [
         {
@@ -107,8 +105,8 @@ export const toilet: Service = {
       { title: "追加する設備", body: "手洗い器、収納、手すり、紙巻器などを付ける場合の本体と取り付けです。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-idea",
+  note: {
+    label: "床の張り替えについて",
     text: "床の張り替えは、便器を外したときが一番きれいに仕上がります。便器の交換を考えているなら、床も同時に検討するのがおすすめです。",
   },
   local: {
@@ -139,6 +137,16 @@ export const toilet: Service = {
       q: "トイレと一緒に洗面台も替えられますか？",
       a: "まとめてお引き受けできます。水まわりの工事を同じ日程にそろえると、養生や片付けが一度で済みます。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "type", variant: "columns" },
+    { type: "guide", id: "check", variant: "photo" },
+    { type: "menu", heading: "トイレ交換・リフォームの対応工事", variant: "rows" },
+    { type: "note" },
+    { type: "signs", heading: "トイレの交換を考える症状" },
+    { type: "cost" },
+    { type: "subsidy" },
+    { type: "local" },
   ],
   related: ["reform", "kitchen-equipment", "other", "water-heater"],
   blogClusters: ["toilet", "housing-equipment", "reform"],

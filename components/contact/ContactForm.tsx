@@ -40,9 +40,9 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
 
   if (state.status === "success") {
     return (
-      <div ref={topRef} className="rounded-lg border-2 border-brand-600 bg-brand-50 p-7 text-center sm:p-10" role="status">
-        <p className="text-xl font-extrabold text-ink">お問い合わせを受け付けました。</p>
-        <p className="mx-auto mt-3 max-w-md text-[0.9375rem] leading-[1.95]">内容を確認のうえ、担当者よりお電話またはメールでご連絡します。お急ぎの場合は、お電話でもお問い合わせください。</p>
+      <div ref={topRef} className="border-l-2 border-navy-900 py-2 pl-5" role="status">
+        <p className="text-xl font-bold text-ink">お問い合わせを受け付けました。</p>
+        <p className="mt-3 max-w-xl text-[0.9375rem] leading-[1.95]">内容を確認のうえ、担当者よりお電話またはメールでご連絡します。お急ぎの場合は、お電話でもお問い合わせください。</p>
         <Link href="/" className="link-arrow mt-5">
           トップページへ戻る
         </Link>
@@ -62,7 +62,7 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   const label = (name: InquiryField, required = false, hint?: string) => (
     <label htmlFor={`f-${name}`} className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.9375rem] font-bold text-ink">
       {inquiryLabels[name]}
-      <span className={`rounded-sm px-1.5 py-0.5 text-[0.6875rem] font-bold leading-none ${required ? "bg-heat text-white" : "bg-silver-200 text-ink-mute"}`}>{required ? "必須" : "任意"}</span>
+      <span className={`border px-1.5 py-0.5 text-[0.6875rem] font-bold leading-none ${required ? "border-heat text-heat" : "border-silver-300 text-ink-mute"}`}>{required ? "必須" : "任意"}</span>
       {hint && <span className="text-xs font-normal text-ink-mute">{hint}</span>}
     </label>
   );
@@ -77,12 +77,12 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   return (
     <div ref={topRef}>
       {preview && (
-        <p className="mb-5 rounded-md border border-dashed border-silver-400 bg-silver-50 px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-mute">
+        <p className="mb-6 bg-silver-50 px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-mute">
           【確認用の表示】メール送信の設定（RESEND_API_KEY・CONTACT_TO_EMAIL）がまだのため、このフォームから送信しても届きません。本番では、設定が済むまでフォームの代わりに電話の案内が表示されます。
         </p>
       )}
       {state.message && (
-        <p role="alert" className="mb-5 rounded-md border border-heat/40 bg-heat/5 px-4 py-3 text-[0.9375rem] font-bold leading-relaxed text-heat">
+        <p role="alert" className="mb-6 border-l-2 border-heat py-1 pl-4 text-[0.9375rem] font-bold leading-relaxed text-heat">
           {state.message}
         </p>
       )}

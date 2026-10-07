@@ -11,13 +11,13 @@ export const other: Service = {
   category: "equipment",
   name: "その他住宅設備工事",
   shortName: "その他の設備工事",
-  icon: "wrench",
-  accent: "brand",
-  image: "works/bath-dryer-after-unit",
-  imageAlt: "浴室の天井に取り付けた浴室暖房乾燥機（横浜総合住設の施工）",
+  image: "works/bath-dryer-after-room",
+  imageAlt: "浴室暖房乾燥機を取り替えたあとの浴室（横浜総合住設の施工）",
+  heroLayout: "side",
+  imageCaption: "浴室暖房乾燥機を取り替えた浴室（当社施工）",
   subImage: "works/cupboard",
   subImageAlt: "キッチンに設置した青い扉のカップボード（横浜総合住設の施工）",
-  catch: "「これ、頼めますか？」から、始めてください。",
+  catch: "浴室暖房乾燥機・内窓・水栓など、設備まわりの工事",
   summary:
     "浴室暖房乾燥機、内窓、カップボード、水栓や電気まわりなど、ほかのページに当てはまらない住宅設備の工事です。一覧に無い工事も、まずはお問い合わせください。",
   seo: {
@@ -27,7 +27,7 @@ export const other: Service = {
     keywords: ["戸塚区 住宅設備 工事", "浴室暖房乾燥機 交換 横浜", "内窓 設置 戸塚区", "カップボード 設置", "水栓 交換 戸塚区"],
   },
   h1: "その他の住宅設備工事",
-  lead: "住まいの設備は、給湯器やエアコンだけではありません。浴室の天井の乾燥機、キッチンの食器棚、窓、蛇口、コンセント。どこに頼めばよいか分からない工事ほど、後回しになりがちです。横浜総合住設は、お客様のご希望をかなえる方法を探すところから始めます。幅広い工事に対応しますので、お気軽にご相談ください。",
+  lead: "浴室暖房乾燥機、内窓、カップボード、水栓、コンセントやスイッチなど、ほかのページに当てはまらない設備まわりの工事をまとめています。どこに頼めばよいか分からない工事も、内容をうかがって、できる方法をお答えします。",
   worries: [
     "浴室暖房乾燥機が動かない、音が大きい",
     "冬の浴室と脱衣所が寒い",
@@ -61,7 +61,7 @@ export const other: Service = {
   guides: [
     {
       id: "dryer",
-      heading: "浴室暖房乾燥機 ── 冬の浴室に備える",
+      heading: "浴室暖房乾燥機の取り付け・交換",
       intro:
         "「浴暖」「バス乾」など呼び方はさまざまですが、浴室の天井に付いて、暖房・衣類の乾燥・換気を1台でこなす設備です。寒い季節の入浴前に浴室を暖めておけば、脱衣所との温度差を小さくできます。",
       items: [
@@ -81,7 +81,7 @@ export const other: Service = {
     },
     {
       id: "window",
-      heading: "内窓 ── 窓の内側にもう一枚",
+      heading: "内窓の設置",
       items: [
         {
           title: "どんな効果があるか",
@@ -108,12 +108,12 @@ export const other: Service = {
       { title: "ほかの工事との組み合わせ", body: "給湯器の交換と浴室暖房乾燥機、キッチンの機器とカップボードなど、同時に行うと出張と養生が1回で済みます。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-phone",
-    text: "「あれこれできませんか？」というお問い合わせ、歓迎です。まずは困っていることを、そのまま聞かせてください。",
+  note: {
+    label: "一覧に無い工事について",
+    text: "このページに無い工事でも、設備まわりの内容であればご相談ください。対応できるかどうかを確認して、お答えします。",
   },
   local: {
-    heading: "戸塚区の住まいの「ちょっとした工事」も",
+    heading: "戸塚区での住宅設備工事",
     body: [
       "大きなリフォームでなくても、暮らしの不便は小さな工事で解消できることがあります。蛇口の交換、コンセントの増設、浴室の乾燥機の入れ替え。ひとつずつ別の業者を探すのは手間ですが、設備をまとめて見られる会社なら、一度の訪問で複数の相談ができます。",
       "横浜総合住設は、戸塚区深谷町のオフィスから、区内と横浜市内、周辺の地域へうかがっています。お見積もりは無料で、現地調査にもうかがいます。",
@@ -140,6 +140,27 @@ export const other: Service = {
       q: "業務用の設備にも対応していますか？",
       a: "店舗や事務所の空調など、法人のお客様からのご依頼にも対応しています。法人・工務店の方向けのページをご覧ください。",
     },
+  ],
+  layout: [
+    { type: "menu", heading: "対応している工事", variant: "rows" },
+    {
+      type: "photos",
+      heading: "施工の例",
+      lead: "浴室暖房乾燥機の取替と、キッチンのカップボードの設置です。",
+      photos: [
+        { image: "works/bath-dryer-before-unit", alt: "取替前の、浴室の天井の暖房乾燥機", caption: "浴室暖房乾燥機：取替前（当社の現場）" },
+        { image: "works/bath-dryer-after-unit", alt: "取替後の、新しい浴室暖房乾燥機", caption: "浴室暖房乾燥機：取替後（当社施工）" },
+        { image: "works/cupboard", alt: "キッチンの背面に設置した、青い扉のカップボード", caption: "カップボードの設置（当社施工）" },
+      ],
+    },
+    { type: "guide", id: "dryer", variant: "columns" },
+    { type: "guide", id: "window", variant: "rows" },
+    { type: "subsidy" },
+    { type: "works" },
+    { type: "signs", heading: "設備まわりのご相談の例" },
+    { type: "note" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["water-heater", "air-conditioner", "reform", "kitchen-equipment"],
   blogClusters: ["housing-equipment", "reform", "subsidy"],

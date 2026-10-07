@@ -10,13 +10,11 @@ export const reform: Service = {
   category: "reform",
   name: "住宅リフォーム",
   shortName: "住宅リフォーム",
-  icon: "reform",
-  accent: "brand",
   image: "photos/reform-ldk",
   imageAlt: "リフォーム後の、木の天井と大きな窓のあるリビング・ダイニング・キッチン",
   subImage: "photos/reform-bathroom",
   subImageAlt: "洗面カウンターと浴槽のある、明るい水まわり",
-  catch: "設備の交換だけでなく、住まいそのものを快適に。",
+  catch: "キッチン・浴室・洗面・トイレ・内装のリフォーム",
   summary:
     "キッチン・浴室・洗面・トイレの水まわりから、内装・収納まで対応します。解体・設備・仕上げをまとめてお受けするので、窓口と工程をひとつにできます。",
   seo: {
@@ -26,7 +24,7 @@ export const reform: Service = {
     keywords: ["戸塚区 リフォーム", "横浜市戸塚区 リフォーム会社", "戸塚区 キッチンリフォーム", "戸塚区 浴室リフォーム", "水まわり リフォーム"],
   },
   h1: "横浜市戸塚区の住宅リフォーム",
-  lead: "リフォームは、複数の職種が順番に入る工事です。解体する人、配管をつなぐ人、電気を引く人、壁や床を仕上げる人。その段取りが噛み合わないと、工期が延び、責任の所在もあいまいになります。横浜総合住設は、住宅設備の工事を軸に、解体から仕上げまでを一貫してお引き受けします。設備の交換だけでなく、快適な住まいづくりをお手伝いします。",
+  lead: "キッチン・浴室・洗面・トイレの水まわりと、内装・収納のリフォームを行っています。解体、配管、電気、仕上げと職種の分かれる工事を、住宅設備の工事を軸に、解体から仕上げまでまとめてお引き受けします。",
   worries: [
     "キッチンと浴室を、できれば同じ時期に直したい",
     "設備屋と内装屋を別々に探すのが大変",
@@ -60,7 +58,7 @@ export const reform: Service = {
   guides: [
     {
       id: "order",
-      heading: "リフォームの進め方 ── 優先順位の付け方",
+      heading: "リフォームの進め方と優先順位",
       intro: "「あれもこれも」と考え始めると、予算も工期もふくらみます。次の順番で整理すると、判断がしやすくなります。",
       items: [
         {
@@ -79,7 +77,7 @@ export const reform: Service = {
     },
     {
       id: "together",
-      heading: "まとめて頼むと変わること",
+      heading: "複数の工事をまとめる場合",
       items: [
         {
           title: "解体と養生が1回で済む",
@@ -97,7 +95,7 @@ export const reform: Service = {
     },
     {
       id: "mansion",
-      heading: "マンションのリフォームで先に確認すること",
+      heading: "マンションのリフォームで確認すること",
       items: [
         {
           title: "管理規約と工事の申請",
@@ -124,8 +122,8 @@ export const reform: Service = {
       { title: "建物の条件", body: "戸建てかマンションか、搬入の経路、作業できる時間帯の制約です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-laptop",
+  note: {
+    label: "ご相談の前に",
     text: "気になる場所を全部書き出してから、ご相談ください。一度に全部やらなくても、順番を決めておくだけで、二度手間になる工事を減らせます。",
   },
   local: {
@@ -156,6 +154,18 @@ export const reform: Service = {
       q: "解体が必要な工事も頼めますか？",
       a: "リフォームに伴う解体工事は、当社で行います。解体から設備の取り付け、内装の仕上げまで一貫して対応します。",
     },
+  ],
+  layout: [
+    { type: "signs", heading: "リフォームを考えるきっかけ" },
+    { type: "menu", heading: "リフォームの施工範囲", variant: "photo" },
+    { type: "guide", id: "order", variant: "steps" },
+    { type: "guide", id: "together", variant: "columns" },
+    { type: "works" },
+    { type: "guide", id: "mansion", variant: "rows" },
+    { type: "note" },
+    { type: "cost" },
+    { type: "subsidy" },
+    { type: "local" },
   ],
   related: ["toilet", "kitchen-equipment", "demolition", "other"],
   blogClusters: ["reform", "kitchen", "housing-equipment"],

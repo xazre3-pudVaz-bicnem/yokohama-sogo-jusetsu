@@ -1,4 +1,3 @@
-import type { IconName } from "@/components/ui/Icon";
 import type { ImageKey } from "@/lib/images";
 
 /**
@@ -12,63 +11,49 @@ import type { ImageKey } from "@/lib/images";
 /* ------------------------------------------------------------------ */
 export type Strength = {
   id: string;
-  icon: IconName;
   title: string;
   body: string;
-  /** 根拠になる写真（実際の現場の写真だけ） */
-  photo?: { key: ImageKey; alt: string; caption: string };
 };
 
 export const strengths: Strength[] = [
   {
     id: "range",
-    icon: "home",
-    title: "設備から外装・庭まで、ひとつの窓口で",
+    title: "住宅設備から外装・造園まで対応",
     body: "給湯器・エアコン・トイレ・コンロといった住宅設備から、太陽光発電、外壁塗装、リフォーム、造園まで対応します。工事ごとに会社を探し直す必要がありません。",
   },
   {
     id: "bundle",
-    icon: "clipboardCheck",
-    title: "複数の工事を、まとめて相談できる",
+    title: "複数の工事をまとめて相談できる",
     body: "「給湯器と浴室乾燥機」「外壁塗装とエアコンの配管」のように、関係する工事をまとめてご相談いただけます。足場や養生、訪問を一度にまとめる段取りを組めます。",
   },
   {
     id: "survey",
-    icon: "car",
-    title: "見積もり無料、現地調査にうかがいます",
+    title: "見積もり・現地調査は無料",
     body: "お見積もりは無料です。現地にうかがって設置場所と配管を確かめ、内訳の分かる見積書をお出しします。お電話でも、Instagram のメッセージでもご相談いただけます。",
   },
   {
     id: "difficult",
-    icon: "shield",
-    title: "他社で断られた工事も、まず見る",
+    title: "他社で断られた工事のご相談",
     body: "高い位置でのエアコンの取替など、別の業者に断られたというご相談を受け、施工した例があります。できない理由を確かめ、できる方法を探します。",
-    photo: { key: "works/aircon-high-place", alt: "住宅の外壁に長いはしごを掛けて作業するスタッフ", caption: "他社で断られた高所でのエアコン取替" },
   },
   {
     id: "finish",
-    icon: "sparkle",
-    title: "養生と仕上げを、手を抜かずに",
-    body: "工事の前に床や浴槽を覆う養生、配管を収める化粧カバー、屋外配管のラッキング。完成後に目に入る部分も、見えなくなる部分も、丁寧に仕上げます。",
-    photo: { key: "works/floor-protection", alt: "工事の前に、床一面を養生シートで覆った室内", caption: "工事の前の床の養生" },
+    title: "養生と仕上げ",
+    body: "工事の前に、床や浴槽を養生で覆います。エアコンの配管は化粧カバーに収め、屋外の空調配管にはラッキングカバーを施工します。完成後に見えなくなる部分も、同じように仕上げます。",
   },
   {
     id: "business",
-    icon: "building",
-    title: "法人・工務店の案件にも対応",
+    title: "法人・工務店からのご依頼に対応",
     body: "個人のお客様だけでなく、法人・工務店・ハウスメーカーからのご依頼もお受けしています。業務用エアコンや空調配管の工事にも対応します。",
-    photo: { key: "works/lagging-3", alt: "屋外の室外機の間を通る、ラッキングカバーを施工した空調配管", caption: "空調配管のラッキングカバー施工" },
   },
   {
     id: "subsidy",
-    icon: "yen",
-    title: "補助金の活用もサポート",
+    title: "補助金の申請をサポート",
     body: "高効率給湯器や窓の断熱など、国や自治体の制度が使える工事があります。対象になるか、いつまでに何が必要かを確認し、申請の進め方をご案内します。",
   },
   {
     id: "local",
-    icon: "mapPin",
-    title: "戸塚区にオフィス。横浜を中心に",
+    title: "戸塚区深谷町にオフィス",
     body: "横浜市戸塚区深谷町にオフィスを置き、横浜を中心に神奈川・東京エリアで工事を行っています。地域の住まいの事情を踏まえてご提案します。",
   },
 ];
@@ -150,7 +135,7 @@ export const flowSteps: FlowStep[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Instagram（トップページの区画に出す投稿）                            */
+/* Instagram（トップページの区画に出す投稿。6件）                        */
 /* ------------------------------------------------------------------ */
 export type InstagramPost = {
   url: string;
@@ -176,17 +161,10 @@ export const instagramPosts: InstagramPost[] = [
     caption: "会社のステッカーが届きました",
   },
   {
-    url: "https://www.instagram.com/p/Dd6HcfPzjrh/",
-    postedAt: "2026-09-30",
-    image: "instagram/banner-yokoju",
-    alt: "「住宅のことならヨコジュウへ」と書かれた、横浜総合住設のイラストバナー",
-    caption: "住宅のことならヨコジュウへ",
-  },
-  {
     url: "https://www.instagram.com/p/Dd3kKouE_63/",
     postedAt: "2026-09-29",
-    image: "works/bath-dryer-after-unit",
-    alt: "浴室の天井に取り付けた浴室暖房乾燥機",
+    image: "works/bath-dryer-after-room",
+    alt: "浴室暖房乾燥機を取り替えたあとの浴室",
     caption: "リンナイの浴室暖房乾燥機",
   },
   {
@@ -199,22 +177,15 @@ export const instagramPosts: InstagramPost[] = [
   {
     url: "https://www.instagram.com/p/DdvwRtrk-4n/",
     postedAt: "2026-09-26",
-    image: "works/wood-deck-3-done",
-    alt: "完成したステップつきのウッドデッキ",
+    image: "works/wood-deck-2-sheet",
+    alt: "整地した地面に防草シートを敷き、束石を並べた様子",
     caption: "ウッドデッキの設置",
-  },
-  {
-    url: "https://www.instagram.com/p/DdtS3dmTOlS/",
-    postedAt: "2026-09-25",
-    image: "works/cupboard",
-    alt: "キッチンに設置した青い扉のカップボード",
-    caption: "カップボードの設置",
   },
   {
     url: "https://www.instagram.com/p/DdnqvlSEz4N/",
     postedAt: "2026-09-23",
-    image: "works/lagging-2",
-    alt: "ラッキングカバーを施工した屋外の空調配管",
+    image: "works/lagging-5",
+    alt: "配管が機器に入る部分の、ラッキングカバーの端部",
     caption: "空調配管のラッキングカバー",
   },
 ];

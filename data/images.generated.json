@@ -144,26 +144,6 @@
     "width": 1536,
     "height": 1024
   },
-  "photos/demolition-cleared": {
-    "src": "/images/photos/demolition-cleared.webp",
-    "width": 1672,
-    "height": 941
-  },
-  "photos/demolition-excavator": {
-    "src": "/images/photos/demolition-excavator.webp",
-    "width": 1672,
-    "height": 941
-  },
-  "photos/demolition-site": {
-    "src": "/images/photos/demolition-site.webp",
-    "width": 1672,
-    "height": 941
-  },
-  "photos/ecocute-garden": {
-    "src": "/images/photos/ecocute-garden.webp",
-    "width": 1672,
-    "height": 941
-  },
   "photos/ecocute-side": {
     "src": "/images/photos/ecocute-side.webp",
     "width": 1672,
@@ -199,9 +179,9 @@
     "width": 1672,
     "height": 941
   },
-  "photos/hero-hillside-house": {
-    "src": "/images/photos/hero-hillside-house.webp",
-    "width": 1672,
+  "photos/hero-house": {
+    "src": "/images/photos/hero-house.webp",
+    "width": 1082,
     "height": 941
   },
   "photos/house-dark-gray": {
@@ -214,14 +194,14 @@
     "width": 1672,
     "height": 941
   },
-  "photos/house-solar-bayview": {
-    "src": "/images/photos/house-solar-bayview.webp",
-    "width": 1672,
-    "height": 941
-  },
   "photos/house-solar-hill": {
     "src": "/images/photos/house-solar-hill.webp",
     "width": 1672,
+    "height": 941
+  },
+  "photos/house-solar-roof": {
+    "src": "/images/photos/house-solar-roof.webp",
+    "width": 1200,
     "height": 941
   },
   "photos/house-white-gray": {
@@ -439,6 +419,11 @@
     "width": 350,
     "height": 330
   },
+  "works/painting-gable-before": {
+    "src": "/images/works/painting-gable-before.webp",
+    "width": 344,
+    "height": 258
+  },
   "works/painting-process": {
     "src": "/images/works/painting-process.webp",
     "width": 1280,
@@ -453,6 +438,11 @@
     "src": "/images/works/painting-roof-after.webp",
     "width": 332,
     "height": 336
+  },
+  "works/painting-roof-before": {
+    "src": "/images/works/painting-roof-before.webp",
+    "width": 312,
+    "height": 234
   },
   "works/wood-deck-1-ground": {
     "src": "/images/works/wood-deck-1-ground.webp",

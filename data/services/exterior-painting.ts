@@ -11,13 +11,11 @@ export const exteriorPainting: Service = {
   category: "exterior",
   name: "外壁塗装・屋根塗装",
   shortName: "外壁塗装・屋根塗装",
-  icon: "roller",
-  accent: "rose",
   image: "photos/painting-scaffold",
   imageAlt: "足場と養生シートを掛けた、外壁塗装の工事中の住宅",
   subImage: "photos/painting-roof-gutter",
   subImageAlt: "塗装を終えた外壁と、軒先・雨どいまわりの仕上がり",
-  catch: "大切な家を、長く美しく保つために。",
+  catch: "外壁・屋根の塗り替え、付帯部の塗装、防水工事",
   summary:
     "外壁と屋根の塗り替え、破風や雨どいなどの付帯部の塗装、防水工事に対応します。下塗り・中塗り・上塗りの工程を守り、細部まで仕上げます。",
   seo: {
@@ -27,7 +25,7 @@ export const exteriorPainting: Service = {
     keywords: ["戸塚区 外壁塗装", "横浜市 外壁塗装", "戸塚区 屋根塗装", "外壁塗装 費用", "外壁塗装 時期"],
   },
   h1: "横浜市戸塚区の外壁塗装・屋根塗装",
-  lead: "外壁と屋根の塗装は、見た目を整えるだけの工事ではありません。塗膜が雨と紫外線を受け止めることで、その下の外壁材や屋根材が守られています。色あせや汚れが目立ってきたら、塗膜が役目を終えつつある合図です。横浜総合住設は、下塗り・中塗り・上塗りの工程を守り、破風や軒先などの細部まで丁寧に仕上げます。",
+  lead: "外壁と屋根の塗り替え、破風や雨どいなど付帯部の塗装、防水工事を行っています。塗膜は、雨と紫外線から外壁材や屋根材を守っています。色あせや汚れが目立ってきたら、塗り替えを考える時期です。下塗り・中塗り・上塗りの工程を踏み、細部まで仕上げます。",
   worries: [
     "外壁を手でこすると白い粉が付く",
     "ひび割れを見つけた",
@@ -61,7 +59,7 @@ export const exteriorPainting: Service = {
   guides: [
     {
       id: "sign",
-      heading: "塗り替えのサイン ── 自分で見られる5つの症状",
+      heading: "外壁・屋根の劣化症状",
       intro: "築年数だけでは塗り替えの時期は決まりません。日当たりや風向きで傷み方が変わるため、家のまわりを一周して次の点を見てみてください。",
       items: [
         { title: "チョーキング", body: "外壁に触れると手に白い粉が付く状態です。塗料の成分が紫外線で分解され、表面に浮き出ています。" },
@@ -73,7 +71,7 @@ export const exteriorPainting: Service = {
     },
     {
       id: "process",
-      heading: "塗装工事の流れ ── 3回塗りの理由",
+      heading: "塗装工事の工程",
       intro:
         "塗装は「何を塗るか」と同じくらい「どう塗り重ねるか」で持ちが変わります。当社の施工では、下塗り・中塗り・上塗りの工程を踏み、仕上がりを確認しながら進めます。",
       items: [
@@ -86,7 +84,7 @@ export const exteriorPainting: Service = {
     },
     {
       id: "paint",
-      heading: "塗料の選び方",
+      heading: "塗料の種類と選び方",
       intro: "塗料は樹脂の種類で性格が分かれます。一般に、耐久性の高いものほど価格も上がります。次の塗り替えをいつにしたいかで選ぶのが現実的です。",
       items: [
         { title: "シリコン系", body: "価格と耐久性のつり合いがよく、住宅の塗り替えで広く使われている種類です。" },
@@ -105,8 +103,8 @@ export const exteriorPainting: Service = {
       { title: "付帯部と同時工事", body: "雨どいや破風を塗る範囲、ベランダ防水を行うか。屋根と外壁を同時に行えば、足場は1回で済みます。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-calc",
+  note: {
+    label: "足場について",
     text: "足場は、塗装の費用の中で大きな割合を占めます。屋根と外壁、雨どいの交換など、足場が要る工事は一度にまとめるのが賢い方法です。",
   },
   local: {
@@ -138,6 +136,27 @@ export const exteriorPainting: Service = {
       q: "見積もりだけでも頼めますか？",
       a: "お見積もりは無料です。現地調査にうかがい、外壁と屋根の状態を確認してから見積書をお出しします。",
     },
+  ],
+  layout: [
+    { type: "signs", heading: "外壁にこんな症状はありませんか" },
+    { type: "guide", id: "sign", variant: "columns" },
+    {
+      type: "guide",
+      id: "process",
+      variant: "steps",
+      photos: [
+        { image: "works/painting-roof-before", alt: "色あせと汚れが目立つ、塗装前の屋根", caption: "屋根：施工前（当社の現場）" },
+        { image: "works/painting-roof-after", alt: "塗装を終えた、淡い緑色の屋根", caption: "屋根：塗装後（当社施工）" },
+        { image: "works/painting-gable-before", alt: "塗膜がはがれている、塗装前の破風", caption: "破風：塗装前（当社の現場）" },
+        { image: "works/painting-gable-after", alt: "塗装を終えた破風と軒天", caption: "破風：塗装後（当社施工）" },
+      ],
+    },
+    { type: "guide", id: "paint", variant: "columns" },
+    { type: "menu", heading: "外壁塗装・屋根塗装の施工内容", variant: "rows" },
+    { type: "works" },
+    { type: "note" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["solar", "reform", "garden", "air-conditioner"],
   blogClusters: ["exterior-painting", "roof-painting", "totsuka"],

@@ -11,13 +11,11 @@ export const garden: Service = {
   category: "site",
   name: "造園・外構工事",
   shortName: "造園・外構",
-  icon: "tree",
-  accent: "leaf",
   image: "photos/garden-approach",
   imageAlt: "植栽と自然石を配した、住宅の玄関アプローチ",
   subImage: "works/wood-deck-3-done",
   subImageAlt: "建物の横に設置した、ステップつきのウッドデッキ（横浜総合住設の施工）",
-  catch: "緑のある心地よい空間を、手入れのしやすさと一緒に。",
+  catch: "庭木の剪定・伐採、雑草対策、ウッドデッキ",
   summary:
     "庭木の剪定・伐採、庭づくり、ウッドデッキなどの外構工事に対応します。手入れの負担を減らす提案から、庭を使える場所に変える工事までご相談ください。",
   seo: {
@@ -27,7 +25,7 @@ export const garden: Service = {
     keywords: ["戸塚区 造園", "戸塚区 外構工事", "戸塚区 庭木 剪定", "戸塚区 ウッドデッキ", "横浜 庭木 伐採"],
   },
   h1: "横浜市戸塚区の造園・外構工事",
-  lead: "庭は、手を入れないとすぐに姿を変える場所です。伸びすぎた枝、夏ごとに生える雑草、使われないままの土のスペース。横浜総合住設は、庭木の剪定や伐採といった手入れから、ウッドデッキの設置のように庭の使い方を変える工事まで対応します。緑のある心地よい空間づくりをお手伝いします。",
+  lead: "庭木の剪定・伐採、草刈りと雑草対策、ウッドデッキの設置などの外構工事を行っています。伸びすぎた枝や毎年の雑草など、手入れの負担を減らすご相談もお受けします。",
   worries: [
     "庭木が伸びて、隣の敷地や道路にはみ出している",
     "高くなりすぎた木を、自分では切れない",
@@ -61,27 +59,27 @@ export const garden: Service = {
   guides: [
     {
       id: "deck",
-      heading: "ウッドデッキができるまで ── 下地で持ちが変わる",
+      heading: "ウッドデッキの施工工程",
       intro:
         "ウッドデッキは、見える床板よりも、その下の地面の処理で寿命が決まります。当社の施工では、次の順番で下地から整えます。",
       items: [
         {
-          title: "1. 整地",
+          title: "整地",
           body: "雑草や石を取り除き、地面を平らにならします。水がたまらないよう、排水のますや勾配を確認します。",
         },
         {
-          title: "2. 防草シートと束石",
+          title: "防草シートと束石",
           body: "デッキの下は日が当たらず、後から手が入りません。先に防草シートを敷き、その上に束石を並べて、床を支える足元の高さをそろえます。",
         },
         {
-          title: "3. 床板とステップ",
+          title: "床板とステップ",
           body: "骨組みを組み、床板を張ります。庭へ下りる側にはステップを設け、室内の床との段差が小さくなる高さに仕上げます。",
         },
       ],
     },
     {
       id: "pruning",
-      heading: "庭木の手入れ ── 時期と頼みどき",
+      heading: "庭木の剪定の時期",
       items: [
         {
           title: "落葉樹",
@@ -99,7 +97,7 @@ export const garden: Service = {
     },
     {
       id: "weed",
-      heading: "草むしりを減らす3つの方法",
+      heading: "雑草対策の方法",
       items: [
         {
           title: "防草シートと砂利",
@@ -126,9 +124,9 @@ export const garden: Service = {
       { title: "地面の状態", body: "切り株や埋まった石の撤去、水はけの改善など、下地を整える作業の量です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-ok",
-    text: "「こんなこと、頼めるのかな」という内容こそ、聞いてください。ご希望をかなえる方法を、一緒に考えます。",
+  note: {
+    label: "ご相談のときにお知らせいただきたいこと",
+    text: "木の高さと本数、庭の広さが分かる写真があると、現地調査の前に、おおよその作業の内容をお伝えできます。",
   },
   local: {
     heading: "戸塚区で庭の工事を頼むときに",
@@ -158,6 +156,26 @@ export const garden: Service = {
       q: "外壁塗装や設備の工事と一緒に頼めますか？",
       a: "まとめてお引き受けできます。足場を組む前に庭木を整える、工事車両の出入りに合わせて外構を直すなど、順番を考えて計画します。",
     },
+  ],
+  layout: [
+    {
+      type: "guide",
+      id: "deck",
+      variant: "steps",
+      photos: [
+        { image: "works/wood-deck-1-ground", alt: "ウッドデッキを設置する前の、土のままの地面", caption: "施工前の地面（当社の現場）" },
+        { image: "works/wood-deck-2-sheet", alt: "整地した地面に防草シートを敷き、束石を並べた様子", caption: "防草シートと束石（当社施工）" },
+        { image: "works/wood-deck-3-done", alt: "建物の横に完成した、ステップつきのウッドデッキ", caption: "完成（当社施工）" },
+      ],
+    },
+    { type: "menu", heading: "造園・外構の対応工事", variant: "rows" },
+    { type: "guide", id: "pruning", variant: "columns" },
+    { type: "guide", id: "weed", variant: "rows" },
+    { type: "works" },
+    { type: "note" },
+    { type: "signs", heading: "庭のご相談の例" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["exterior-painting", "reform", "demolition", "other"],
   blogClusters: ["garden", "totsuka"],

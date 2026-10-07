@@ -3,13 +3,12 @@ import Link from "next/link";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FaqList } from "@/components/ui/FaqList";
-import { Icon, type IconName } from "@/components/ui/Icon";
-import { LinkButton, PhoneButton } from "@/components/ui/Button";
+import { FieldNote } from "@/components/ui/FieldNote";
+import { Icon } from "@/components/ui/Icon";
 import { PhotoHero } from "@/components/ui/PageHero";
 import { PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { StaffTip } from "@/components/ui/StaffTip";
+import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { reveal } from "@/lib/reveal";
 import { faqSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
@@ -20,6 +19,7 @@ import { buildMetadata } from "@/lib/seo";
  * 担当する検索意図：住宅設備 協力業者 横浜／設備工事 下請け 横浜／業務用エアコン 工事 横浜／空調配管 ラッキング 施工
  * 書かないこと：個人のお客様向けの機種選びの話（各サービスページ）。
  * 取引実績の社名・件数など、確認できていないことは書かない。
+ * 冒頭に問い合わせのボタンは置かない（ヘッダーとページの最後にある）。
  */
 export const metadata: Metadata = buildMetadata({
   title: "法人・工務店・ハウスメーカーの方へ｜設備工事の協力先",
@@ -29,13 +29,13 @@ export const metadata: Metadata = buildMetadata({
   keywords: ["住宅設備 協力業者 横浜", "設備工事 協力会社 神奈川", "業務用エアコン 工事 横浜", "空調配管 ラッキング 施工", "工務店 設備工事 依頼"],
 });
 
-const SCOPE: { icon: IconName; title: string; body: string }[] = [
-  { icon: "flame", title: "住宅設備の設置・交換", body: "給湯器・エコキュート・ハイブリッド給湯器、トイレ、ビルトインコンロ、レンジフード、浴室暖房乾燥機などの取り付けと交換。" },
-  { icon: "aircon", title: "空調工事", body: "家庭用・業務用エアコンの設置と交換、冷媒配管の施工、化粧カバーや屋外配管のラッキングカバーの仕上げ。" },
-  { icon: "reform", title: "リフォームの設備・内装", body: "水まわりの入れ替えに伴う、解体・配管・電気・設備の取り付け・内装の仕上げ。工程をまとめてお任せいただけます。" },
-  { icon: "roller", title: "外壁・屋根の塗装", body: "外壁と屋根の塗り替え、破風や雨どいなどの付帯部の塗装、防水工事。" },
-  { icon: "solar", title: "太陽光発電・蓄電池", body: "住宅用の太陽光発電システムと蓄電池の設置。" },
-  { icon: "tree", title: "造園・外構", body: "庭木の剪定・伐採、雑草対策、ウッドデッキなどの外構工事。" },
+const SCOPE = [
+  { title: "住宅設備の設置・交換", body: "給湯器・エコキュート・ハイブリッド給湯器、トイレ、ビルトインコンロ、レンジフード、浴室暖房乾燥機などの取り付けと交換。" },
+  { title: "空調工事", body: "家庭用・業務用エアコンの設置と交換、冷媒配管の施工、化粧カバーや屋外配管のラッキングカバーの仕上げ。" },
+  { title: "リフォームの設備・内装", body: "水まわりの入れ替えに伴う、解体・配管・電気・設備の取り付け・内装の仕上げ。工程をまとめてお任せいただけます。" },
+  { title: "外壁・屋根の塗装", body: "外壁と屋根の塗り替え、破風や雨どいなどの付帯部の塗装、防水工事。" },
+  { title: "太陽光発電・蓄電池", body: "住宅用の太陽光発電システムと蓄電池の設置。" },
+  { title: "造園・外構", body: "庭木の剪定・伐採、雑草対策、ウッドデッキなどの外構工事。" },
 ];
 
 const CASES = [
@@ -76,152 +76,123 @@ const FAQS = [
   },
 ];
 
+const SITE_PHOTOS = [
+  { key: "works/lagging-3", alt: "室外機の間を通る、ラッキングカバーを施工した空調配管", caption: "直線部分の通り" },
+  { key: "works/lagging-4", alt: "配管の曲がりの部分。板を分けて曲がりに沿わせたラッキングカバー", caption: "曲がりの納まり" },
+  { key: "works/lagging-5", alt: "配管が機器に入る部分の、ラッキングカバーの端部", caption: "端部の処理" },
+] as const;
+
 export default function BusinessPage() {
   return (
     <>
       <PhotoHero
-        eyebrow="法人・工務店・ハウスメーカーの方へ"
-        title={
-          <>
-            <span className="ib">設備工事とリフォームの、</span>
-            <span className="ib">頼れる協力先に。</span>
-          </>
-        }
-        lead="横浜総合住設は、個人のお客様だけでなく、法人・工務店・ハウスメーカーからのご依頼もお受けしています。住宅設備の取り付けから、業務用エアコン、空調配管の仕上げまで。現場の条件に合わせて、柔軟に対応します。"
-        image="works/lagging-1"
+        title="法人・工務店・ハウスメーカーの方へ"
+        lead="横浜総合住設は、個人のお客様だけでなく、法人・工務店・ハウスメーカーからのご依頼もお受けしています。住宅設備の取り付け、業務用エアコンの工事、空調配管の仕上げなど、現場の条件に合わせて対応します。"
+        image="works/lagging-2"
         imageAlt="屋外に並ぶ業務用の室外機と、ラッキングカバーを施工した空調配管（横浜総合住設の施工）"
+        caption="業務用空調の配管に、ラッキングカバーを施工した現場（当社施工）"
         crumbs={[{ name: "法人・工務店の方へ", href: "/business" }]}
-      >
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <LinkButton href="/contact?topic=business" icon="document">
-            お見積もり・ご相談
-          </LinkButton>
-          <PhoneButton variant="white" />
-        </div>
-      </PhotoHero>
+      />
 
-      {/* こんなご相談に */}
-      <section aria-labelledby="biz-cases" className="section bg-white">
+      <div className="section bg-white">
+        <div className="container-x space-y-14 lg:space-y-20">
+          {/* ご依頼の例 */}
+          <SectionSplit heading={<SectionHeading id="biz-cases" title="ご依頼をお受けしている事業者の方" />}>
+            <ul className="rows" {...reveal(60)}>
+              {CASES.map((c) => (
+                <li key={c.title} className="grid gap-x-9 gap-y-1.5 py-5 md:grid-cols-[17rem_1fr]">
+                  <h3 className="text-base font-bold leading-[1.75]">
+                    <Phrase>{c.title}</Phrase>
+                  </h3>
+                  <p className="text-[0.9375rem] leading-[1.95]">{c.body}</p>
+                </li>
+              ))}
+            </ul>
+          </SectionSplit>
+
+          {/* 対応できる工事 */}
+          <SectionSplit heading={<SectionHeading id="biz-scope" title="対応工事" lead="工事の一部だけのご依頼も、複数の工種をまとめたご依頼も、どちらもお受けします。" />}>
+            <ul className="rows" {...reveal(60)}>
+              {SCOPE.map((s) => (
+                <li key={s.title} className="grid gap-x-9 gap-y-1.5 py-5 md:grid-cols-[13.5rem_1fr]">
+                  <h3 className="text-base font-bold leading-[1.75]">
+                    <Phrase>{s.title}</Phrase>
+                  </h3>
+                  <p className="text-[0.9375rem] leading-[1.95]">{s.body}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-[0.8125rem] leading-relaxed text-ink-mute">解体工事は、リフォームに伴うものに対応しています。建物全体の解体のみのご依頼は承っていません。</p>
+          </SectionSplit>
+        </div>
+      </div>
+
+      {/* 現場の写真 */}
+      <section aria-labelledby="biz-works" className="cv section bg-silver-50">
         <div className="container-x">
-          <SectionHeading id="biz-cases" eyebrow="こんなご相談に" title="このような事業者の方から、ご依頼をお受けします。" />
-          <ul className="mt-9 grid gap-4 sm:grid-cols-2">
-            {CASES.map((c, i) => (
-              <li key={c.title} className="flex gap-4 rounded-lg border border-silver-200 bg-silver-50 p-5 sm:p-6" {...reveal((i % 2) * 80)}>
-                <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-sm bg-navy-900 text-white">
-                  <Icon name="check" className="size-4" strokeWidth={2.5} />
-                </span>
-                <div>
-                  <h3 className="text-[1.0625rem] font-extrabold leading-snug"><Phrase>{c.title}</Phrase></h3>
-                  <p className="mt-2 text-[0.9375rem] leading-[1.9]">{c.body}</p>
-                </div>
+          <div className="grid gap-x-12 gap-y-6 lg:grid-cols-12 lg:items-end">
+            <SectionHeading id="biz-works" title="施工の例（空調配管のラッキング）" className="lg:col-span-5" />
+            <p className="text-[0.9688rem] leading-[2.05] lg:col-span-7" {...reveal(60)}>
+              屋外に並ぶ室外機につながる空調配管に、ラッキングカバーを施工した現場です。直線の通り、曲がりの納まり、端部の処理まで、写真でご確認いただけます。
+            </p>
+          </div>
+          <ul className="mt-9 grid gap-x-3 gap-y-7 sm:grid-cols-3">
+            {SITE_PHOTOS.map((p, i) => (
+              <li key={p.key} {...reveal(i * 90, "wipe")}>
+                <figure>
+                  <div className="relative aspect-[4/3] bg-silver-100">
+                    <PhotoFill image={p.key} alt={p.alt} sizes="(min-width: 640px) 32vw, 100vw" />
+                  </div>
+                  <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">{p.caption}（当社施工）</figcaption>
+                </figure>
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      {/* 対応できる工事 */}
-      <section aria-labelledby="biz-scope" className="cv section bg-silver-50">
-        <div className="container-x">
-          <SectionHeading id="biz-scope" eyebrow="対応できる工事" title="設備から外装まで、分けても、まとめても。" lead="工事の一部だけのご依頼も、複数の工種をまとめたご依頼も、どちらもお受けします。" />
-          <ul className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SCOPE.map((s, i) => (
-              <li key={s.title} className="rounded-lg border border-silver-200 bg-white p-5 sm:p-6" {...reveal((i % 3) * 80)}>
-                <span className="grid size-11 place-items-center rounded-md bg-brand-50 text-brand-700">
-                  <Icon name={s.icon} className="size-5" />
-                </span>
-                <h3 className="mt-4 text-[1.0625rem] font-extrabold leading-snug"><Phrase>{s.title}</Phrase></h3>
-                <p className="mt-2 text-[0.9375rem] leading-[1.9]">{s.body}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-[0.8125rem] leading-relaxed text-ink-mute" {...reveal()}>
-            解体工事は、リフォームに伴うものに対応しています。建物全体の解体のみのご依頼は承っていません。
+          <p className="mt-8 flex flex-wrap gap-x-9 gap-y-3" {...reveal(80)}>
+            <Link href="/works/air-conditioning-pipe-lagging" className="link-arrow">
+              この施工事例の詳細
+              <Icon name="arrowRight" className="size-4" />
+            </Link>
+            <Link href="/works" className="link-arrow">
+              施工事例の一覧
+              <Icon name="arrowRight" className="size-4" />
+            </Link>
           </p>
         </div>
       </section>
 
-      {/* 現場の写真 */}
-      <section aria-labelledby="biz-works" className="cv section bg-white">
-        <div className="container-x grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-          <div>
-            <SectionHeading
-              id="biz-works"
-              eyebrow="施工の例"
-              title={
-                <>
-                  <span className="ib">仕上がりを見て、</span>
-                  <span className="ib">判断してください。</span>
-                </>
-              }
-              lead="屋外に並ぶ室外機につながる空調配管に、ラッキングカバーを施工した現場です。直線の通り、曲がりの納まり、端部の処理まで、写真でご確認いただけます。"
-            />
-            <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2" {...reveal(80)}>
-              <Link href="/works/air-conditioning-pipe-lagging" className="link-arrow">
-                この事例をくわしく見る
-                <Icon name="arrowRight" className="size-4" />
-              </Link>
-              <Link href="/works" className="link-arrow">
-                施工事例の一覧
-                <Icon name="arrowRight" className="size-4" />
-              </Link>
-            </div>
-            <StaffTip pose="illust/pose-trust" className="mt-9">
+      <div className="cv section bg-white">
+        <div className="container-x space-y-14 lg:space-y-20">
+          {/* 進め方（順番のある内容なので、番号を付ける） */}
+          <SectionSplit heading={<SectionHeading id="biz-flow" title="ご依頼の流れ" />}>
+            <ol className="rows" {...reveal(60)}>
+              {STEPS.map((s, i) => (
+                <li key={s.title} className="flex gap-5 py-5 sm:gap-7">
+                  <span className="num w-6 shrink-0 text-[1.375rem] font-medium leading-[1.4] text-silver-500">{i + 1}</span>
+                  <div>
+                    <h3 className="text-base font-bold leading-[1.75]">{s.title}</h3>
+                    <p className="mt-1.5 text-[0.9375rem] leading-[1.95]">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <FieldNote label="ご相談のときにお知らせいただきたいこと" className="mt-8">
               現場ごとの決まりごと（入退場の時間、養生の範囲、写真の撮り方など）は、最初にお知らせください。それに合わせて段取りします。
-            </StaffTip>
-          </div>
-          <ul className="grid grid-cols-2 gap-3">
-            {(
-              [
-                { key: "works/lagging-2", alt: "室外機の間を通る、ラッキングカバーを施工した空調配管", span: true },
-                { key: "works/lagging-4", alt: "配管の曲がりの部分。板を分けて曲がりに沿わせたラッキングカバー", span: false },
-                { key: "works/lagging-5", alt: "配管が機器に入る部分の、ラッキングカバーの端部", span: false },
-              ] as const
-            ).map((p, i) => (
-              <li key={p.key} className={p.span ? "col-span-2" : ""} {...reveal(i * 90, "zoom")}>
-                <div className={`relative overflow-hidden rounded-lg bg-silver-100 ${p.span ? "aspect-[16/9]" : "aspect-[4/3]"}`}>
-                  <PhotoFill image={p.key} alt={p.alt} sizes={p.span ? "(min-width: 1024px) 52vw, 100vw" : "(min-width: 1024px) 26vw, 50vw"} />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+            </FieldNote>
+          </SectionSplit>
 
-      {/* 進め方 */}
-      <section aria-labelledby="biz-flow" className="cv bg-blueprint text-white">
-        <div className="container-x section">
-          <SectionHeading id="biz-flow" onDark eyebrow="ご依頼の流れ" title="ご相談から、完了のご報告まで。" />
-          <ol className="mt-9 grid gap-px overflow-hidden rounded-lg bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="bg-navy-900/90 p-5 sm:p-6" {...reveal(i * 70, "fade")}>
-                <p className="num text-sm font-semibold tracking-[0.2em] text-sky-300">STEP {i + 1}</p>
-                <h3 className="mt-1.5 text-[1.0625rem] font-extrabold leading-snug !text-white"><Phrase>{s.title}</Phrase></h3>
-                <p className="mt-2 text-sm leading-[1.9] text-silver-200">{s.body}</p>
-              </li>
-            ))}
-          </ol>
+          {/* よくある質問 */}
+          <SectionSplit heading={<SectionHeading id="biz-faq" title="法人・工務店の方からのよくある質問" />}>
+            <div {...reveal(60)}>
+              <FaqList faqs={FAQS} />
+            </div>
+          </SectionSplit>
         </div>
-      </section>
-
-      {/* よくある質問 */}
-      <section aria-labelledby="biz-faq" className="cv section bg-white">
-        <div className="container-narrow">
-          <SectionHeading id="biz-faq" eyebrow="よくある質問" title="法人・工務店の方からの質問" />
-          <div className="mt-8" {...reveal(60)}>
-            <FaqList faqs={FAQS} />
-          </div>
-        </div>
-      </section>
+      </div>
 
       <CtaBand
         id="cta-business"
-        title={
-          <>
-            <span className="ib">現場のこと、</span>
-            <span className="ib">まずはご相談ください。</span>
-          </>
-        }
+        title="法人・工務店の方のご相談"
         lead="工事の内容と現場の場所、ご希望の時期をお知らせください。図面や写真をお送りいただければ、概算のご相談もお受けします。お見積もりは無料です。"
       />
       <JsonLd data={faqSchema(FAQS)} />

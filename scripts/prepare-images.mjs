@@ -11,6 +11,8 @@
  *   assets/stock/                 … 出典の表示が必要な写真（横浜市オープンデータなど。data/credits.ts に出典）
  *
  * 写真を差し替えるときは、下の表の「元ファイル名」を新しいファイルに変えて、このスクリプトを実行する。
+ * 表の3つ目に { left, top, width, height } を書くと、元画像のその範囲だけを切り出す
+ * （遠景に実在しない街並みが写り込んでいる画像は、その部分を切り落として使う）。
  * public/ に元画像を直接置かないこと（置いたものはすべて公開される）。
  */
 import sharp from "sharp";
@@ -33,10 +35,10 @@ async function emit(key, pipeline, { quality = 84 } = {}) {
 /* 1. イメージ写真（元ファイル名の時刻部分 → 出力名）                   */
 /* ------------------------------------------------------------------ */
 const PHOTOS = [
-  ["17_30_36", "photos/ecocute-garden"],
   ["17_30_52", "photos/toilet-wood"],
   ["17_31_14", "photos/kitchen-stove-hood"],
-  ["17_31_36-2", "photos/house-solar-bayview"],
+  // 元画像の右端に、実在しない高層ビル群の遠景が写っているため、左側だけを使う
+  ["17_31_36-2", "photos/house-solar-roof", { left: 0, top: 0, width: 1200, height: 941 }],
   ["17_31_38-3", "photos/ecocute-side"],
   ["17_31_40-4", "photos/gas-water-heater-wall"],
   ["17_31_42-5", "photos/toilet-counter"],
@@ -45,7 +47,8 @@ const PHOTOS = [
   ["17_31_48-8", "photos/house-modern-front"],
   ["17_31_50-9", "photos/garden-approach"],
   ["17_31_52-10", "photos/old-unit-and-tank"],
-  ["17_34_34-1", "photos/hero-hillside-house"],
+  // 元画像の左端に、実在しない港の街並みの遠景が写っているため、右側だけを使う
+  ["17_34_34-1", "photos/hero-house", { left: 590, top: 0, width: 1082, height: 941 }],
   ["17_34_36-2", "photos/house-solar-hill"],
   ["17_34_38-3", "photos/gas-water-heater-side"],
   ["17_34_40-4", "photos/ecocute-wall"],
@@ -59,19 +62,17 @@ const PHOTOS = [
   ["17_38_37-2", "photos/painting-masking"],
   ["17_38_39-3", "photos/painting-roof-gutter"],
   ["17_38_41-4", "photos/house-dark-gray"],
-  ["17_38_43-5", "photos/demolition-excavator"],
-  ["17_38_45-6", "photos/demolition-site"],
-  ["17_38_46-7", "photos/demolition-cleared"],
   ["17_38_48-8", "photos/reform-ldk"],
   ["17_38_50-9", "photos/reform-bathroom"],
   ["17_38_51-10", "photos/reform-kitchen-wood"],
 ];
 const photoDir = path.join(ROOT, "assets", "source", "photos");
 const photoFiles = fs.readdirSync(photoDir);
-for (const [stamp, key] of PHOTOS) {
+for (const [stamp, key, region] of PHOTOS) {
   const file = photoFiles.find((f) => f.endsWith(`${stamp}.png`));
   if (!file) throw new Error(`写真が見つかりません: ${stamp}`);
-  await emit(key, sharp(path.join(photoDir, file)).resize({ width: 1672, withoutEnlargement: true }), { quality: 86 });
+  const source = sharp(path.join(photoDir, file));
+  await emit(key, (region ? source.extract(region) : source).resize({ width: 1672, withoutEnlargement: true }), { quality: 86 });
 }
 
 /* ------------------------------------------------------------------ */
@@ -182,7 +183,9 @@ for (const [file, key] of IG) {
 }
 // 工程紹介の画像の上の部分（一覧のカード用。題名と施工前の屋根の写真が入る範囲）
 await emit("works/painting-process-card", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 112, top: 0, width: 1128, height: 846 }));
-// 工程紹介の画像の中の写真（屋根：塗装後／破風：塗装前・塗装後）
+// 工程紹介の画像の中の写真（屋根：施工前・塗装後／破風：塗装前・塗装後）。文字のラベルが掛からない範囲だけを切り出す
+await emit("works/painting-roof-before", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 520, top: 282, width: 312, height: 234 }));
+await emit("works/painting-gable-before", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 260, top: 964, width: 344, height: 258 }));
 await emit("works/painting-roof-after", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 676, top: 546, width: 332, height: 336 }));
 await emit("works/painting-gable-after", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 656, top: 908, width: 350, height: 330 }));
 // ステッカーの写真（ステッカーの部分だけを切り出す）

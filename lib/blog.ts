@@ -2,7 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { postFrontmatterSchema, type PostFrontmatter } from "@/lib/blog-schema";
-import { getCluster, type BlogCluster } from "@/lib/blog-clusters";
+import { blogClusters, getCluster, type BlogCluster } from "@/lib/blog-clusters";
+import { hasImage, type ImageKey } from "@/lib/images";
 
 /**
  * コラム記事の読み込み（サーバー専用。content/blog/*.md）。
@@ -19,6 +20,8 @@ export const MIN_POSTS_TO_INDEX = 3;
 export type Post = PostFrontmatter & {
   body: string;
   cluster: BlogCluster;
+  /** 記事の冒頭と一覧に出す写真（frontmatter の cover か、カテゴリの写真） */
+  photo: { image: ImageKey; alt: string };
   /** 本文の文字数（空白・記号を除く目安） */
   length: number;
   headings: { level: 2 | 3; text: string; id: string }[];
@@ -65,6 +68,27 @@ export function bodyLength(body: string): number {
     .replace(/\s+/g, "").length;
 }
 
+/** 地域のカテゴリ（写真が地域の風景になっているもの） */
+const AREA_CLUSTER_IDS = ["yokohama", "totsuka"];
+
+/**
+ * 記事の写真を決める。
+ * 1. frontmatter の cover（当社の現場の写真など、記事ごとに指定したもの）
+ * 2. 地域のカテゴリの記事は、地域の風景ではなく、扱っている工事（relatedServices の先頭）の写真
+ * 3. カテゴリの写真
+ */
+function photoOf(fm: PostFrontmatter, cluster: BlogCluster, file: string): Post["photo"] {
+  if (fm.cover) {
+    if (!hasImage(fm.cover)) throw new Error(`[blog] ${file}: cover の画像 ${fm.cover} がありません`);
+    return { image: fm.cover, alt: fm.coverAlt ?? cluster.imageAlt };
+  }
+  if (AREA_CLUSTER_IDS.includes(cluster.id)) {
+    const byService = blogClusters.find((c) => c.pillar.href === `/service/${fm.relatedServices[0]}`);
+    if (byService) return { image: byService.image, alt: byService.imageAlt };
+  }
+  return { image: cluster.image, alt: cluster.imageAlt };
+}
+
 let cache: Post[] | null = null;
 
 export function getAllPosts(): Post[] {
@@ -85,7 +109,7 @@ export function getAllPosts(): Post[] {
     const cluster = getCluster(fm.category);
     if (!cluster) throw new Error(`[blog] ${file}: カテゴリ ${fm.category} がありません`);
     const body = content.trim();
-    posts.push({ ...fm, body, cluster, length: bodyLength(body), headings: extractHeadings(body) });
+    posts.push({ ...fm, body, cluster, photo: photoOf(fm, cluster, file), length: bodyLength(body), headings: extractHeadings(body) });
   }
   // 新しい順。同じ日は slug 順で固定する
   posts.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.slug.localeCompare(b.slug));

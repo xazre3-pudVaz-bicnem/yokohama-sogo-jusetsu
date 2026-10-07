@@ -12,13 +12,11 @@ export const demolition: Service = {
   category: "site",
   name: "解体工事",
   shortName: "解体工事",
-  icon: "hammer",
-  accent: "brand",
-  image: "photos/demolition-cleared",
-  imageAlt: "重機が入った解体工事の現場",
-  subImage: "works/floor-protection",
-  subImageAlt: "工事の前に床一面を養生シートで覆った室内（横浜総合住設の現場）",
-  catch: "壊すところから、仕上げまで。リフォームの解体を一貫して。",
+  image: "works/floor-protection",
+  imageAlt: "工事の前に床一面を養生シートで覆った室内（横浜総合住設の現場）",
+  heroLayout: "side",
+  imageCaption: "工事の前に、床を養生シートで覆った現場（当社の現場）",
+  catch: "リフォームに伴う設備の撤去・内装の解体",
   summary:
     "リフォームに伴う解体工事に対応します。古い設備や内装の撤去から、その後の設備工事・仕上げまで、同じ窓口で続けて進められます。",
   seo: {
@@ -28,7 +26,7 @@ export const demolition: Service = {
     keywords: ["リフォーム 解体工事", "内装解体 横浜", "戸塚区 解体 リフォーム", "キッチン 浴室 解体", "解体 設備撤去"],
   },
   h1: "リフォームに伴う解体工事",
-  lead: "リフォームは、まず古いものを取り除くところから始まります。どこまで壊し、何を残すか。その判断を誤ると、後の設備工事や仕上げに無理が出ます。横浜総合住設は、解体を「次の工事の準備」として行います。解体から仕上げまでを同じ会社が担当するため、壊しすぎも、壊し残しもありません。",
+  lead: "キッチンや浴室などの設備の撤去と、内装の解体を行っています。対応しているのは、リフォームに伴う解体工事です。次に付ける設備と仕上げを踏まえて、どこまで壊し、何を残すかを決めてから着工します。",
   scope: "当社が対応しているのは、リフォームに伴う解体工事です。建て替えや更地にするための、建物全体の解体のみのご依頼は承っていません。",
   worries: [
     "解体業者とリフォーム業者を別々に探すのが手間",
@@ -86,7 +84,7 @@ export const demolition: Service = {
     },
     {
       id: "merit",
-      heading: "解体からリフォームまで、ひとつの窓口にまとめる理由",
+      heading: "解体とリフォームを同じ窓口で行う場合",
       items: [
         {
           title: "必要な範囲だけを壊せる",
@@ -113,8 +111,8 @@ export const demolition: Service = {
       { title: "事前調査と届け出", body: "石綿の事前調査や、工事の規模によって必要になる届け出に関わる費用です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-trust",
+  note: {
+    label: "養生について",
     text: "工事の前の養生は、時間をかけて行います。床や壁、家具を守ることが、きれいな仕上がりへの最初の一歩だと考えています。",
   },
   local: {
@@ -145,6 +143,16 @@ export const demolition: Service = {
       q: "解体してから追加の費用が出ることはありますか？",
       a: "壁や床の中の配管の傷み、下地の腐食など、解体して初めて分かることがあります。可能性がある箇所は事前にお伝えし、見つかった場合は内容と費用をご説明してから進めます。",
     },
+  ],
+  layout: [
+    { type: "scope", heading: "対応範囲" },
+    { type: "menu", heading: "解体工事の内容", variant: "columns" },
+    { type: "guide", id: "before", variant: "rows" },
+    { type: "note" },
+    { type: "guide", id: "merit", variant: "columns" },
+    { type: "signs", heading: "解体工事のご相談の例" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["reform", "toilet", "kitchen-equipment", "garden"],
   blogClusters: ["demolition", "reform"],

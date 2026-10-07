@@ -3,8 +3,7 @@ import Link from "next/link";
 import { WorkCard } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Icon, type IconName } from "@/components/ui/Icon";
-import { LinkButton } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { getService } from "@/data/services";
 import { worksSorted, type Work } from "@/data/works";
@@ -34,7 +33,7 @@ export const metadata: Metadata = buildMetadata({
  */
 const GROUP_MIN = 3;
 
-type Group = { id: string; title: string; icon: IconName; link?: { href: string; label: string }; list: Work[] };
+type Group = { id: string; title: string; link?: { href: string; label: string }; list: Work[] };
 
 /** 件数に合わせた列数（PC）。2件・4件は2列で大きく見せ、それ以外は3列 */
 function gridOf(count: number) {
@@ -52,34 +51,28 @@ export default function WorksPage() {
     .sort((a, b) => b[1].length - a[1].length)
     .map(([slug, list]) => {
       const s = getService(slug)!;
-      return { id: `service-${slug}`, title: `${s.name}の事例`, icon: s.icon, link: { href: `/service/${s.slug}`, label: `${s.shortName}のサービス内容` }, list };
+      return { id: `service-${slug}`, title: `${s.shortName}の施工事例`, link: { href: `/service/${s.slug}`, label: `${s.shortName}のサービス内容` }, list };
     });
   const rest = worksSorted.filter((w) => countOf(w.services[0]) < GROUP_MIN);
-  if (rest.length) groups.push({ id: "service-others", title: groups.length ? "そのほかの施工事例" : "施工事例", icon: "wrench", list: rest });
+  if (rest.length) groups.push({ id: "service-others", title: groups.length ? "そのほかの施工事例" : "施工事例", list: rest });
   const anchorOf = (slug: string) => (countOf(slug) >= GROUP_MIN ? `#service-${slug}` : "#service-others");
 
   return (
     <>
       <PageHero
-        eyebrow="施工事例"
-        title={
-          <>
-            <span className="ib">仕上がりは、</span>
-            <span className="ib">写真で確かめてください。</span>
-          </>
-        }
-        lead="当社が実際に施工した現場の記録です。施工前と施工後の写真、工事で気をつけたポイントを、ひとつずつ紹介しています。写真はすべて、現場で撮影したものです。"
+        title="施工事例"
+        lead="当社が施工した現場の記録です。施工前と施工後の写真、工事で気をつけた点を、1件ずつ掲載しています。写真はすべて、現場で撮影したものです。"
         crumbs={[{ name: "施工事例", href: "/works" }]}
       >
-        <ul className="mt-7 flex flex-wrap gap-2 text-[0.8125rem] font-bold">
+        <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-1 border-t border-silver-200 pt-4 text-[0.8125rem] font-bold">
           {[...byService.entries()].map(([slug, list]) => {
             const s = getService(slug);
             if (!s) return null;
             return (
               <li key={slug}>
-                <a href={anchorOf(slug)} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/30 bg-white/5 px-4 transition-colors hover:bg-white hover:text-navy-900">
+                <a href={anchorOf(slug)} className="inline-flex min-h-10 items-center gap-1.5 text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
                   {s.shortName}
-                  <span className="num text-sky-300">{list.length}</span>
+                  <span className="num font-medium text-ink-mute">{list.length}</span>
                 </a>
               </li>
             );
@@ -93,19 +86,16 @@ export default function WorksPage() {
             const grid = gridOf(g.list.length);
             return (
               <div key={g.id} id={g.id} className="scroll-mt-28">
-                <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b-2 border-navy-900 pb-3" {...reveal()}>
-                  <h2 className="h-sub flex items-center gap-2.5">
-                    <Icon name={g.icon} className="size-6 text-brand-600" />
-                    {g.title}
-                  </h2>
+                <div className="rule-top flex flex-wrap items-end justify-between gap-x-8 gap-y-2 pt-6" {...reveal()}>
+                  <h2 className="h-section">{g.title}</h2>
                   {g.link && (
-                    <Link href={g.link.href} className="link-arrow text-sm">
+                    <Link href={g.link.href} className="link-arrow !text-sm">
                       {g.link.label}
-                      <Icon name="arrowRight" className="size-4" />
+                      <Icon name="arrowRight" className="size-3.5" />
                     </Link>
                   )}
                 </div>
-                <ul className={`mt-8 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:gap-x-8 ${grid.cls}`}>
+                <ul className={`mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 ${grid.cls}`}>
                   {g.list.map((w, i) => (
                     <li key={w.slug} {...reveal((i % grid.cols) * 80)}>
                       <WorkCard work={w} headingLevel="h3" sizes={grid.sizes} priority={gi === 0 && i === 0} />
@@ -115,23 +105,15 @@ export default function WorksPage() {
               </div>
             );
           })}
-        </div>
-      </section>
 
-      <section aria-labelledby="works-more" className="cv section-tight bg-silver-50">
-        <div className="container-narrow text-center">
-          <h2 id="works-more" className="h-sub" {...reveal()}>
-            最新の現場は、Instagram でも
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[0.9375rem] leading-[1.95]" {...reveal(60)}>
-            ここに載せている事例は、公式 Instagram に投稿した施工写真をもとにまとめたものです。新しい現場の様子は、Instagram で随時お伝えしています。施工地域や使用した機器など、くわしい情報は順次追加していきます。
-          </p>
           {siteConfig.social.instagram && (
-            <div className="mt-6" {...reveal(120)}>
-              <LinkButton href={siteConfig.social.instagram} variant="outline" icon="instagram" external>
-                Instagram を見る
-              </LinkButton>
-            </div>
+            <p className="max-w-3xl border-l-2 border-navy-900 py-1 pl-5 text-[0.9375rem] leading-[1.95]" {...reveal()}>
+              ここに載せている事例は、公式 Instagram に投稿した施工写真をもとにまとめたものです。新しい現場の様子は、
+              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="text-link">
+                Instagram
+              </a>
+              でお伝えしています。施工地域や使用した機器など、くわしい情報は順次追加していきます。
+            </p>
           )}
         </div>
       </section>

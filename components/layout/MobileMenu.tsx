@@ -56,7 +56,7 @@ export function MobileMenu({
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "メニューを閉じる" : "メニューを開く"}
-        className="relative grid size-11 place-items-center rounded-md bg-navy-900 text-white"
+        className="relative grid size-11 place-items-center rounded-sm bg-navy-900 text-white"
       >
         <span className="relative block h-3.5 w-5" aria-hidden="true">
           <span className={`absolute left-0 top-0 h-0.5 w-5 bg-current transition-transform duration-300 ${open ? "translate-y-1.5 rotate-45" : ""}`} />
@@ -94,7 +94,7 @@ export function MobileMenu({
                 <p className="text-xs font-bold tracking-widest text-ink-mute">{cat.name}</p>
                 <ul className="mt-1 grid grid-cols-2 gap-x-4">
                   {cat.links.map((l) => (
-                    <li key={l.href} className="border-b border-dashed border-silver-300">
+                    <li key={l.href} className="border-b border-silver-200">
                       <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900">
                         {l.label}
                       </Link>
@@ -104,15 +104,15 @@ export function MobileMenu({
               </div>
             ))}
           </div>
-          <Link href="/service" className="link-arrow mt-4 text-sm">
-            サービスの一覧を見る
+          <Link href="/service" className="link-arrow mt-5 !text-sm">
+            サービス一覧
           </Link>
 
           {/* そのほかのページ */}
           <p className="eyebrow mt-9">サイトの案内</p>
           <ul className="mt-2 grid grid-cols-2 gap-x-4">
             {[...main.filter((l) => l.href !== "/service"), ...sub].map((l) => (
-              <li key={l.href} className="border-b border-dashed border-silver-300">
+              <li key={l.href} className="border-b border-silver-200">
                 <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900">
                   {l.label}
                 </Link>
@@ -121,8 +121,8 @@ export function MobileMenu({
           </ul>
 
           {instagram && (
-            <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-arrow mt-7 text-sm">
-              Instagram で施工写真を見る
+            <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-arrow mt-7 !text-sm">
+              Instagram（施工写真）
             </a>
           )}
         </nav>

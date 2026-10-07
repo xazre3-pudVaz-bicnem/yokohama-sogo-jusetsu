@@ -6,10 +6,9 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
-import { LinkButton } from "@/components/ui/Button";
 import { Photo, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getService } from "@/data/services";
 import { getWork, works, worksSorted, type WorkImage } from "@/data/works";
 import { img } from "@/lib/images";
@@ -22,6 +21,7 @@ import { buildMetadata, formatDateJa } from "@/lib/seo";
  * 役割：経験・実績を、実際の現場の写真と施工のポイントで示す。
  * 表示する項目は、データに値があるものだけ（施工地域・時期・期間・メーカーは、未確認なら出ない）。
  * 内部リンク：該当するサービスページ／同じサービスのほかの事例／地域ページ（地域が分かっている場合）。
+ * 問い合わせのボタンは本文に置かない（ヘッダーとページの最後にある）。
  */
 export function generateStaticParams() {
   return works.map((w) => ({ slug: w.slug }));
@@ -46,13 +46,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
+/** 施工前・施工後などのラベルを添えた写真 */
 function Labeled({ image, sizes, portrait }: { image: WorkImage; sizes: string; portrait: boolean }) {
   return (
     <figure>
-      <div className={`relative overflow-hidden rounded-lg bg-silver-100 ${portrait ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
+      <div className={`relative bg-silver-100 ${portrait ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
         <PhotoFill image={image.key} alt={image.alt} sizes={sizes} />
-        {image.label && <span className={`tag-slant absolute left-0 top-4 ${image.label === "施工後" ? "tag-slant-blue" : ""}`}>{image.label}</span>}
       </div>
+      {image.label && <figcaption className="mt-2 text-xs font-bold tracking-wider text-ink">{image.label}</figcaption>}
     </figure>
   );
 }
@@ -91,168 +92,176 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
     },
   ];
 
+  const heading = (
+    <>
+      <p className="eyebrow">施工事例　／　{w.category}</p>
+      <h1 className="h-page mt-2 text-balance">
+        <Phrase>{w.title}</Phrase>
+      </h1>
+      <p className="lead mt-5">{w.summary}</p>
+    </>
+  );
+  const specList = (
+    <dl className="dl-spec text-[0.9375rem]">
+      {spec.map((row) => (
+        <div key={row.label} className="!py-3 sm:!grid-cols-[7.5rem_1fr]">
+          <dt>{row.label}</dt>
+          <dd>{row.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+
   return (
     <>
       <article>
-        {/* 見出し */}
-        <header className="bg-silver-soft border-b border-silver-200">
-          <div className="container-x pb-10 pt-6 lg:pb-14 lg:pt-8">
+        {/* 見出しと概要 */}
+        <header className="bg-white">
+          <div className="container-x pb-9 pt-4 lg:pb-12 lg:pt-5">
             <Breadcrumbs
               items={[
                 { name: "施工事例", href: "/works" },
                 { name: w.title.split(" ── ")[0], href: `/works/${w.slug}` },
               ]}
             />
-            <div className="mt-8 grid items-end gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
-              <div>
-                <p className="flex flex-wrap items-center gap-2.5">
-                  <span className="tag-slant tag-slant-blue">施工事例</span>
-                  <span className="chip chip-outline">
-                    <Icon name={mainService.icon} className="size-3.5" />
-                    {w.category}
-                  </span>
-                </p>
-                <h1 className="h-page mt-4 text-balance"><Phrase>{w.title}</Phrase></h1>
-                <p className="lead mt-5">{w.summary}</p>
-              </div>
-              <dl className="dl-spec text-[0.9375rem]">
-                {spec.map((row) => (
-                  <div key={row.label} className="!py-3 sm:!grid-cols-[7.5rem_1fr]">
-                    <dt>{row.label}</dt>
-                    <dd>{row.value}</dd>
+            {coverPortrait ? (
+              /* 縦長の写真：見出しと概要の横に置く（スマホでは 見出し → 写真 → 概要 の順） */
+              <div className="mt-7 grid gap-x-14 gap-y-8 lg:mt-11 lg:grid-cols-12 lg:grid-rows-[auto_1fr]">
+                <div className="lg:col-span-7">{heading}</div>
+                <figure className="self-start lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1">
+                  <div className="bg-silver-100">
+                    <Photo image={w.cover.key} alt={w.cover.alt} sizes="(min-width: 1280px) 470px, (min-width: 1024px) 40vw, 100vw" priority />
                   </div>
-                ))}
-              </dl>
-            </div>
+                  {w.photoNote && <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">{w.photoNote}</figcaption>}
+                </figure>
+                <div className="lg:col-span-7 lg:col-start-1">{specList}</div>
+              </div>
+            ) : (
+              <div className="mt-7 grid gap-x-12 gap-y-7 lg:mt-11 lg:grid-cols-12 lg:items-end">
+                <div className="lg:col-span-7">{heading}</div>
+                <div className="lg:col-span-5">{specList}</div>
+              </div>
+            )}
           </div>
         </header>
 
-        {/* 写真（主） */}
-        <div className="bg-white">
-          <div className={`mx-auto px-[clamp(1.25rem,4vw,2.5rem)] pt-10 lg:pt-14 ${coverPortrait ? "max-w-2xl" : "max-w-5xl"}`}>
-            <figure className="overflow-hidden rounded-lg bg-silver-100">
-              <Photo image={w.cover.key} alt={w.cover.alt} sizes={coverPortrait ? "(min-width: 768px) 640px, 100vw" : "(min-width: 1100px) 960px, 100vw"} priority />
+        {/* 写真（主）：横長の写真は、見出しの下に大きく */}
+        {!coverPortrait && (
+          <div className="bg-white">
+            <figure className="mx-auto max-w-[78rem] lg:px-[clamp(1.25rem,4vw,2.5rem)]">
+              <div className="bg-silver-100">
+                <Photo image={w.cover.key} alt={w.cover.alt} sizes="(min-width: 1280px) 1168px, 100vw" priority />
+              </div>
+              {w.photoNote && <figcaption className="mt-2 px-[clamp(1.25rem,4vw,2.5rem)] text-xs leading-relaxed text-ink-mute lg:px-0">{w.photoNote}</figcaption>}
             </figure>
-            {w.photoNote && <p className="mt-2 text-xs text-ink-mute">{w.photoNote}</p>}
           </div>
-        </div>
+        )}
 
         <div className="section bg-white">
-          <div className="container-narrow space-y-14 lg:space-y-20">
-            {/* お悩み */}
+          <div className="container-x space-y-14 lg:space-y-16">
+            {/* ご相談の内容 */}
             {w.worry && (
-              <section aria-labelledby="worry">
-                <SectionHeading id="worry" eyebrow="ご相談のきっかけ" title="お客様のお悩み" />
-                <p className="bubble bubble-down mt-6 w-fit max-w-full text-[1.0313rem]" {...reveal(60)}>
+              <SectionSplit heading={<SectionHeading id="worry" title="ご相談の内容" />}>
+                <p className="text-[1.0313rem] font-bold leading-[1.95] text-ink" {...reveal(60)}>
                   {w.worry}
                 </p>
-              </section>
+              </SectionSplit>
             )}
 
             {/* 施工内容 */}
-            <section aria-labelledby="content">
-              <SectionHeading id="content" eyebrow="施工内容" title="この現場で行ったこと" />
-              <div className="mt-6 space-y-5 text-[0.9688rem] leading-[2.05]" {...reveal(60)}>
+            <SectionSplit heading={<SectionHeading id="content" title="施工内容" />}>
+              <div className="space-y-5 text-[0.9688rem] leading-[2.05]" {...reveal(60)}>
                 {w.content.map((p) => (
                   <p key={p.slice(0, 16)}>{p}</p>
                 ))}
               </div>
-            </section>
+            </SectionSplit>
 
             {/* 施工前後 */}
             {w.beforeAfter.length > 0 && (
-              <section aria-labelledby="before-after">
-                <SectionHeading id="before-after" eyebrow="施工前・施工後" title="写真で比べる" />
-                <div className="mt-8 space-y-10">
+              <SectionSplit heading={<SectionHeading id="before-after" title="施工前・施工後" />}>
+                <div className="space-y-10">
                   {w.beforeAfter.map((pair) => {
                     const a = img(pair.after.key);
                     const portrait = a.height > a.width;
                     return (
                       <div key={pair.title} {...reveal()}>
-                        <h3 className="mb-3 flex items-center gap-2 text-base font-extrabold">
-                          <span aria-hidden="true" className="inline-block h-3 w-4 -skew-x-[24deg] bg-brand-600" />
-                          {pair.title}
-                        </h3>
-                        <div className={`grid grid-cols-2 items-start gap-2 sm:gap-4 ${portrait ? "mx-auto max-w-2xl" : ""}`}>
-                          <Labeled image={pair.before} portrait={portrait} sizes="(min-width: 900px) 420px, 50vw" />
-                          <Labeled image={pair.after} portrait={portrait} sizes="(min-width: 900px) 420px, 50vw" />
+                        <h3 className="mb-3 text-base font-bold">{pair.title}</h3>
+                        <div className={`grid grid-cols-2 items-start gap-2 sm:gap-4 ${portrait ? "max-w-2xl" : ""}`}>
+                          <Labeled image={pair.before} portrait={portrait} sizes="(min-width: 1024px) 380px, 50vw" />
+                          <Labeled image={pair.after} portrait={portrait} sizes="(min-width: 1024px) 380px, 50vw" />
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </section>
+              </SectionSplit>
             )}
 
             {/* そのほかの写真 */}
             {w.gallery.length > 0 && (
-              <section aria-labelledby="gallery">
-                <SectionHeading id="gallery" eyebrow="現場の写真" title={w.beforeAfter.length > 0 ? "作業の様子・仕上がり" : "写真で見る"} />
-                <ul className={`mt-8 grid gap-3 sm:gap-4 ${w.gallery.length === 1 ? "" : "sm:grid-cols-2"}`}>
+              <SectionSplit heading={<SectionHeading id="gallery" title={w.beforeAfter.length > 0 ? "作業の様子・仕上がり" : "現場の写真"} />}>
+                <ul className={`grid gap-x-4 gap-y-7 ${w.gallery.length === 1 ? "" : "sm:grid-cols-2"}`}>
                   {w.gallery.map((g, i) => (
                     <li key={g.key} {...reveal((i % 2) * 80)}>
                       <figure>
-                        <div className="relative overflow-hidden rounded-lg bg-silver-100">
-                          <Photo image={g.key} alt={g.alt} sizes={w.gallery.length === 1 ? "(min-width: 900px) 832px, 100vw" : "(min-width: 900px) 410px, (min-width: 640px) 50vw, 100vw"} />
-                          {g.label && <span className={`tag-slant absolute left-0 top-4 ${g.label === "施工後" ? "tag-slant-blue" : ""}`}>{g.label}</span>}
+                        <div className="bg-silver-100">
+                          <Photo image={g.key} alt={g.alt} sizes={w.gallery.length === 1 ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw"} />
                         </div>
-                        <figcaption className="mt-2 text-[0.8125rem] leading-relaxed text-ink-mute">{g.alt}</figcaption>
+                        <figcaption className="mt-2 text-[0.8125rem] leading-relaxed text-ink-mute">
+                          {g.label && <span className="mr-2 font-bold text-ink">{g.label}</span>}
+                          {g.alt}
+                        </figcaption>
                       </figure>
                     </li>
                   ))}
                 </ul>
-              </section>
+              </SectionSplit>
             )}
 
-            {/* 施工のポイント */}
+            {/* 施工のポイント（順番の無い項目なので、番号は付けない） */}
             {w.points.length > 0 && (
-              <section aria-labelledby="points">
-                <SectionHeading id="points" eyebrow="施工のポイント" title="この工事で大切にしたこと" />
-                <ol className="rows mt-7">
-                  {w.points.map((p, i) => (
-                    <li key={p.title} className="flex gap-4 py-5 sm:gap-6" {...reveal(i * 60)}>
-                      <span className="num w-9 shrink-0 pt-0.5 text-2xl font-semibold leading-none text-brand-600">{String(i + 1).padStart(2, "0")}</span>
-                      <div className="flex-1">
-                        <h3 className="text-[1.0625rem] font-extrabold leading-snug"><Phrase>{p.title}</Phrase></h3>
-                        <p className="mt-2 text-[0.9375rem] leading-[1.95]">{p.body}</p>
-                      </div>
+              <SectionSplit heading={<SectionHeading id="points" title="施工のポイント" />}>
+                <ul className="rows" {...reveal(60)}>
+                  {w.points.map((p) => (
+                    <li key={p.title} className="py-5">
+                      <h3 className="text-base font-bold leading-[1.75]">
+                        <Phrase>{p.title}</Phrase>
+                      </h3>
+                      <p className="mt-1.5 text-[0.9375rem] leading-[1.95]">{p.body}</p>
                     </li>
                   ))}
-                </ol>
-              </section>
+                </ul>
+              </SectionSplit>
             )}
 
-            {/* コメント */}
+            {/* コメント（公式 Instagram の投稿文） */}
             {w.comment && (
-              <section aria-labelledby="comment">
-                <SectionHeading id="comment" eyebrow="横浜総合住設から" title="担当からのコメント" />
-                <figure className="mt-6 rounded-lg bg-navy-900 p-6 text-white sm:p-8" {...reveal(60)}>
-                  <blockquote className="text-[1.0313rem] font-medium leading-[2]">「{w.comment}」</blockquote>
-                  <figcaption className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/15 pt-4 text-xs text-silver-300">
+              <SectionSplit heading={<SectionHeading id="comment" title="横浜総合住設からのコメント" />}>
+                <figure {...reveal(60)}>
+                  <blockquote className="border-l-2 border-navy-900 pl-5 text-[1.0313rem] font-medium leading-[2] text-ink">{w.comment}</blockquote>
+                  <figcaption className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-ink-mute">
                     <span>公式 Instagram の投稿より（{formatDateJa(w.source.postedAt)}）</span>
-                    <a href={w.source.url} target="_blank" rel="noopener noreferrer" className="link-arrow link-arrow-on-dark !py-1 text-xs">
-                      <Icon name="instagram" className="size-3.5" />
-                      元の投稿を見る
+                    <a href={w.source.url} target="_blank" rel="noopener noreferrer" className="text-link inline-flex items-center gap-1">
+                      元の投稿
+                      <Icon name="arrowUpRight" className="size-3" />
                     </a>
                   </figcaption>
                 </figure>
-              </section>
+              </SectionSplit>
             )}
 
             {/* サービスページへ */}
-            <section aria-label="この工事について" className="rounded-lg border border-silver-200 bg-silver-50 p-6 sm:p-8" {...reveal()}>
-              <p className="eyebrow">この工事について、くわしく</p>
-              <p className="mt-2 text-xl font-extrabold text-ink">{mainService.name}</p>
-              <p className="mt-2 text-[0.9375rem] leading-[1.9]">{mainService.summary}</p>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <LinkButton href={`/service/${mainService.slug}`} variant="navy">
+            <SectionSplit heading={<SectionHeading title="この工事について" />}>
+              <p className="text-lg font-bold text-ink">{mainService.name}</p>
+              <p className="mt-2 text-[0.9375rem] leading-[1.95]">{mainService.summary}</p>
+              <p className="mt-6">
+                <Link href={`/service/${mainService.slug}`} className="link-arrow">
                   {mainService.shortName}のサービス内容
-                </LinkButton>
-                <LinkButton href="/contact" variant="outline" icon="document" arrow={false}>
-                  同じ工事を相談する
-                </LinkButton>
-              </div>
-            </section>
+                  <Icon name="arrowRight" className="size-4" />
+                </Link>
+              </p>
+            </SectionSplit>
           </div>
         </div>
       </article>
@@ -260,17 +269,17 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       {/* ほかの事例 */}
       <section aria-labelledby="other-works" className="cv section bg-silver-50">
         <div className="container-x">
-          <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
-            <SectionHeading id="other-works" eyebrow="施工事例" title="ほかの事例も見る" />
+          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+            <SectionHeading id="other-works" title="ほかの施工事例" />
             <Link href="/works" className="link-arrow shrink-0" {...reveal(80)}>
-              施工事例の一覧へ
+              施工事例の一覧
               <Icon name="arrowRight" className="size-4" />
             </Link>
           </div>
-          <ul className="scroller mt-9 gap-x-6 gap-y-10 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="scroller mt-9 gap-x-8 gap-y-10 sm:grid sm:grid-cols-2 lg:grid-cols-3">
             {others.map((o, i) => (
               <li key={o.slug} className={i === 2 ? "sm:hidden lg:block" : ""} {...reveal(i * 80)}>
-                <WorkCard work={o} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 100vw" />
+                <WorkCard work={o} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 78vw" />
               </li>
             ))}
           </ul>

@@ -11,13 +11,11 @@ export const solar: Service = {
   category: "energy",
   name: "太陽光発電",
   shortName: "太陽光発電",
-  icon: "solar",
-  accent: "sun",
-  image: "photos/house-solar-bayview",
-  imageAlt: "屋根に太陽光パネルを載せた住宅と、遠くに見える横浜の街並み",
-  subImage: "photos/house-solar-hill",
-  subImageAlt: "南向きの屋根に太陽光パネルを設置した2階建ての住宅",
-  catch: "屋根でつくった電気を、まず家で使う。",
+  image: "photos/house-solar-hill",
+  imageAlt: "南向きの屋根に太陽光パネルを設置した2階建ての住宅",
+  subImage: "photos/house-solar-roof",
+  subImageAlt: "屋根に載せた太陽光パネル",
+  catch: "住宅用太陽光発電システムの設置",
   summary:
     "住宅用の太陽光発電システムの設置に対応します。屋根の向き・形・状態を確認し、蓄電池との組み合わせや補助金の活用まで含めてご提案します。",
   seo: {
@@ -27,7 +25,7 @@ export const solar: Service = {
     keywords: ["戸塚区 太陽光", "戸塚区 太陽光発電", "横浜市 太陽光 設置", "太陽光 屋根 向き", "太陽光 屋根塗装 同時"],
   },
   h1: "横浜市戸塚区の太陽光発電の設置工事",
-  lead: "太陽光発電は、屋根ごとに結果が変わる設備です。同じ枚数のパネルでも、屋根の向き、勾配、まわりの建物や木の影で、つくれる電気の量が違います。横浜総合住設は、屋根の状態まで確認したうえで、載せるかどうか、どれだけ載せるかを一緒に考えます。電気代の削減と、環境にやさしい暮らしを両立する提案をします。",
+  lead: "太陽光発電の発電量は、屋根の向き、勾配、まわりの建物や木の影によって変わります。現地で屋根の状態まで確認したうえで、載せるかどうか、どれだけ載せるかをご提案します。蓄電池との組み合わせや、使える補助金についてもご案内します。",
   worries: [
     "電気代が上がって、対策を考えている",
     "うちの屋根に載せられるのか分からない",
@@ -56,8 +54,31 @@ export const solar: Service = {
   ],
   guides: [
     {
+      id: "system",
+      heading: "太陽光発電システムの構成",
+      intro: "住宅用の太陽光発電は、屋根のパネルだけでなく、いくつかの機器を組み合わせて動きます。それぞれの置き場所と配線の経路を、現地調査で確認します。",
+      items: [
+        {
+          title: "太陽光パネル",
+          body: "屋根に載せて、太陽の光で電気をつくります。架台と金具で屋根に固定します。屋根材の種類によって、固定の方法が変わります。",
+        },
+        {
+          title: "パワーコンディショナ",
+          body: "パネルがつくる直流の電気を、家庭で使える交流に変える機器です。屋外の壁面か、屋内に取り付けます。",
+        },
+        {
+          title: "分電盤と配線",
+          body: "つくった電気を、家の中の回路へ送ります。太陽光発電用のブレーカーを設け、パネルから分電盤までの配線の経路を決めます。",
+        },
+        {
+          title: "電力量計とモニター",
+          body: "売った電気と買った電気を量るメーターは、電力会社への申請を経て取り付けられます。発電の量は、モニターで確かめられます。",
+        },
+      ],
+    },
+    {
       id: "roof",
-      heading: "屋根で決まる4つのこと",
+      heading: "太陽光発電の設置条件",
       intro: "太陽光発電の検討は、機器のカタログよりも屋根を見ることから始まります。現地調査では次の4点を確認します。",
       items: [
         {
@@ -80,7 +101,7 @@ export const solar: Service = {
     },
     {
       id: "use",
-      heading: "つくった電気の使い方 ── 自家消費と売電",
+      heading: "発電した電気の使い方（自家消費と売電）",
       items: [
         {
           title: "まず家で使う",
@@ -122,8 +143,8 @@ export const solar: Service = {
       { title: "蓄電池・補助金", body: "蓄電池を同時に設置するか、補助制度が使えるかで、総額と実質の負担が変わります。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-chart",
+  note: {
+    label: "現地調査の前に、ご用意いただくとよいもの",
     text: "毎月の電気料金の明細（できれば1年分）があると、どの時間帯にどれだけ使っているかが分かり、載せる量を決めやすくなります。",
   },
   local: {
@@ -154,6 +175,18 @@ export const solar: Service = {
       q: "太陽光と屋根塗装を一緒に頼めますか？",
       a: "どちらも当社で対応しています。足場を共用できるため、同じ時期にまとめる計画をご提案できます。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "system", variant: "columns" },
+    { type: "guide", id: "roof", variant: "rows" },
+    { type: "guide", id: "use", variant: "columns" },
+    { type: "guide", id: "timing", variant: "rows" },
+    { type: "menu", heading: "太陽光発電の対応工事", variant: "photo" },
+    { type: "note" },
+    { type: "subsidy" },
+    { type: "signs", heading: "太陽光発電の設置で迷うこと" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["storage-battery", "exterior-painting", "eco-one", "water-heater"],
   blogClusters: ["solar", "storage-battery", "subsidy"],

@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownBody } from "@/components/blog/MarkdownBody";
-import { PostCard } from "@/components/cards/PostCard";
+import { PostRow } from "@/components/cards/PostCard";
 import { ServiceRow } from "@/components/cards/ServiceCard";
-import { WorkCard } from "@/components/cards/WorkCard";
+import { WorkCard, WorkFeature } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FaqList } from "@/components/ui/FaqList";
 import { Icon } from "@/components/ui/Icon";
-import { LinkButton, PhoneButton } from "@/components/ui/Button";
 import { PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getArea } from "@/data/areas";
+import { creditOf } from "@/data/company";
 import { getService } from "@/data/services";
 import { worksByService } from "@/data/works";
 import { getAllPosts, getPost, getRelatedPosts } from "@/lib/blog";
@@ -28,6 +28,7 @@ import { siteConfig } from "@/lib/site";
  * コラムの記事ページ（content/blog/<slug>.md の1ファイルが1ページ）。
  * 役割：1つの検索意図に答える。答えたあと、サービスページ・施工事例・地域ページへ送る。
  * 構造化データ：BlogPosting、FAQPage（この記事に表示している質問だけ）、BreadcrumbList。
+ * 問い合わせのボタンは本文に置かない（ヘッダーとページの最後にある）。
  */
 export function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const p = getPost(slug);
   if (!p) return {};
-  const cover = img(p.cluster.image);
+  const cover = img(p.photo.image);
   return buildMetadata({
     title: p.title,
     description: p.description,
@@ -63,15 +64,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const relatedAreas = p.relatedAreas.map(getArea).filter((a) => a !== undefined);
   const works = relatedServices.length ? worksByService(relatedServices[0].slug).slice(0, 3) : [];
   const relatedPosts = getRelatedPosts(p, 3);
-  const cover = img(p.cluster.image);
+  const cover = img(p.photo.image);
+  const coverCredit = creditOf(p.photo.image);
   const toc = p.headings.filter((h) => h.level === 2);
   const updated = p.updatedAt !== p.publishedAt;
 
   return (
     <>
       <article>
-        <header className="bg-silver-soft border-b border-silver-200">
-          <div className="container-x pb-10 pt-6 lg:pb-12 lg:pt-8">
+        <header className="bg-white">
+          <div className="container-x pt-4 lg:pt-5">
             <Breadcrumbs
               items={[
                 { name: "住宅設備コラム", href: "/blog" },
@@ -79,13 +81,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 { name: p.title, href: `/blog/${p.slug}` },
               ]}
             />
-            <div className="mx-auto mt-8 max-w-[52rem] lg:mt-10">
-              <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                {/* タップしやすい高さを確保するため、リンクの中にラベルを入れる */}
-                <Link href={`/blog/category/${p.category}`} className="inline-flex min-h-10 items-center">
-                  <span className="tag-slant tag-slant-blue">{p.cluster.name}</span>
+            <div className="mx-auto mt-7 max-w-[50rem] lg:mt-11">
+              <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs tracking-wider text-ink-mute">
+                <Link href={`/blog/category/${p.category}`} className="inline-flex min-h-10 items-center font-bold text-ink underline decoration-silver-400 underline-offset-4 hover:text-brand-700">
+                  {p.cluster.name}
                 </Link>
-                <span className="num text-xs tracking-widest text-ink-mute">
+                <span className="num">
                   公開 <time dateTime={p.publishedAt}>{formatDateJa(p.publishedAt)}</time>
                   {updated && (
                     <>
@@ -94,29 +95,47 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   )}
                 </span>
               </p>
-              <h1 className="h-page mt-4 text-balance"><Phrase>{p.title}</Phrase></h1>
+              <h1 className="h-page mt-2 text-balance">
+                <Phrase>{p.title}</Phrase>
+              </h1>
               <p className="lead mt-5 max-w-none">{p.description}</p>
             </div>
           </div>
         </header>
 
         <div className="bg-white">
-          <div className="mx-auto max-w-[60rem] px-[clamp(1.25rem,4vw,2.5rem)] pt-8 lg:pt-12">
-            <div className="relative aspect-[21/9] overflow-hidden rounded-lg bg-silver-100">
-              <PhotoFill image={p.cluster.image} alt={p.cluster.imageAlt} sizes="(min-width: 1000px) 880px, 100vw" priority />
+          {/* 記事の写真。イメージ写真には「イメージ」と書き、出典の表示が必要な写真には出典を添える */}
+          <figure className="mx-auto mt-8 max-w-[58rem] lg:mt-10 lg:px-[clamp(1.25rem,4vw,2.5rem)]">
+            <div className="relative aspect-[16/9] bg-silver-100 sm:aspect-[21/9]">
+              <PhotoFill image={p.photo.image} alt={p.photo.alt} sizes="(min-width: 1000px) 848px, 100vw" priority />
             </div>
-          </div>
+            <figcaption className="mt-2 px-[clamp(1.25rem,4vw,2.5rem)] text-xs leading-relaxed text-ink-mute lg:px-0">
+              {coverCredit ? (
+                <>
+                  写真：
+                  <a href={coverCredit.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                    {coverCredit.author}
+                  </a>
+                  （{coverCredit.license}）
+                </>
+              ) : p.photo.image.startsWith("works/") ? (
+                "写真は、当社の施工現場で撮影したものです。"
+              ) : (
+                "写真はイメージです"
+              )}
+            </figcaption>
+          </figure>
 
-          <div className="mx-auto max-w-[52rem] px-[clamp(1.25rem,4vw,2.5rem)] pb-[clamp(3.5rem,7vw,6rem)] pt-10">
+          <div className="mx-auto max-w-[50rem] px-[clamp(1.25rem,4vw,2.5rem)] pb-[clamp(3rem,6vw,5rem)] pt-9">
             {/* 目次 */}
             {toc.length >= 3 && (
-              <nav aria-label="この記事の目次" className="mb-10 rounded-lg border border-silver-200 bg-silver-50 p-5 sm:p-6">
+              <nav aria-label="この記事の目次" className="mb-10 border-y border-silver-300 py-5">
                 <p className="eyebrow">この記事の内容</p>
-                <ol className="mt-3 space-y-0.5">
+                <ol className="mt-2">
                   {toc.map((h, i) => (
                     <li key={h.id}>
-                      <a href={`#${h.id}`} className="group flex gap-3 py-1.5 text-[0.9375rem] font-bold leading-relaxed text-ink hover:text-brand-700">
-                        <span className="num w-6 shrink-0 text-brand-600">{String(i + 1).padStart(2, "0")}</span>
+                      <a href={`#${h.id}`} className="group flex gap-3.5 py-1.5 text-[0.9375rem] leading-relaxed text-ink hover:text-brand-700">
+                        <span className="num w-4 shrink-0 text-ink-mute">{i + 1}</span>
                         <span className="underline-offset-4 group-hover:underline">{h.text}</span>
                       </a>
                     </li>
@@ -130,8 +149,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {/* この記事の質問 */}
             {p.faq.length > 0 && (
               <section aria-labelledby="post-faq" className="mt-14">
-                <h2 id="post-faq" className="h-sub mb-4 flex items-center gap-2.5">
-                  <span aria-hidden="true" className="inline-block h-3.5 w-5 -skew-x-[24deg] bg-brand-600" />
+                <h2 id="post-faq" className="h-sub mb-4">
                   この記事に関する質問
                 </h2>
                 <FaqList faqs={p.faq} />
@@ -140,7 +158,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             {/* 出典 */}
             {p.sources.length > 0 && (
-              <section aria-labelledby="post-sources" className="mt-12 rounded-lg bg-silver-50 p-5 sm:p-6">
+              <section aria-labelledby="post-sources" className="mt-12 bg-silver-50 p-5 sm:p-6">
                 <h2 id="post-sources" className="text-sm font-bold text-ink">
                   出典・参考にした公式情報
                 </h2>
@@ -160,24 +178,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             )}
 
             {/* 著者 */}
-            <aside aria-label="この記事について" className="mt-10 flex flex-col gap-4 border-y border-silver-200 py-6 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs font-bold tracking-widest text-ink-mute">この記事を書いた人</p>
-                <p className="mt-1 text-base font-extrabold text-ink">{p.author}</p>
-                <p className="mt-1 text-[0.8125rem] leading-relaxed">
-                  {siteConfig.name}は、横浜市戸塚区を中心に住宅設備の工事・リフォームを行っています。
-                  <Link href="/company" className="text-link ml-1">
-                    会社案内
-                  </Link>
-                </p>
-              </div>
+            <aside aria-label="この記事について" className="mt-10 border-y border-silver-200 py-5">
+              <p className="text-xs font-bold tracking-wider text-ink-mute">この記事を書いた人</p>
+              <p className="mt-1 text-base font-bold text-ink">{p.author}</p>
+              <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                {siteConfig.name}は、横浜市戸塚区を中心に住宅設備の工事・リフォームを行っています。
+                <Link href="/company" className="text-link ml-1">
+                  会社案内
+                </Link>
+              </p>
             </aside>
 
             {/* 関連するサービス */}
             {relatedServices.length > 0 && (
               <section aria-labelledby="post-services" className="mt-12">
-                <h2 id="post-services" className="h-sub flex items-center gap-2.5">
-                  <span aria-hidden="true" className="inline-block h-3.5 w-5 -skew-x-[24deg] bg-brand-600" />
+                <h2 id="post-services" className="h-sub">
                   この記事に関係するサービス
                 </h2>
                 <ul className="rows mt-4">
@@ -188,21 +203,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   ))}
                 </ul>
                 {relatedAreas.length > 0 && (
-                  <p className="mt-5 flex flex-wrap gap-x-6 gap-y-1">
+                  <p className="mt-6 flex flex-wrap gap-x-9 gap-y-3">
                     {relatedAreas.map((a) => (
-                      <Link key={a.slug} href={`/area/${a.slug}`} className="link-arrow text-sm">
-                        <Icon name="mapPin" className="size-4" />
+                      <Link key={a.slug} href={`/area/${a.slug}`} className="link-arrow !text-sm">
                         {a.name}の住宅設備・リフォーム
+                        <Icon name="arrowRight" className="size-3.5" />
                       </Link>
                     ))}
                   </p>
                 )}
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <LinkButton href="/contact" icon="document">
-                    無料見積もりを依頼する
-                  </LinkButton>
-                  <PhoneButton variant="outline" />
-                </div>
               </section>
             )}
           </div>
@@ -212,22 +221,28 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* 施工事例 */}
       {works.length > 0 && (
         <section aria-labelledby="post-works" className="cv section bg-silver-50">
+          {works.length === 1 ? (
+            <div className="container-x">
+              <WorkFeature work={works[0]} heading={<SectionHeading id="post-works" title={`${relatedServices[0].shortName}の施工事例`} />} />
+            </div>
+          ) : (
           <div className="container-x">
-            <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
-              <SectionHeading id="post-works" eyebrow="施工事例" title={`${relatedServices[0].shortName}の施工事例`} />
+            <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+              <SectionHeading id="post-works" title={`${relatedServices[0].shortName}の施工事例`} />
               <Link href="/works" className="link-arrow shrink-0" {...reveal(80)}>
-                施工事例の一覧へ
+                施工事例の一覧
                 <Icon name="arrowRight" className="size-4" />
               </Link>
             </div>
-            <ul className="scroller mt-9 gap-x-6 gap-y-10 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+            <ul className={`scroller mt-9 gap-x-8 gap-y-10 sm:grid sm:grid-cols-2 ${works.length >= 3 ? "lg:grid-cols-3" : ""}`}>
               {works.map((w, i) => (
                 <li key={w.slug} {...reveal(i * 80)}>
-                  <WorkCard work={w} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 100vw" />
+                  <WorkCard work={w} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 78vw" />
                 </li>
               ))}
             </ul>
           </div>
+          )}
         </section>
       )}
 
@@ -235,20 +250,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {relatedPosts.length > 0 && (
         <section aria-labelledby="post-related" className={`cv section ${works.length > 0 ? "bg-white" : "bg-silver-50"}`}>
           <div className="container-x">
-            <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
-              <SectionHeading id="post-related" eyebrow="関連コラム" title="合わせて読みたい" />
-              <Link href={`/blog/category/${p.category}`} className="link-arrow shrink-0" {...reveal(80)}>
-                「{p.cluster.name}」のコラム一覧
-                <Icon name="arrowRight" className="size-4" />
-              </Link>
-            </div>
-            <ul className="scroller mt-9 gap-x-6 gap-y-10 sm:grid sm:grid-cols-2 lg:grid-cols-3">
-              {relatedPosts.map((r, i) => (
-                <li key={r.slug} {...reveal(i * 80)}>
-                  <PostCard post={r} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 100vw" />
-                </li>
-              ))}
-            </ul>
+            <SectionSplit heading={<SectionHeading id="post-related" title="関連コラム" />}>
+              <ul className="rows" {...reveal(60)}>
+                {relatedPosts.map((r) => (
+                  <li key={r.slug}>
+                    <PostRow post={r} />
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-7">
+                <Link href={`/blog/category/${p.category}`} className="link-arrow">
+                  「{p.cluster.name}」のコラム一覧
+                  <Icon name="arrowRight" className="size-4" />
+                </Link>
+              </p>
+            </SectionSplit>
           </div>
         </section>
       )}

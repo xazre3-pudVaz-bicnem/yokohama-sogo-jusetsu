@@ -18,32 +18,33 @@ export function BlogIndexView({ page, cluster }: { page: number; cluster?: BlogC
   const posts = paginate(all, page);
   const basePath = cluster ? `/blog/category/${cluster.id}` : "/blog";
   const crumbs = [{ name: "住宅設備コラム", href: "/blog" }, ...(cluster ? [{ name: cluster.name, href: basePath }] : [])];
+  const pageNote = page > 1 ? <span className="ml-3 text-[0.55em] font-bold text-ink-mute">{page}ページ目</span> : null;
 
   return (
     <>
       <PageHero
-        eyebrow={cluster ? "住宅設備コラム" : "住宅設備コラム"}
+        eyebrow={cluster ? "住宅設備コラム" : undefined}
         title={
           cluster ? (
             <>
-              「{cluster.name}」のコラム{page > 1 && <span className="ml-3 text-[0.6em] font-bold text-silver-300">{page}ページ目</span>}
+              「{cluster.name}」のコラム{pageNote}
             </>
           ) : (
             <>
-              <span className="ib">交換の時期、選び方、</span>
-              <span className="ib">費用の考え方。</span>
-              {page > 1 && <span className="ml-3 text-[0.6em] font-bold text-silver-300">{page}ページ目</span>}
+              住宅設備コラム{pageNote}
             </>
           )
         }
-        lead={cluster ? cluster.description : "「いつ替えるべきか」「何を基準に選ぶか」。住宅設備の工事を頼む前に知っておきたいことを、設備ごと・地域ごとにまとめています。"}
+        lead={cluster ? cluster.description : "交換の時期、機種の選び方、費用の考え方など、住宅設備の工事を頼む前に確認しておきたいことを、設備ごと・地域ごとにまとめています。"}
         crumbs={crumbs}
       >
         {cluster && (
-          <Link href={cluster.pillar.href} className="link-arrow link-arrow-on-dark mt-5">
-            {cluster.pillar.label}のページを見る
-            <Icon name="arrowRight" className="size-4" />
-          </Link>
+          <p className="mt-6">
+            <Link href={cluster.pillar.href} className="link-arrow">
+              {cluster.pillar.label}
+              <Icon name="arrowRight" className="size-4" />
+            </Link>
+          </p>
         )}
       </PageHero>
 

@@ -211,9 +211,14 @@ export const works: Work[] = [
       },
     ],
     comment: "空調配管のラッキングカバー施工です。キレイに仕上がっております。",
-    beforeAfter: [],
+    beforeAfter: [
+      {
+        title: "機械置き場の配管",
+        before: { key: "works/lagging-1", alt: "ラッキングカバーを施工する前の空調配管。保温材を巻いた状態", label: "施工前" },
+        after: { key: "works/lagging-2", alt: "ラッキングカバーを施工したあとの空調配管", label: "施工後" },
+      },
+    ],
     gallery: [
-      { key: "works/lagging-1", alt: "室外機が並ぶ屋外の機械置き場と、ラッキングカバーを施工した空調配管" },
       { key: "works/lagging-3", alt: "室外機の間を通る、ラッキングカバーを施工した配管" },
       { key: "works/lagging-4", alt: "配管の曲がりの部分。板を分けて曲がりに沿わせたラッキングカバー" },
       { key: "works/lagging-5", alt: "配管が機器に入る部分の、ラッキングカバーの端部" },

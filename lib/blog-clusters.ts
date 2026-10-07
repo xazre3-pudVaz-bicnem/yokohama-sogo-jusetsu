@@ -134,8 +134,8 @@ export const blogClusters: BlogCluster[] = [
     name: "解体",
     description: "リフォームに伴う解体の範囲、石綿の事前調査、廃材の処理など、解体の前に知っておきたいこと。",
     pillar: { href: "/service/demolition", label: "解体工事" },
-    image: "photos/demolition-site",
-    imageAlt: "解体工事の現場",
+    image: "works/floor-protection",
+    imageAlt: "工事の前に、床一面を養生シートで覆った室内",
   },
   {
     id: "garden",

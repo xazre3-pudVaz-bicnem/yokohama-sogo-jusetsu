@@ -11,13 +11,10 @@ export const storageBattery: Service = {
   category: "energy",
   name: "家庭用蓄電池",
   shortName: "蓄電池",
-  icon: "battery",
-  accent: "sun",
-  image: "photos/house-solar-hill",
-  imageAlt: "太陽光パネルを載せた、丘の上の2階建て住宅",
-  subImage: "photos/house-white-gray",
-  subImageAlt: "白と濃いグレーの外壁の2階建て住宅",
-  catch: "ためて、夜に使う。停電にも備える。",
+  image: "photos/house-white-gray",
+  imageAlt: "白と濃いグレーの外壁の2階建て住宅",
+  heroLayout: "side",
+  catch: "家庭用蓄電池の設置、太陽光発電への後付け",
   summary:
     "家庭用蓄電池の設置に対応します。太陽光発電との同時設置はもちろん、すでに太陽光がある家への後付けも、いまの機器との相性を確認してご提案します。",
   seo: {
@@ -27,7 +24,7 @@ export const storageBattery: Service = {
     keywords: ["戸塚区 蓄電池", "横浜市 蓄電池 設置", "蓄電池 後付け", "蓄電池 全負荷 特定負荷", "蓄電池 停電"],
   },
   h1: "横浜市戸塚区の家庭用蓄電池の設置工事",
-  lead: "蓄電池は、「何のために置くか」で選ぶ機種が変わります。昼に太陽光でつくった電気を夜に使いたいのか、停電のときに家中の電気を使いたいのか。目的がはっきりすれば、必要な容量と機能はおのずと決まります。横浜総合住設は、いまの電気の使い方をうかがいながら、過不足のない一台をご提案します。",
+  lead: "昼に太陽光でつくった電気を夜に使いたいのか、停電に備えたいのか。蓄電池は、目的によって選ぶ機種と容量が変わります。太陽光発電との同時設置にも、すでに太陽光がある家への後付けにも対応します。",
   worries: [
     "太陽光の売電期間が終わり、余った電気の使い道を考えている",
     "停電のときに冷蔵庫やエアコンを使えるようにしたい",
@@ -61,7 +58,7 @@ export const storageBattery: Service = {
   guides: [
     {
       id: "type",
-      heading: "蓄電池選びの3つの分かれ道",
+      heading: "蓄電池の種類と選び方",
       intro: "カタログには多くの数字が並びますが、最初に決めるのは次の3点です。",
       items: [
         {
@@ -118,8 +115,8 @@ export const storageBattery: Service = {
       { title: "補助金の有無", body: "制度が使えるかどうかで実質の負担が変わります。受付の時期と条件は年度ごとに確認が必要です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-think",
+  note: {
+    label: "容量を決める前に",
     text: "「停電のとき、どの家電を動かしたいか」を書き出してみてください。冷蔵庫と照明だけか、エアコンやお風呂もか。それで選ぶ型が決まります。",
   },
   local: {
@@ -150,6 +147,16 @@ export const storageBattery: Service = {
       q: "見積もりだけでも頼めますか？",
       a: "お見積もりは無料です。現地調査で分電盤と設置場所を確認してから、見積書をお出しします。",
     },
+  ],
+  layout: [
+    { type: "guide", id: "type", variant: "columns", table: true },
+    { type: "guide", id: "place", variant: "rows" },
+    { type: "menu", heading: "蓄電池の対応工事", variant: "rows" },
+    { type: "note" },
+    { type: "subsidy" },
+    { type: "signs", heading: "蓄電池の検討でよくある疑問" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["solar", "eco-one", "water-heater", "ene-farm"],
   blogClusters: ["storage-battery", "solar", "subsidy"],

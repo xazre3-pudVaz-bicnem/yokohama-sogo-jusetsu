@@ -109,7 +109,7 @@ export default function PrivacyPage() {
       body: (
         <>
           <p>個人情報の取り扱いについてのお問い合わせは、次の窓口までお願いします。</p>
-          <dl className="not-prose mt-4 rounded-lg bg-silver-50 p-5 text-[0.9375rem] leading-[1.9]">
+          <dl className="not-prose mt-4 bg-silver-50 p-5 text-[0.9375rem] leading-[1.9]">
             <dt className="font-bold text-ink">{siteConfig.name}</dt>
             <dd>{officeAddressWithPostal("head")}</dd>
             {phone && <dd className="num">電話：{phone}</dd>}
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
 
   return (
     <>
-      <PageHero eyebrow="プライバシーポリシー" title="個人情報の取り扱いについて" crumbs={[{ name: "プライバシーポリシー", href: "/privacy" }]} />
+      <PageHero title="プライバシーポリシー" lead="このサイトでの、個人情報の取り扱いについての方針です。" crumbs={[{ name: "プライバシーポリシー", href: "/privacy" }]} />
       <div className="section bg-white">
         <div className="container-narrow">
           <div className="prose-jp">

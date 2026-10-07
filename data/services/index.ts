@@ -13,7 +13,7 @@ import { demolition } from "./demolition";
 import { garden } from "./garden";
 import { other } from "./other";
 
-export type { Service, ServiceCategory, ServiceCategoryId, Accent, BlogClusterId, ServiceFaq } from "./types";
+export type { Service, ServiceCategory, ServiceCategoryId, BlogClusterId, ServiceFaq } from "./types";
 
 /**
  * サービスの一覧（この並びが、メニュー・一覧ページ・サイトマップの順番になる）。
@@ -44,9 +44,6 @@ export const serviceCategories: ServiceCategory[] = [
   { id: "reform", name: "リフォーム", description: "水まわりから内装まで。解体・設備・仕上げを一貫して。" },
   { id: "site", name: "外構・解体", description: "庭木の手入れ、ウッドデッキ、リフォームに伴う解体工事。" },
 ];
-
-/** トップページで大きく見せる主力サービス（先頭の2つが特に大きい） */
-export const featuredServiceSlugs = ["water-heater", "air-conditioner", "exterior-painting", "solar", "toilet", "reform"] as const;
 
 export function getService(slug: string): Service | undefined {
   return services.find((s) => s.slug === slug);

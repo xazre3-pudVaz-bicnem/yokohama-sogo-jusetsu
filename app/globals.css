@@ -2,7 +2,7 @@
 
 /*
  * デザイントークン
- * 濃紺 × 白 × 鮮やかな青 × シルバー（ロゴの配色）。
+ * 濃紺 × 白 × 淡いグレー（シルバー）が基本。青は、問い合わせのボタンなど、ごく小さな面積にだけ使う。
  * 色は必ずここで定義したものを使う。文字色と背景の組み合わせは、コントラスト比 4.5:1 以上を確認してある。
  */
 @theme {
@@ -13,7 +13,7 @@
   --color-navy-700: #0f2f73;
   --color-navy-600: #17409a;
 
-  /* 青（ロゴの平行四辺形 #003ee1〜#00adfc） */
+  /* 青（ロゴの平行四辺形の色）。ボタンとリンクの強調だけに使う */
   --color-brand-800: #08348f;
   --color-brand-700: #0a41b8;
   --color-brand-600: #0d57e6;
@@ -28,34 +28,26 @@
   --color-sky-300: #7dcbff;
 
   /* シルバー */
-  --color-silver-50: #f5f7fa;
-  --color-silver-100: #edf0f5;
-  --color-silver-200: #dfe4ec;
-  --color-silver-300: #c8cfda;
-  --color-silver-400: #a3adbd;
-  --color-silver-500: #768196;
-  --color-silver-600: #566179;
+  --color-silver-50: #f5f6f8;
+  --color-silver-100: #eceef2;
+  --color-silver-200: #dde1e8;
+  --color-silver-300: #c5cbd6;
+  --color-silver-400: #a0a9b8;
+  --color-silver-500: #747e91;
+  --color-silver-600: #556075;
 
   /* 文字 */
   --color-ink: #0c1630;
   --color-ink-body: #2b3650;
-  --color-ink-mute: #566179;
+  --color-ink-mute: #556075;
 
-  /* サービスごとの差し色（チラシの配色。小さな面積にだけ使う） */
-  --color-heat: #d03a26; /* 白文字を載せても 4.5:1 を満たす濃さ（#d8402b は 4.48:1 で不足） */
-  --color-leaf: #1b8a50;
-  --color-sun: #c96a00;
-  --color-rose: #cf3a70;
-  --color-violet: #6447d6;
-  --color-aqua: #0b7fc4;
+  /* 入力の誤りを知らせる赤（フォームだけで使う） */
+  --color-heat: #c0321f;
 
   --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", YuGothic, Meiryo, sans-serif;
   --font-display: var(--font-jost), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic", YuGothic, Meiryo, sans-serif;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-
-  --shadow-card: 0 1px 2px rgb(6 21 55 / 0.06), 0 12px 32px -16px rgb(6 21 55 / 0.22);
-  --shadow-lift: 0 2px 4px rgb(6 21 55 / 0.08), 0 24px 48px -20px rgb(6 21 55 / 0.35);
 
   --breakpoint-xs: 26rem;
 }
@@ -90,7 +82,7 @@
   h4 {
     color: var(--color-ink);
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.45;
     letter-spacing: 0.04em;
     /* 見出しは、文節の切れ目で折り返す（対応しているブラウザだけ。そのほかは従来どおり） */
     word-break: auto-phrase;
@@ -99,9 +91,8 @@
     text-underline-offset: 0.2em;
   }
   :focus-visible {
-    outline: 3px solid var(--color-brand-500);
+    outline: 2px solid var(--color-brand-600);
     outline-offset: 2px;
-    border-radius: 2px;
   }
   ::selection {
     background: var(--color-brand-200);
@@ -125,71 +116,62 @@
   }
   .container-narrow {
     width: 100%;
-    max-width: 56rem;
+    max-width: 54rem;
     margin-inline: auto;
     padding-inline: clamp(1.25rem, 4vw, 2.5rem);
   }
+  /* 区画の上下の余白。内容どうしの関係が分かる程度にとどめる（広げすぎない） */
   .section {
-    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+    padding-block: clamp(3rem, 5.5vw, 5.25rem);
   }
   .section-tight {
-    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(2.25rem, 4vw, 3.5rem);
   }
 
   /* 画面外の区画は、近づくまで描画しない（長いページの初期表示を軽くする） */
   .cv {
     content-visibility: auto;
-    contain-intrinsic-size: auto 720px;
+    contain-intrinsic-size: auto 640px;
   }
 
   /* ── 見出し ─────────────────────────────────────── */
-  /* 小見出しの前に、ロゴの青い平行四辺形を置く */
+  /* 見出しの上に添える小さな区分名。飾りは付けない */
   .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6em;
-    color: var(--color-brand-700);
-    font-size: 0.875rem;
+    display: block;
+    color: var(--color-ink-mute);
+    font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    line-height: 1.4;
-  }
-  .eyebrow::before {
-    content: "";
-    width: 1.05em;
-    height: 0.8em;
-    background: linear-gradient(135deg, #003ee1, #00adfc);
-    transform: skewX(-24deg);
-    flex: none;
+    letter-spacing: 0.14em;
+    line-height: 1.5;
   }
   .eyebrow-on-dark {
-    color: var(--color-sky-300);
+    color: var(--color-silver-300);
   }
   .h-display {
-    font-size: clamp(2rem, 1.2rem + 3.4vw, 3.75rem);
-    line-height: 1.24;
-    letter-spacing: 0.04em;
-    font-weight: 800;
+    font-size: clamp(1.9rem, 1.2rem + 3vw, 3.4rem);
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    font-weight: 700;
   }
   .h-page {
-    font-size: clamp(1.7rem, 1.2rem + 2.2vw, 2.9rem);
-    line-height: 1.32;
-    font-weight: 800;
+    font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.5rem);
+    line-height: 1.4;
+    font-weight: 700;
   }
   .h-section {
-    font-size: clamp(1.5rem, 1.15rem + 1.6vw, 2.35rem);
-    line-height: 1.38;
-    font-weight: 800;
-  }
-  .h-sub {
-    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+    font-size: clamp(1.35rem, 1.1rem + 1.1vw, 1.875rem);
     line-height: 1.5;
     font-weight: 700;
   }
+  .h-sub {
+    font-size: clamp(1.0938rem, 1.02rem + 0.35vw, 1.25rem);
+    line-height: 1.55;
+    font-weight: 700;
+  }
   .lead {
-    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
-    line-height: 2;
-    max-width: 44em;
+    font-size: clamp(0.9688rem, 0.94rem + 0.15vw, 1.0313rem);
+    line-height: 2.05;
+    max-width: 42em;
   }
   .num {
     font-family: var(--font-display);
@@ -198,29 +180,26 @@
   }
 
   /* ── ボタン ─────────────────────────────────────── */
+  /* 角は小さく、影は付けない。青いボタンは、問い合わせの導線だけに使う */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.6em;
-    min-height: 3.25rem;
-    padding: 0.7rem 1.5rem;
-    border-radius: 0.375rem;
+    min-height: 3rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     line-height: 1.3;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-decoration: none;
     white-space: nowrap;
     transition:
       background-color 0.25s var(--ease-out-soft),
       color 0.25s var(--ease-out-soft),
-      border-color 0.25s var(--ease-out-soft),
-      transform 0.25s var(--ease-out-soft),
-      box-shadow 0.25s var(--ease-out-soft);
-  }
-  .btn:active {
-    transform: translateY(1px);
+      border-color 0.25s var(--ease-out-soft);
   }
   .btn .btn-arrow {
     transition: transform 0.3s var(--ease-out-soft);
@@ -231,7 +210,6 @@
   .btn-primary {
     background: var(--color-brand-600);
     color: #fff;
-    box-shadow: 0 10px 24px -12px rgb(13 87 230 / 0.75);
   }
   .btn-primary:hover {
     background: var(--color-brand-700);
@@ -246,15 +224,14 @@
   .btn-white {
     background: #fff;
     color: var(--color-navy-900);
-    box-shadow: 0 10px 24px -14px rgb(2 11 36 / 0.6);
   }
   .btn-white:hover {
-    background: var(--color-brand-50);
+    background: var(--color-silver-100);
   }
   .btn-outline {
-    background: #fff;
+    background: transparent;
     color: var(--color-navy-900);
-    border: 1.5px solid var(--color-navy-900);
+    border-color: var(--color-navy-900);
   }
   .btn-outline:hover {
     background: var(--color-navy-900);
@@ -262,8 +239,7 @@
   }
   .btn-ghost-dark {
     color: #fff;
-    border: 1.5px solid rgb(255 255 255 / 0.55);
-    background: rgb(255 255 255 / 0.06);
+    border-color: rgb(255 255 255 / 0.6);
   }
   .btn-ghost-dark:hover {
     background: #fff;
@@ -273,29 +249,42 @@
   .btn-sm {
     min-height: 2.75rem;
     padding: 0.5rem 1.1rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
-  /* 文中のリンク（矢印つき） */
+  /* 矢印つきのリンク（一覧・くわしいページへ送るとき） */
   .link-arrow {
     display: inline-flex;
     align-items: center;
-    gap: 0.45em;
-    color: var(--color-brand-700);
+    gap: 0.5em;
+    color: var(--color-navy-900);
+    font-size: 0.9375rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-decoration: none;
-    padding-block: 0.35rem;
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0 1.5px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    transition: background-size 0.35s var(--ease-out-soft);
+    padding-block: 0.4rem;
+    border-bottom: 1px solid var(--color-navy-900);
+    transition:
+      color 0.25s var(--ease-out-soft),
+      border-color 0.25s var(--ease-out-soft);
   }
   .link-arrow:hover {
-    background-size: 100% 1.5px;
+    color: var(--color-brand-700);
+    border-color: var(--color-brand-700);
+  }
+  .link-arrow svg {
+    transition: transform 0.3s var(--ease-out-soft);
+  }
+  .link-arrow:hover svg {
+    transform: translateX(3px);
   }
   .link-arrow-on-dark {
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.6);
+  }
+  .link-arrow-on-dark:hover {
     color: var(--color-sky-300);
+    border-color: var(--color-sky-300);
   }
   .text-link {
     color: var(--color-brand-700);
@@ -306,76 +295,45 @@
   .text-link:hover {
     text-decoration-thickness: 2px;
   }
+  /* リンクに添える小さな矢印は、文字の青ではなくグレーにする（アイコンには色を付けない） */
+  .text-link svg {
+    color: var(--color-silver-500);
+  }
 
-  /* ── 面 ─────────────────────────────────────────── */
-  /* ロゴと同じ傾きで角を落とす */
-  .cut-tr {
-    clip-path: polygon(0 0, calc(100% - 2.25rem) 0, 100% 2.25rem, 100% 100%, 0 100%);
+  /* ── 罫線で区切る ───────────────────────────────── */
+  /* カードの代わりに、細い線で区切った行を使う（一覧・質問・対応工事など） */
+  .rows > * {
+    border-bottom: 1px solid var(--color-silver-200);
   }
-  .cut-bl {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 2.25rem 100%, 0 calc(100% - 2.25rem));
+  .rows > *:first-child {
+    border-top: 1px solid var(--color-silver-200);
   }
-  .slant-l {
-    clip-path: polygon(11% 0, 100% 0, 100% 100%, 0 100%);
+  .rows-on-dark > * {
+    border-bottom: 1px solid rgb(255 255 255 / 0.16);
   }
-  /* 斜めのラベル（番号・区分） */
-  .tag-slant {
+  .rows-on-dark > *:first-child {
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+  }
+  /* 区画の見出しの上に引く、濃い1本の線 */
+  .rule-top {
+    border-top: 1px solid var(--color-navy-900);
+  }
+
+  /* 写真に添える小さなラベル（施工前・施工後・区分） */
+  .tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.2rem 0.9rem;
+    padding: 0.2rem 0.65rem;
     background: var(--color-navy-900);
     color: #fff;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     line-height: 1.5;
-    clip-path: polygon(0.55rem 0, 100% 0, calc(100% - 0.55rem) 100%, 0 100%);
   }
-  .tag-slant-blue {
-    background: var(--color-brand-600);
-  }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    padding: 0.2rem 0.7rem;
-    border-radius: 999px;
-    background: var(--color-brand-50);
-    color: var(--color-brand-800);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    line-height: 1.5;
-    letter-spacing: 0.05em;
-  }
-  .chip-outline {
+  .tag-light {
     background: #fff;
-    border: 1px solid var(--color-silver-300);
-    color: var(--color-ink-body);
-  }
-  /* シルバーの細い線 */
-  .hairline {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-silver-300) 12%, var(--color-silver-300) 88%, transparent);
-  }
-  .bg-blueprint {
-    background-color: var(--color-navy-900);
-    background-image:
-      linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
-    background-size: 2.5rem 2.5rem;
-  }
-  .bg-silver-soft {
-    background: linear-gradient(180deg, var(--color-silver-50), #fff 60%);
-  }
-  .metal-edge {
-    background: linear-gradient(135deg, #f7f9fb 0%, #c3cad6 38%, #f2f4f8 55%, #9aa5b5 100%);
-  }
-
-  /* 破線で区切る行（FAQ・関連リンク・一覧）。カードを並べる代わりに使う */
-  .rows > * {
-    border-bottom: 1px dashed var(--color-silver-300);
-  }
-  .rows > *:first-child {
-    border-top: 1px dashed var(--color-silver-300);
+    color: var(--color-navy-900);
   }
 
   /* 写真のホバー */
@@ -385,43 +343,11 @@
   .zoom-wrap .zoom-img {
     transition: transform 0.9s var(--ease-out-soft);
   }
-  a:hover .zoom-img,
-  .zoom-wrap:hover .zoom-img {
-    transform: scale(1.045);
+  a:hover .zoom-img {
+    transform: scale(1.03);
   }
 
-  /* 吹き出し */
-  .bubble {
-    position: relative;
-    background: #fff;
-    border: 1.5px solid var(--color-navy-900);
-    border-radius: 0.75rem;
-    padding: 0.9rem 1.15rem;
-    color: var(--color-ink);
-    font-weight: 600;
-    line-height: 1.7;
-  }
-  .bubble::after {
-    content: "";
-    position: absolute;
-    width: 0.9rem;
-    height: 0.9rem;
-    background: #fff;
-    border-right: 1.5px solid var(--color-navy-900);
-    border-bottom: 1.5px solid var(--color-navy-900);
-  }
-  .bubble-down::after {
-    left: 2rem;
-    bottom: -0.52rem;
-    transform: rotate(45deg);
-  }
-  .bubble-left::after {
-    left: -0.52rem;
-    top: 1.4rem;
-    transform: rotate(135deg);
-  }
-
-  /* スマホでは横にスクロールする一覧にして、カードを縦に並べすぎない（640px 以上は呼び出し側の grid 指定に従う） */
+  /* スマホでは横にスクロールする一覧にして、縦に並べすぎない（640px 以上は呼び出し側の grid 指定に従う） */
   @media (max-width: 39.99rem) {
     .scroller {
       display: flex;
@@ -438,52 +364,43 @@
       display: none;
     }
     .scroller > * {
-      flex: 0 0 80%;
+      flex: 0 0 78%;
       scroll-snap-align: start;
     }
-  }
-
-  /* 蛍光ペン風の下線（青） */
-  .marker {
-    background: linear-gradient(transparent 62%, var(--color-brand-200) 62%);
-    padding-inline: 0.1em;
-  }
-  .marker-on-dark {
-    background: linear-gradient(transparent 66%, rgb(69 180 255 / 0.45) 66%);
   }
 
   /* ── 表 ─────────────────────────────────────────── */
   .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    border: 1px solid var(--color-silver-200);
-    border-radius: 0.5rem;
+    border-top: 1px solid var(--color-navy-900);
+    border-bottom: 1px solid var(--color-silver-300);
   }
   .table-spec {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9375rem;
-    line-height: 1.7;
+    line-height: 1.75;
     min-width: 34rem;
   }
   .table-spec th,
   .table-spec td {
-    padding: 0.85rem 1rem;
+    padding: 0.9rem 1rem;
     text-align: left;
     vertical-align: top;
     border-bottom: 1px solid var(--color-silver-200);
   }
   .table-spec thead th {
-    background: var(--color-navy-900);
-    color: #fff;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .table-spec tbody th {
     background: var(--color-silver-50);
     color: var(--color-ink);
     font-weight: 700;
     white-space: nowrap;
+  }
+  .table-spec tbody th {
+    color: var(--color-ink);
+    font-weight: 700;
+    white-space: nowrap;
+    background: #fff;
   }
   .table-spec tr:last-child th,
   .table-spec tr:last-child td {
@@ -511,6 +428,7 @@
       box-shadow: 1px 0 0 var(--color-silver-200);
     }
   }
+  /* 項目名と内容を左右に並べる一覧（会社概要・工事の概要など） */
   .dl-spec {
     display: grid;
     grid-template-columns: 1fr;
@@ -519,11 +437,11 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.15rem 1.5rem;
-    padding-block: 1.05rem;
+    padding-block: 1rem;
     border-bottom: 1px solid var(--color-silver-200);
   }
   .dl-spec > div:first-child {
-    border-top: 1px solid var(--color-silver-200);
+    border-top: 1px solid var(--color-navy-900);
   }
   .dl-spec dt {
     color: var(--color-ink);
@@ -538,7 +456,7 @@
 
   /* ── 記事本文 ───────────────────────────────────── */
   .prose-jp {
-    font-size: 1.0125rem;
+    font-size: 1rem;
     line-height: 2.05;
     color: var(--color-ink-body);
   }
@@ -553,27 +471,15 @@
   }
   .prose-jp h2 {
     margin-top: 2.8em;
-    padding: 0.1em 0 0.5em 0;
-    font-size: clamp(1.3rem, 1.15rem + 0.7vw, 1.6rem);
-    line-height: 1.5;
-    border-bottom: 2px solid var(--color-navy-900);
-    position: relative;
-  }
-  .prose-jp h2::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 4.5rem;
-    height: 2px;
-    background: var(--color-brand-500);
+    padding-top: 1.1em;
+    font-size: clamp(1.25rem, 1.12rem + 0.6vw, 1.5rem);
+    line-height: 1.55;
+    border-top: 1px solid var(--color-navy-900);
   }
   .prose-jp h3 {
     margin-top: 2.2em;
-    padding-left: 0.9em;
-    font-size: 1.15rem;
+    font-size: 1.0938rem;
     line-height: 1.6;
-    border-left: 4px solid var(--color-brand-600);
   }
   .prose-jp a {
     color: var(--color-brand-700);
@@ -599,12 +505,11 @@
   .prose-jp ul > li::before {
     content: "";
     position: absolute;
-    left: 0.15em;
-    top: 0.82em;
-    width: 0.55em;
-    height: 0.42em;
-    background: var(--color-brand-600);
-    transform: skewX(-24deg);
+    left: 0.1em;
+    top: 1em;
+    width: 0.7em;
+    height: 1px;
+    background: var(--color-navy-900);
   }
   .prose-jp ol {
     list-style: decimal;
@@ -617,7 +522,7 @@
     font-weight: 700;
   }
   .prose-jp blockquote {
-    border-left: 3px solid var(--color-silver-300);
+    border-left: 2px solid var(--color-silver-300);
     padding: 0.25em 0 0.25em 1.2em;
     color: var(--color-ink-mute);
   }
@@ -642,13 +547,29 @@
     color: var(--color-ink);
   }
 
+  /* 箇条書きの印（短い横線）。本文中の一覧で共通に使う */
+  .dash-list > li {
+    position: relative;
+    padding-left: 1.4em;
+  }
+  .dash-list > li::before {
+    content: "";
+    position: absolute;
+    left: 0.1em;
+    top: 0.95em;
+    width: 0.7em;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
   /* ── フォーム ───────────────────────────────────── */
   .field {
     width: 100%;
     min-height: 3.25rem;
     padding: 0.75rem 1rem;
-    border: 1.5px solid var(--color-silver-300);
-    border-radius: 0.375rem;
+    border: 1px solid var(--color-silver-400);
+    border-radius: 2px;
     background: #fff;
     color: var(--color-ink);
     font-size: 1rem;
@@ -661,12 +582,12 @@
     color: var(--color-silver-500);
   }
   .field:hover {
-    border-color: var(--color-silver-400);
+    border-color: var(--color-silver-500);
   }
   .field:focus {
     outline: none;
-    border-color: var(--color-brand-600);
-    box-shadow: 0 0 0 3px rgb(27 108 255 / 0.2);
+    border-color: var(--color-navy-900);
+    box-shadow: 0 0 0 3px rgb(13 87 230 / 0.18);
   }
   .field[aria-invalid="true"] {
     border-color: var(--color-heat);
@@ -690,6 +611,7 @@
 /* ── 登場アニメーション ─────────────────────────────
  * components/layout/RevealObserver.tsx が html[data-reveal-on] と data-revealed を付ける。
  * JS が動かないときは何も隠れない。最初から画面内にある要素も隠れない。
+ * 動きは控えめに：下から少し上がって現れる／写真が左から開く、の2種類だけ。
  */
 @media (prefers-reduced-motion: no-preference) {
   html[data-reveal-on] [data-reveal] {
@@ -700,23 +622,7 @@
   }
   html[data-reveal-on] [data-reveal]:not([data-revealed]) {
     opacity: 0;
-    transform: translateY(28px);
-  }
-  html[data-reveal-on] [data-reveal="left"]:not([data-revealed]) {
-    transform: translateX(-32px);
-  }
-  html[data-reveal-on] [data-reveal="right"]:not([data-revealed]) {
-    transform: translateX(32px);
-  }
-  /* スマホでは横にずらさない（隠れている間、ずれた分だけ横スクロールが出てしまうため） */
-  @media (max-width: 47.99rem) {
-    html[data-reveal-on] [data-reveal="left"]:not([data-revealed]),
-    html[data-reveal-on] [data-reveal="right"]:not([data-revealed]) {
-      transform: translateY(28px);
-    }
-  }
-  html[data-reveal-on] [data-reveal="zoom"]:not([data-revealed]) {
-    transform: scale(0.94);
+    transform: translateY(20px);
   }
   html[data-reveal-on] [data-reveal="fade"]:not([data-revealed]) {
     transform: none;
@@ -731,10 +637,10 @@
     clip-path: inset(0 100% 0 0);
   }
 
-  /* ヒーローの写真：ゆっくり寄る（1回だけ） */
+  /* トップの写真：ゆっくり寄る（1回だけ） */
   @keyframes hero-settle {
     from {
-      transform: scale(1.07);
+      transform: scale(1.05);
     }
     to {
       transform: scale(1);
@@ -742,56 +648,6 @@
   }
   .hero-settle {
     animation: hero-settle 2.4s var(--ease-out-soft) both;
-  }
-  /* ロゴの光（1回だけ） */
-  @keyframes glint {
-    0% {
-      transform: translateX(-120%) skewX(-24deg);
-      opacity: 0;
-    }
-    20% {
-      opacity: 0.9;
-    }
-    100% {
-      transform: translateX(320%) skewX(-24deg);
-      opacity: 0;
-    }
-  }
-  .glint {
-    position: relative;
-    overflow: hidden;
-  }
-  .glint::after {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 35%;
-    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
-    animation: glint 1.6s var(--ease-out-soft) 0.6s 1 both;
-    pointer-events: none;
-  }
-  /* 人物イラストが小さく跳ねる（画面に入ったとき 1 回だけ） */
-  @keyframes pop-in {
-    0% {
-      transform: translateY(18px) scale(0.94);
-      opacity: 0;
-    }
-    60% {
-      transform: translateY(-4px) scale(1.01);
-      opacity: 1;
-    }
-    100% {
-      transform: none;
-      opacity: 1;
-    }
-  }
-  html[data-reveal-on] [data-reveal="pop"]:not([data-revealed]) {
-    opacity: 0;
-    transform: translateY(18px) scale(0.94);
-  }
-  html[data-reveal-on] [data-reveal="pop"][data-revealed] {
-    animation: pop-in 0.7s var(--ease-out-soft) var(--reveal-delay, 0ms) both;
-    transition: none;
   }
 }
 

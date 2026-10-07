@@ -10,13 +10,11 @@ export const kitchenEquipment: Service = {
   category: "equipment",
   name: "ビルトインコンロ・レンジフード",
   shortName: "コンロ・レンジフード",
-  icon: "stove",
-  accent: "violet",
   image: "photos/kitchen-stove-hood",
   imageAlt: "ビルトインのガスコンロとステンレスのレンジフードがあるキッチン",
   subImage: "photos/kitchen-open",
   subImageAlt: "ガスコンロと薄型のレンジフードを備えた対面キッチン",
-  catch: "キッチンはそのまま、火まわりだけ新しく。",
+  catch: "ビルトインコンロとレンジフードの交換",
   summary:
     "ビルトインコンロとレンジフードの交換に対応します。いまのキッチンの寸法とガスの種類を確認し、同時交換で使える連動機能まで含めてご提案します。",
   seo: {
@@ -26,7 +24,7 @@ export const kitchenEquipment: Service = {
     keywords: ["戸塚区 ビルトインコンロ 交換", "戸塚区 レンジフード 交換", "横浜 ガスコンロ 交換", "レンジフード 交換 費用", "コンロ レンジフード 同時交換"],
   },
   h1: "横浜市戸塚区のビルトインコンロ・レンジフード交換",
-  lead: "コンロとレンジフードは、キッチン全体を入れ替えなくても、単体で新しくできる設備です。火がつきにくい、換気扇の音が大きくなった。そんな不便は、機器の交換だけで解消できることがほとんどです。横浜総合住設は、いまのキッチンに収まる機種を寸法から確認し、快適で使いやすい火まわりをご提案します。",
+  lead: "ビルトインコンロとレンジフードは、キッチン全体を入れ替えなくても、機器だけを交換できます。いまのキッチンの寸法とガスの種類を確認し、収まる機種をご提案します。火がつきにくい、換気扇の音が大きくなったといったご相談もお受けしています。",
   worries: [
     "コンロの火がつきにくい、途中で消える",
     "グリルが汚れて使わなくなった",
@@ -114,8 +112,8 @@ export const kitchenEquipment: Service = {
       { title: "既存機器の撤去", body: "古いコンロとレンジフードの取り外しと処分です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-idea",
+  note: {
+    label: "型番の確認のしかた",
     text: "コンロは天板の裏や電池ケースのふた、レンジフードはフィルターを外した内側に、型番のシールがあります。写真を送っていただければ確認します。",
   },
   local: {
@@ -146,6 +144,16 @@ export const kitchenEquipment: Service = {
       q: "キッチン全体の入れ替えも頼めますか？",
       a: "対応しています。システムキッチンの入れ替えは、住宅リフォームのページをご覧ください。",
     },
+  ],
+  layout: [
+    { type: "menu", heading: "コンロ・レンジフードの対応工事", variant: "photo" },
+    { type: "guide", id: "stove", variant: "rows" },
+    { type: "guide", id: "hood", variant: "columns" },
+    { type: "works" },
+    { type: "note" },
+    { type: "signs", heading: "コンロ・レンジフードの交換時期の目安" },
+    { type: "cost" },
+    { type: "local" },
   ],
   related: ["reform", "water-heater", "toilet", "other"],
   blogClusters: ["kitchen", "range-hood", "housing-equipment"],

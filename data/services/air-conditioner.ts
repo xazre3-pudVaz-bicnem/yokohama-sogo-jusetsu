@@ -11,13 +11,11 @@ export const airConditioner: Service = {
   category: "equipment",
   name: "エアコン設置・交換・修理",
   shortName: "エアコン",
-  icon: "aircon",
-  accent: "aqua",
   image: "photos/living-aircon",
   imageAlt: "壁掛けエアコンのある、日当たりのよいリビング",
   subImage: "works/aircon-cover-after-outdoor",
   subImageAlt: "配管を白い化粧カバーで仕上げたエアコンの室外機（横浜総合住設の施工）",
-  catch: "取り付けにくい場所も、仕上がりの見た目まで。",
+  catch: "家庭用・業務用エアコンの設置・交換・修理",
   summary:
     "家庭用エアコンの設置・交換・修理から、業務用エアコンの工事まで対応します。配管の化粧カバー仕上げや高所への設置など、他社で断られた工事もまずはご相談ください。",
   seo: {
@@ -27,7 +25,7 @@ export const airConditioner: Service = {
     keywords: ["戸塚区 エアコン工事", "戸塚区 エアコン取り付け", "横浜 エアコン 交換", "エアコン 高所作業", "業務用エアコン 横浜"],
   },
   h1: "横浜市戸塚区のエアコン工事 ── 設置・交換・修理",
-  lead: "エアコン工事は、機械を壁に付けて終わりではありません。配管をどこに通すか、室外機をどこに置くか、外から見たときにどう見えるか。横浜総合住設は、取り付けにくい場所への設置にも、配管の見た目を整える仕上げにも対応しています。家庭用から業務用まで、空調のことはまとめてご相談ください。",
+  lead: "家庭用エアコンの設置・交換・修理と、業務用エアコンの工事を行っています。2階や3階の外壁など取り付けにくい場所への設置、配管を化粧カバーに収める仕上げにも対応します。他社で断られた工事も、現地を見たうえでお答えします。",
   worries: [
     "冷えない、暖まらない、風が弱くなった",
     "室内機から水が落ちてくる",
@@ -65,7 +63,7 @@ export const airConditioner: Service = {
   guides: [
     {
       id: "finish",
-      heading: "配管の仕上げ ── 化粧テープと化粧カバー",
+      heading: "配管の仕上げ（化粧テープと化粧カバー）",
       intro:
         "エアコンの室内機と室外機は、冷媒の配管・排水のホース・電線でつながっています。屋外でこれらをどう保護するかで、耐久性と見た目が変わります。",
       items: [
@@ -109,7 +107,7 @@ export const airConditioner: Service = {
     },
     {
       id: "sign",
-      heading: "修理か交換か、判断の目安",
+      heading: "修理か交換かの目安",
       items: [
         {
           title: "効きが悪い",
@@ -140,9 +138,9 @@ export const airConditioner: Service = {
       { title: "電気工事と取り外し", body: "専用回路やコンセントの工事、古いエアコンの取り外しと、リサイクル料金・収集運搬料金です。" },
     ],
   },
-  staffTip: {
-    pose: "illust/pose-fist",
-    text: "「うちは無理かも」と思う場所ほど、一度見せてください。断られた理由が分かれば、別のやり方が見つかることがあります。",
+  note: {
+    label: "設置が難しいと言われた場合",
+    text: "取り付けられないと言われた場所でも、現地を見ると別の方法が見つかることがあります。断られた理由と、設置場所の写真をお知らせください。",
   },
   local: {
     heading: "戸塚区でエアコン工事を頼むときに",
@@ -176,6 +174,25 @@ export const airConditioner: Service = {
       q: "店舗や事務所の業務用エアコンにも対応していますか？",
       a: "対応しています。業務用エアコンの設置・交換のほか、屋外の空調配管にラッキングカバーを施工した事例もあります。法人・工務店の方は専用のページもご覧ください。",
     },
+  ],
+  layout: [
+    {
+      type: "guide",
+      id: "finish",
+      variant: "photo",
+      photos: [
+        { image: "works/aircon-cover-before-outdoor", alt: "取替前の室外機と、テープを巻いた配管", caption: "取替前：配管はテープ巻きの仕上げ（当社の現場）" },
+        { image: "works/aircon-cover-after-outdoor", alt: "取替後の室外機と、化粧カバーに収めた配管", caption: "取替後：配管を化粧カバーに収めた（当社施工）" },
+      ],
+    },
+    { type: "menu", heading: "エアコンの対応工事", variant: "columns" },
+    { type: "works" },
+    { type: "guide", id: "extra", variant: "rows" },
+    { type: "guide", id: "sign", variant: "columns", signs: true },
+    { type: "note" },
+    { type: "cost" },
+    { type: "subsidy" },
+    { type: "local" },
   ],
   related: ["other", "water-heater", "reform", "solar"],
   blogClusters: ["air-conditioner", "housing-equipment", "totsuka"],

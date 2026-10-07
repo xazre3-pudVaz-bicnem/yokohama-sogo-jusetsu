@@ -22,7 +22,7 @@ export function Footer() {
           <Logo onDark size="lg" />
           <p className="mt-6 max-w-md text-sm leading-loose text-silver-300">
             {siteConfig.primaryArea.city}
-            {siteConfig.primaryArea.ward}を中心に、住宅設備・リフォーム・外壁塗装・太陽光発電・造園まで。{siteConfig.tagline}
+            {siteConfig.primaryArea.ward}を中心に、住宅設備・リフォーム・外壁塗装・太陽光発電・造園の工事を行っています。
           </p>
 
           <dl className="mt-7 space-y-4 text-sm">
@@ -54,10 +54,10 @@ export function Footer() {
               href={siteConfig.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/25 px-4 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
+              className="mt-7 inline-flex min-h-11 items-center gap-2 border border-white/30 px-4 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
             >
               <Icon name="instagram" className="size-5" />
-              Instagram で施工写真を見る
+              Instagram（施工写真）
             </a>
           )}
         </div>
@@ -65,7 +65,7 @@ export function Footer() {
         {/* メニュー */}
         <nav aria-label="フッターメニュー" className="grid gap-10 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           <div>
-            <p className="eyebrow eyebrow-on-dark">サービス</p>
+            <p className="eyebrow eyebrow-on-dark border-b border-white/20 pb-2">サービス</p>
             <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-6">
               {serviceNav.map((cat) => (
                 <div key={cat.id}>
@@ -86,7 +86,7 @@ export function Footer() {
 
           <div className="space-y-9">
             <div>
-              <p className="eyebrow eyebrow-on-dark">対応エリア</p>
+              <p className="eyebrow eyebrow-on-dark border-b border-white/20 pb-2">対応エリア</p>
               <ul className="mt-3">
                 {footerAreaNav.map((l) => (
                   <li key={l.href}>
@@ -98,7 +98,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="eyebrow eyebrow-on-dark">サイトの案内</p>
+              <p className="eyebrow eyebrow-on-dark border-b border-white/20 pb-2">サイトの案内</p>
               <ul className="mt-3">
                 {footerNav.map((l) => (
                   <li key={l.href}>
