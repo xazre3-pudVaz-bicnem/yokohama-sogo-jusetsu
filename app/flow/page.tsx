@@ -34,15 +34,16 @@ export default function FlowPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-couple-clipboard"
         title="工事の流れ"
         lead="ご相談から工事の完了までを8つの段階に分けて、それぞれで行うことと、ご用意いただくものをご案内します。"
         crumbs={[{ name: "工事の流れ", href: "/flow" }]}
       >
-        <ol className="mt-8 flex flex-wrap gap-x-6 gap-y-1 border-t border-silver-200 pt-4 text-[0.8125rem] font-bold">
+        <ol className="mt-7 flex flex-wrap gap-2">
           {flowSteps.map((s, i) => (
             <li key={s.id}>
-              <a href={`#${s.id}`} className="inline-flex min-h-10 items-center gap-1.5 text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
-                <span className="num font-medium text-ink-mute">{i + 1}</span>
+              <a href={`#${s.id}`} className="chip">
+                <span className="num font-semibold text-brand-700">{i + 1}</span>
                 {s.title}
               </a>
             </li>
@@ -52,29 +53,34 @@ export default function FlowPage() {
 
       <section aria-label="工事の流れ" className="section bg-white">
         <div className="container-x">
-          <ol className="rows mx-auto max-w-[58rem]">
+          <ol className="relative mx-auto max-w-[56rem]">
             {flowSteps.map((s, i) => (
-              <li key={s.id} id={s.id} className="grid scroll-mt-28 grid-cols-[2.25rem_1fr] gap-x-4 py-8 sm:grid-cols-[3.5rem_1fr_6.5rem] sm:gap-x-7 lg:py-10" {...reveal()}>
-                <p className="num text-[1.75rem] font-medium leading-none text-silver-500 sm:text-[2.25rem]">{i + 1}</p>
-                <div>
-                  <h2 className="text-[1.25rem] font-bold leading-snug sm:text-[1.375rem]">
-                    <Phrase>{s.title}</Phrase>
-                  </h2>
-                  <p className="mt-1 text-[0.8125rem] font-bold tracking-wider text-ink-mute">{s.lead}</p>
-                  <p className="mt-3 text-[0.9688rem] leading-[2.05]">{s.body}</p>
-                  {s.prepare && (
-                    <div className="mt-5 border-l-2 border-navy-900 pl-5">
-                      <p className="text-[0.8125rem] font-bold tracking-wider text-ink">ご用意いただくとよいもの</p>
-                      <ul className="dash-list mt-2 space-y-1 text-[0.9375rem]">
-                        {s.prepare.map((p) => (
-                          <li key={p}>{p}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-                <div className="hidden self-start sm:block" aria-hidden="true">
-                  <Illust image={s.pose} width={104} className="ml-auto h-auto w-[5.5rem]" />
+              <li key={s.id} id={s.id} className="relative flex scroll-mt-28 gap-3.5 pb-6 last:pb-0 sm:gap-6" {...reveal()}>
+                {i < flowSteps.length - 1 && <span className="absolute bottom-0 left-[1.3125rem] top-11 w-0.5 bg-brand-200 sm:left-[1.6875rem] sm:top-14" aria-hidden="true" />}
+                <span className="num relative grid size-11 shrink-0 place-items-center rounded-full bg-brand-600 text-lg font-semibold text-white shadow-card sm:size-14 sm:text-xl">{i + 1}</span>
+                <div className="card card-line grid flex-1 gap-x-6 px-5 py-5 sm:grid-cols-[1fr_5.5rem] sm:px-7 sm:py-6">
+                  <div>
+                    <h2 className="text-[1.25rem] font-black leading-snug sm:text-[1.375rem]">
+                      <Phrase>{s.title}</Phrase>
+                    </h2>
+                    <p className="mt-2">
+                      <span className="tag tag-blue">{s.lead}</span>
+                    </p>
+                    <p className="mt-3 text-[0.9688rem] leading-[2.05]">{s.body}</p>
+                    {s.prepare && (
+                      <div className="mt-4 rounded-2xl bg-cream px-5 py-4">
+                        <p className="font-heading text-[0.8125rem] font-bold text-navy-900">ご用意いただくとよいもの</p>
+                        <ul className="dash-list mt-1.5 space-y-1 text-[0.9375rem]">
+                          {s.prepare.map((p) => (
+                            <li key={p}>{p}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  <div className="hidden self-start sm:block" aria-hidden="true">
+                    <Illust image={s.pose} width={104} className="ml-auto h-auto w-[5.5rem]" />
+                  </div>
                 </div>
               </li>
             ))}
@@ -82,9 +88,9 @@ export default function FlowPage() {
         </div>
       </section>
 
-      <section aria-labelledby="flow-notes" className="cv section bg-silver-50">
+      <section aria-labelledby="flow-notes" className="cv section band band-mist deco-tr">
         <div className="container-x">
-          <SectionSplit heading={<SectionHeading id="flow-notes" title="ご相談の前に" />}>
+          <SectionSplit heading={<SectionHeading id="flow-notes" eyebrow="お願い" color="navy" title="ご相談の前に" />}>
             <ul className="rows" {...reveal(60)}>
               {NOTES.map((n) => (
                 <li key={n.title} className="grid gap-x-9 gap-y-1.5 py-5 md:grid-cols-[17rem_1fr]">

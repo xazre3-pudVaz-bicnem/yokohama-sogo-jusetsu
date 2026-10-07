@@ -32,9 +32,9 @@ export default function NotFound() {
         <nav aria-label="主なページ" className="mt-12 grid gap-x-12 gap-y-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <h2 className="eyebrow">主なページ</h2>
-            <ul className="mt-2 border-t border-navy-900">
+            <ul className="rows mt-3">
               {LINKS.map((l) => (
-                <li key={l.href} className="border-b border-silver-200">
+                <li key={l.href}>
                   <Link href={l.href} className="group flex min-h-12 items-center justify-between gap-2 py-2 text-[0.9375rem] font-bold text-ink transition-colors hover:text-brand-700">
                     {l.label}
                     <Icon name="arrowRight" className="size-3.5 transition-transform group-hover:translate-x-1" />
@@ -45,9 +45,9 @@ export default function NotFound() {
           </div>
           <div className="lg:col-span-8">
             <h2 className="eyebrow">サービスから探す</h2>
-            <dl className="mt-2 border-t border-navy-900 text-[0.9375rem] leading-[1.95]">
+            <dl className="card card-line mt-3 px-5 text-[0.9375rem] leading-[1.95] sm:px-7">
               {serviceCategories.map((cat) => (
-                <div key={cat.id} className="grid gap-x-9 gap-y-1 border-b border-silver-200 py-3.5 md:grid-cols-[11rem_1fr]">
+                <div key={cat.id} className="grid gap-x-9 gap-y-1 border-b-2 border-dotted border-silver-300 py-3.5 last:border-b-0 md:grid-cols-[11rem_1fr]">
                   <dt className="font-bold text-ink">{cat.name}</dt>
                   <dd className="flex flex-wrap gap-x-5 gap-y-1">
                     {servicesByCategory(cat.id).map((s) => (

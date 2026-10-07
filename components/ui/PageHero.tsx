@@ -1,26 +1,59 @@
 import type { ReactNode } from "react";
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
-import { PhotoFill } from "@/components/ui/Photo";
+import { Illust, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { img, type ImageKey } from "@/lib/images";
 
 /**
- * 下層ページの冒頭。
+ * 下層ページの冒頭。クリーム地にパンくず・ラベル・h1・短い説明、下の端は波形で白に切り替える。
  *
- * <PageHero>  … 文字だけ（一覧・案内のページ）。
- * <PhotoHero> … 文字と写真1枚（サービス・地域のページ）。
- *               layout="wide"（既定）は見出しの下に横長の写真、layout="side" は見出しの横に写真を置く。
+ * <PageHero>  … 右に人物のイラストを添える（一覧・案内のページ）。イラストは内容に合うものを選ぶ。
+ * <PhotoHero> … 右に写真を角丸のカードで添える（サービス・地域のページ）。
  *
- * 冒頭に置くのは「区分・見出し（h1）・短い説明・写真」だけ。
- * 問い合わせのボタン・電話番号・バッジは置かない（まず内容を読んでもらうため。連絡先はヘッダーとページの最後にある）。
+ * 冒頭に置くのは「ラベル・見出し（h1）・短い説明・写真かイラスト」だけ。
+ * 問い合わせのボタン・電話番号・バッジは置かない（連絡先はヘッダーとページの最後にある）。
  * 見出しは最初の描画でそのまま見せる（登場アニメーションを付けない）。LCP を遅らせないため。
  */
+function Wave() {
+  return (
+    <svg className="block h-6 w-full text-white sm:h-10" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="currentColor" d="M0 30c180 26 420 26 720 6s540-22 720 4v20H0z" />
+    </svg>
+  );
+}
+
+function Dots() {
+  return (
+    <>
+      <span className="absolute right-[6%] top-10 hidden size-3 animate-twinkle rounded-full bg-sun-400 sm:block" aria-hidden="true" />
+      <span className="absolute right-[34%] top-24 hidden size-2 animate-twinkle rounded-full bg-brand-400 [animation-delay:1.4s] lg:block" aria-hidden="true" />
+    </>
+  );
+}
+
+function Heading({ eyebrow, title, lead }: { eyebrow?: string; title: ReactNode; lead?: ReactNode }) {
+  return (
+    <>
+      {eyebrow && (
+        <p className="mb-5 flex">
+          <span className="pill">{eyebrow}</span>
+        </p>
+      )}
+      <h1 className="h-page text-balance">
+        <Phrase>{title}</Phrase>
+      </h1>
+      {lead && <p className="mt-5 max-w-3xl text-pretty text-[0.9688rem] leading-[2] sm:text-base sm:leading-[2]">{lead}</p>}
+    </>
+  );
+}
+
 export function PageHero({
   eyebrow,
   title,
   lead,
   crumbs,
   children,
+  illust,
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -28,21 +61,28 @@ export function PageHero({
   crumbs: Crumb[];
   /** ページ内の案内（区分へのリンクなど）。問い合わせのボタンは入れない */
   children?: ReactNode;
+  /** 右に添える人物のイラスト */
+  illust?: ImageKey;
 }) {
   return (
-    <div className="border-b border-silver-200 bg-white">
-      <div className="container-x pb-10 pt-4 lg:pb-14 lg:pt-5">
+    <header className="relative overflow-hidden bg-cream">
+      <Dots />
+      <div className="container-x relative pb-10 pt-4 sm:pb-14 lg:pt-5">
         <Breadcrumbs items={crumbs} />
-        <div className="mt-7 max-w-3xl lg:mt-11">
-          {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          <h1 className={`h-page text-balance ${eyebrow ? "mt-2" : ""}`}>
-            <Phrase>{title}</Phrase>
-          </h1>
-          {lead && <p className="lead mt-5 text-pretty">{lead}</p>}
+        <div className={`mt-5 sm:mt-8 ${illust ? "grid items-center gap-x-12 gap-y-6 lg:grid-cols-[1fr_15rem]" : ""}`}>
+          <div className="max-w-3xl">
+            <Heading eyebrow={eyebrow} title={title} lead={lead} />
+          </div>
+          {illust && (
+            <div className="mx-auto w-36 animate-float-slow sm:w-44 lg:mx-0 lg:w-full">
+              <Illust image={illust} width={240} className="mx-auto h-auto w-full" />
+            </div>
+          )}
         </div>
         {children}
       </div>
-    </div>
+      <Wave />
+    </header>
   );
 }
 
@@ -56,7 +96,6 @@ export function PhotoHero({
   children,
   credit,
   caption,
-  layout = "wide",
   imageClassName = "",
 }: {
   eyebrow?: string;
@@ -69,64 +108,34 @@ export function PhotoHero({
   children?: ReactNode;
   /** 写真の出典（表示が必要な写真だけ） */
   credit?: ReactNode;
-  /** 写真の説明（当社の現場の写真のときに書く） */
+  /** 写真の説明（当社の現場の写真なら「当社施工」、イメージ写真なら「写真はイメージです」） */
   caption?: string;
-  /** 写真の置き方。wide＝見出しの下に横長で／side＝見出しの横に */
-  layout?: "wide" | "side";
   /** 写真の見せる位置（object-position のクラス） */
   imageClassName?: string;
 }) {
-  if (layout === "side") {
-    const portrait = img(image).height > img(image).width;
-    return (
-      <div className="border-b border-silver-200 bg-white">
-        <div className="container-x pb-10 pt-4 lg:pb-14 lg:pt-5">
-          <Breadcrumbs items={crumbs} />
-          <div className="mt-7 grid gap-x-14 gap-y-8 lg:mt-10 lg:grid-cols-12 lg:items-center">
-            <div className={portrait ? "lg:col-span-7" : "lg:col-span-6"}>
-              {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-              <h1 className={`h-page text-balance ${eyebrow ? "mt-2" : ""}`}>
-                <Phrase>{title}</Phrase>
-              </h1>
-              {lead && <p className="mt-5 text-pretty text-[0.9688rem] leading-[2.05] lg:mt-6">{lead}</p>}
-              {children}
-            </div>
-            <figure className={portrait ? "lg:col-span-5" : "lg:col-span-6"}>
-              <div className={`relative w-full overflow-hidden bg-silver-100 ${portrait ? "aspect-[4/3] sm:aspect-[3/2] lg:aspect-[5/6]" : "aspect-[4/3]"}`}>
-                <PhotoFill image={image} alt={imageAlt} sizes="(min-width: 1280px) 584px, (min-width: 1024px) 46vw, 100vw" priority className={imageClassName} />
-                {credit && <p className="absolute bottom-0 right-0 bg-navy-950/70 px-2 py-1 text-[0.625rem] leading-none text-white">{credit}</p>}
-              </div>
-              {caption && <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">{caption}</figcaption>}
-            </figure>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  const portrait = img(image).height > img(image).width;
   return (
-    <div className="bg-white">
-      <div className="container-x pt-4 lg:pt-5">
+    <header className="relative overflow-hidden bg-cream">
+      <Dots />
+      <div className="container-x relative pb-10 pt-4 sm:pb-14 lg:pt-5">
         <Breadcrumbs items={crumbs} />
-        <div className="mt-7 grid gap-x-12 gap-y-5 lg:mt-11 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-            <h1 className={`h-page text-balance ${eyebrow ? "mt-2" : ""}`}>
-              <Phrase>{title}</Phrase>
-            </h1>
+        <div className={`mt-5 grid items-center gap-x-12 gap-y-9 sm:mt-8 ${portrait ? "lg:grid-cols-[1fr_22rem]" : "lg:grid-cols-[1.05fr_1fr]"}`}>
+          <div>
+            <Heading eyebrow={eyebrow} title={title} lead={lead} />
+            {children}
           </div>
-          {lead && <p className="text-pretty text-[0.9688rem] leading-[2.05] lg:col-span-5">{lead}</p>}
+          <figure className={portrait ? "mx-auto w-full max-w-sm lg:max-w-none" : ""}>
+            <div className="photo-frame photo-frame-r">
+              <div className={`photo-card relative border-[5px] border-white ${portrait ? "aspect-[4/5]" : "aspect-[4/3]"}`}>
+                <PhotoFill image={image} alt={imageAlt} sizes={portrait ? "(min-width: 1024px) 352px, 384px" : "(min-width: 1280px) 540px, (min-width: 1024px) 46vw, 100vw"} priority className={imageClassName} />
+                {credit && <p className="absolute bottom-0 right-0 rounded-tl-lg bg-navy-950/70 px-2 py-1 text-[0.625rem] leading-none text-white">{credit}</p>}
+              </div>
+            </div>
+            {caption && <figcaption className="mt-3 text-xs leading-relaxed text-ink-mute">{caption}</figcaption>}
+          </figure>
         </div>
-        {children}
       </div>
-      {/* 写真：スマホでは画面の端まで、PC では本文と同じ幅 */}
-      <figure className="mx-auto mt-8 max-w-[78rem] lg:mt-12 lg:px-[clamp(1.25rem,4vw,2.5rem)]">
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-silver-100 sm:aspect-[2/1] lg:aspect-[5/2]">
-          <PhotoFill image={image} alt={imageAlt} sizes="(min-width: 1280px) 1168px, 100vw" priority className={imageClassName} />
-          {credit && <p className="absolute bottom-0 right-0 bg-navy-950/70 px-2 py-1 text-[0.625rem] leading-none text-white">{credit}</p>}
-        </div>
-        {caption && <figcaption className="mt-2 px-[clamp(1.25rem,4vw,2.5rem)] text-xs leading-relaxed text-ink-mute lg:px-0">{caption}</figcaption>}
-      </figure>
-    </div>
+      <Wave />
+    </header>
   );
 }

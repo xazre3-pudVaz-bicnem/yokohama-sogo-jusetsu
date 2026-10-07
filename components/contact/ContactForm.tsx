@@ -40,7 +40,7 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
 
   if (state.status === "success") {
     return (
-      <div ref={topRef} className="border-l-2 border-navy-900 py-2 pl-5" role="status">
+      <div ref={topRef} className="rounded-2xl bg-cream px-6 py-5" role="status">
         <p className="text-xl font-bold text-ink">お問い合わせを受け付けました。</p>
         <p className="mt-3 max-w-xl text-[0.9375rem] leading-[1.95]">内容を確認のうえ、担当者よりお電話またはメールでご連絡します。お急ぎの場合は、お電話でもお問い合わせください。</p>
         <Link href="/" className="link-arrow mt-5">
@@ -77,7 +77,7 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   return (
     <div ref={topRef}>
       {preview && (
-        <p className="mb-6 bg-silver-50 px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-mute">
+        <p className="mb-6 rounded-2xl bg-paper-2 px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-mute">
           【確認用の表示】メール送信の設定（RESEND_API_KEY・CONTACT_TO_EMAIL）がまだのため、このフォームから送信しても届きません。本番では、設定が済むまでフォームの代わりに電話の案内が表示されます。
         </p>
       )}

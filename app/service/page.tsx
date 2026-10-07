@@ -28,14 +28,15 @@ export default function ServiceIndexPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-staff-woman"
         title="事業内容・サービス一覧"
         lead="横浜総合住設は、住まいに関わる工事を幅広くお引き受けしています。毎日使う設備の交換から、家の外まわりの手入れまで、5つの分野・13のサービスがあります。"
         crumbs={[{ name: "サービス", href: "/service" }]}
       >
-        <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-1 border-t border-silver-200 pt-4 text-[0.8125rem] font-bold">
+        <ul className="mt-7 flex flex-wrap gap-2">
           {serviceCategories.map((c) => (
             <li key={c.id}>
-              <a href={`#${c.id}`} className="inline-flex min-h-10 items-center text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
+              <a href={`#${c.id}`} className="chip">
                 {c.name}
               </a>
             </li>
@@ -48,14 +49,14 @@ export default function ServiceIndexPage() {
           {serviceCategories.map((cat) => {
             const list = servicesByCategory(cat.id);
             return (
-              <section key={cat.id} aria-labelledby={cat.id} className="rule-top grid scroll-mt-28 gap-x-12 gap-y-5 pt-8 lg:grid-cols-12 lg:pt-10">
+              <section key={cat.id} aria-labelledby={cat.id} className="grid scroll-mt-28 gap-x-12 gap-y-5 lg:grid-cols-12">
                 <div className="lg:col-span-3" {...reveal()}>
                   <h2 id={cat.id} className="h-section">
                     {cat.name}
                   </h2>
                   <p className="mt-3 text-[0.9375rem] leading-[1.95]">{cat.description}</p>
                 </div>
-                <ul className="rows lg:col-span-9" {...reveal(60)}>
+                <ul className="space-y-3 lg:col-span-9" {...reveal(60)}>
                   {list.map((s) => (
                     <li key={s.slug}>
                       <ServiceThumbRow service={s} />

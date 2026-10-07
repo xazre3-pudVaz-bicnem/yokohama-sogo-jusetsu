@@ -109,7 +109,7 @@ export default function PrivacyPage() {
       body: (
         <>
           <p>個人情報の取り扱いについてのお問い合わせは、次の窓口までお願いします。</p>
-          <dl className="not-prose mt-4 bg-silver-50 p-5 text-[0.9375rem] leading-[1.9]">
+          <dl className="not-prose mt-4 rounded-2xl bg-paper-2 p-5 text-[0.9375rem] leading-[1.9]">
             <dt className="font-bold text-ink">{siteConfig.name}</dt>
             <dd>{officeAddressWithPostal("head")}</dd>
             {phone && <dd className="num">電話：{phone}</dd>}

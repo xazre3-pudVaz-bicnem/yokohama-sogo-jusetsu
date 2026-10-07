@@ -3,14 +3,29 @@ import { Phrase } from "@/components/ui/Phrase";
 import { reveal } from "@/lib/reveal";
 
 /**
- * 区画の見出し。見出し（＋必要なら短い導入文）だけで組む。
+ * 区画の見出し。
  *
- * - 見出しは、内容が一目で分かる言葉にする（「対応工事」「交換時期の目安」「施工工程」など）。
- *   キャッチコピーにしない。
- * - eyebrow（見出しの上の小さな区分名）は、見出しだけでは区分が分からないときにだけ付ける。
- *   すべての区画に付けると、どのページも同じ型に見えるため。
- * - 左寄せが基本。
+ * - eyebrow は、吹き出し型のラベル（下に小さな三角）。区画が何の話かを一言で示す。
+ * - 見出しは、内容が一目で分かる言葉にする（「対応工事」「交換時期の目安」「施工工程」など）。キャッチコピーにしない。
+ * - mark に見出しの一部を渡すと、その部分に蛍光ペンを引く（画面に入ったときに左から引かれる）。
+ * - align="center" は、カードを横に並べる区画の上に置くとき。文章が中心の区画は左寄せ。
  */
+const PILL = { blue: "", navy: "pill-navy", sun: "pill-sun", white: "pill-white" } as const;
+
+function Title({ title, mark }: { title: ReactNode; mark?: string }) {
+  if (typeof title !== "string" || !mark || !title.includes(mark)) return <Phrase>{title}</Phrase>;
+  const at = title.indexOf(mark);
+  return (
+    <>
+      <Phrase>{title.slice(0, at)}</Phrase>
+      <span className="marker">
+        <Phrase>{mark}</Phrase>
+      </span>
+      <Phrase>{title.slice(at + mark.length)}</Phrase>
+    </>
+  );
+}
+
 export function SectionHeading({
   eyebrow,
   title,
@@ -20,6 +35,9 @@ export function SectionHeading({
   id,
   className = "",
   children,
+  align = "left",
+  color = "blue",
+  mark,
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -29,14 +47,24 @@ export function SectionHeading({
   id?: string;
   className?: string;
   children?: ReactNode;
+  align?: "left" | "center";
+  /** ラベルの色 */
+  color?: keyof typeof PILL;
+  /** 見出しのうち、蛍光ペンを引く部分 */
+  mark?: string;
 }) {
+  const center = align === "center";
   return (
-    <div className={className} {...reveal()}>
-      {eyebrow && <p className={`eyebrow ${onDark ? "eyebrow-on-dark" : ""}`}>{eyebrow}</p>}
-      <Tag id={id} className={`h-section text-balance ${eyebrow ? "mt-2" : ""} ${onDark ? "!text-white" : ""}`}>
-        <Phrase>{title}</Phrase>
+    <div className={`${center ? "mx-auto max-w-3xl text-center" : ""} ${className}`} {...reveal()}>
+      {eyebrow && (
+        <p className={`mb-5 flex ${center ? "justify-center" : ""}`}>
+          <span className={`pill ${center ? "pill-center" : ""} ${PILL[onDark && color === "blue" ? "white" : color]}`}>{eyebrow}</span>
+        </p>
+      )}
+      <Tag id={id} className={`h-section text-balance ${onDark ? "!text-white" : ""}`}>
+        <Title title={title} mark={mark} />
       </Tag>
-      {lead && <p className={`lead mt-4 text-pretty ${onDark ? "text-silver-200" : ""}`}>{lead}</p>}
+      {lead && <p className={`lead mt-4 text-pretty ${center ? "mx-auto" : ""} ${onDark ? "text-silver-100" : ""}`}>{lead}</p>}
       {children}
     </div>
   );
@@ -44,11 +72,11 @@ export function SectionHeading({
 
 /**
  * 見出しを左、内容を右に置く区画の組み方（PC）。スマホでは縦に並ぶ。
- * 文章や一覧が中心の区画で使う。カードで囲まず、見出しの上の1本の線で区切る。
+ * 文章や一覧が中心の区画で使う。
  */
 export function SectionSplit({ heading, children, className = "" }: { heading: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <div className={`rule-top grid gap-x-12 gap-y-7 pt-8 lg:grid-cols-12 lg:pt-10 ${className}`}>
+    <div className={`grid gap-x-12 gap-y-7 lg:grid-cols-12 ${className}`}>
       <div className="lg:col-span-4">{heading}</div>
       <div className="lg:col-span-8">{children}</div>
     </div>

@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostRow } from "@/components/cards/PostCard";
-import { ServiceRow } from "@/components/cards/ServiceCard";
+import { ServiceTile } from "@/components/cards/ServiceCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { ServiceBlockView, blockLabel } from "@/components/service/ServiceBlocks";
+import { ServiceBlockView, blockLabel, type Tone } from "@/components/service/ServiceBlocks";
 import { FaqList } from "@/components/ui/FaqList";
 import { Icon } from "@/components/ui/Icon";
 import { PhotoHero } from "@/components/ui/PageHero";
+import { Illust } from "@/components/ui/Photo";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { categoryOf, getService, services } from "@/data/services";
 import { subsidiesByIds } from "@/data/subsidies";
@@ -74,11 +75,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   });
   const toc = [...blocks.map((b) => blockLabel(b, s)).filter((x) => x !== null), { id: "faq", label: "よくある質問" }];
 
-  // 区画の地色は、白と淡いグレーを交互に（補足だけの短い区画は、直前の区画と同じ色にする）
+  // 区画の地色は、白と色つきの帯を交互に（色は 淡い青 → クリーム → 淡いグレー の順に回す）。
+  // 補足だけの短い区画は、直前の区画と同じ色にする
+  const TINTS: Tone[] = ["mist", "cream", "paper"];
   const counts = blocks.reduce<number[]>((acc, b) => [...acc, (acc.at(-1) ?? 0) + (b.type === "note" ? 0 : 1)], []);
-  const tones = counts.map((c) => (c % 2 === 1 ? ("white" as const) : ("tint" as const)));
+  const tones = counts.map((c): Tone => (c % 2 === 1 ? "white" : TINTS[(c / 2 - 1) % TINTS.length]));
   const total = counts.at(-1) ?? 0;
-  const tail = (k: number) => ((total + k) % 2 === 1 ? "bg-white" : "bg-silver-50");
+  // よくある質問は、直前の区画が白ならクリーム、色つきなら白
+  const faqOnCream = total % 2 === 1;
 
   return (
     <>
@@ -88,7 +92,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         lead={s.lead}
         image={s.image}
         imageAlt={s.imageAlt}
-        layout={s.heroLayout}
         caption={s.imageCaption ?? (s.image.startsWith("photos/") ? "写真はイメージです" : undefined)}
         crumbs={[
           { name: "サービス", href: "/service" },
@@ -96,13 +99,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         ]}
       />
 
-      {/* ページ内の案内（文字だけ） */}
-      <nav aria-label="このページの内容" className="border-b border-silver-200 bg-white">
+      {/* ページ内の案内（丸いラベルを横に並べる。スマホでは横にスクロール） */}
+      <nav aria-label="このページの内容" className="bg-white">
         <div className="container-x">
-          <ul className="flex gap-x-6 overflow-x-auto py-3 text-[0.8125rem] font-bold [scrollbar-width:none] lg:flex-wrap">
+          <ul className="flex gap-2 overflow-x-auto pb-1 pt-5 [scrollbar-width:none] lg:flex-wrap">
             {toc.map((t) => (
               <li key={t.id} className="shrink-0">
-                <a href={`#${t.id}`} className="inline-flex min-h-10 items-center text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
+                <a href={`#${t.id}`} className="chip">
                   {t.label}
                 </a>
               </li>
@@ -116,26 +119,30 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       ))}
 
       {/* よくある質問 */}
-      <section aria-labelledby="faq" className={`cv section ${tail(1)}`}>
-        <div className="container-x">
-          <SectionSplit heading={<SectionHeading id="faq" title={`${s.shortName}のよくある質問`} />}>
-            <div {...reveal(60)}>
-              <FaqList faqs={s.faqs} />
+      <section aria-labelledby="faq" className={`cv section ${faqOnCream ? "band band-cream deco-bl" : "bg-white"}`}>
+        <div className="container-x grid gap-x-12 gap-y-8 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-4">
+            <SectionHeading id="faq" eyebrow="よくある質問" title={`${s.shortName}のよくある質問`} />
+            <div className="mt-4 hidden lg:block" {...reveal(120, "pop")}>
+              <Illust image="illust/people-woman-think" width={152} className="h-auto w-32 animate-float-slow" />
             </div>
-            <p className="mt-7">
-              <Link href="/faq" className="link-arrow">
+            <p className="mt-6">
+              <Link href="/faq" className="btn btn-outline btn-sm">
                 よくある質問の一覧
-                <Icon name="arrowRight" className="size-4" />
+                <Icon name="arrowRight" className="btn-arrow size-4" />
               </Link>
             </p>
-          </SectionSplit>
+          </div>
+          <div className="lg:col-span-8" {...reveal(60)}>
+            <FaqList faqs={s.faqs} />
+          </div>
         </div>
       </section>
 
       {/* 関連コラム・関連するサービス */}
-      <section aria-labelledby="columns" className={`cv section ${tail(2)}`}>
-        <div className="container-x space-y-14 lg:space-y-16">
-          <SectionSplit heading={<SectionHeading id="columns" title="関連コラム" />}>
+      <section aria-labelledby="columns" className={`cv section ${faqOnCream ? "bg-white" : "band band-paper"}`}>
+        <div className="container-x space-y-14 lg:space-y-20">
+          <SectionSplit heading={<SectionHeading id="columns" eyebrow="コラム" title="関連コラム" />}>
             {posts.length > 0 ? (
               <ul className="rows" {...reveal(60)}>
                 {posts.map((p) => (
@@ -145,11 +152,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 ))}
               </ul>
             ) : (
-              <p className="text-[0.9375rem] leading-[1.95]" {...reveal(60)}>
+              <p className="card card-line px-6 py-5 text-[0.9375rem] leading-[1.95]" {...reveal(60)}>
                 このテーマのコラムは準備中です。住宅設備コラムでは、設備の選び方や交換の時期について、順次お伝えしていきます。
               </p>
             )}
-            <p className="mt-7">
+            <p className="mt-6">
               <Link href={mainCluster ? `/blog/category/${mainCluster.id}` : "/blog"} className="link-arrow">
                 {mainCluster ? `「${mainCluster.name}」のコラム一覧` : "住宅設備コラム"}
                 <Icon name="arrowRight" className="size-4" />
@@ -160,22 +167,24 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           {/* 専門サイトの案内（URL が設定されたときだけ出る） */}
           {s.specialtySite && (
             <SectionSplit heading={<SectionHeading title="専門サイトのご案内" />}>
-              <p className="text-lg font-bold text-ink">{s.specialtySite.name}</p>
-              <p className="mt-1.5 text-[0.9375rem] leading-[1.95]">{s.specialtySite.note}</p>
-              <p className="mt-5">
-                <a href={s.specialtySite.url} target="_blank" rel="noopener noreferrer" className="link-arrow">
-                  専門サイトを見る
-                  <Icon name="arrowUpRight" className="size-4" />
-                </a>
-              </p>
+              <div className="card card-line px-6 py-6">
+                <p className="font-heading text-lg font-bold text-navy-900">{s.specialtySite.name}</p>
+                <p className="mt-1.5 text-[0.9375rem] leading-[1.95]">{s.specialtySite.note}</p>
+                <p className="mt-4">
+                  <a href={s.specialtySite.url} target="_blank" rel="noopener noreferrer" className="link-arrow">
+                    専門サイトを見る
+                    <Icon name="arrowUpRight" className="size-4" />
+                  </a>
+                </p>
+              </div>
             </SectionSplit>
           )}
 
-          <SectionSplit heading={<SectionHeading id="related" title="関連するサービス" />}>
-            <ul className="rows sm:grid sm:grid-cols-2 sm:gap-x-9 sm:[&>*:nth-child(2)]:border-t sm:[&>*:nth-child(2)]:border-silver-200" {...reveal(60)}>
+          <SectionSplit heading={<SectionHeading id="related" eyebrow="あわせて" color="navy" title="関連するサービス" />}>
+            <ul className="grid gap-3 sm:grid-cols-2" {...reveal(60)}>
               {related.map((r) => (
                 <li key={r.slug}>
-                  <ServiceRow service={r} />
+                  <ServiceTile service={r} />
                 </li>
               ))}
             </ul>

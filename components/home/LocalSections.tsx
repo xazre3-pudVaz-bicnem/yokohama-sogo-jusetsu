@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { PostRow } from "@/components/cards/PostCard";
+import { PostCard, PostRow } from "@/components/cards/PostCard";
 import { FaqList } from "@/components/ui/FaqList";
 import { Icon } from "@/components/ui/Icon";
-import { Photo, PhotoFill } from "@/components/ui/Photo";
+import { Illust, Photo, PhotoFill } from "@/components/ui/Photo";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getArea, yokohamaWards } from "@/data/areas";
 import { creditOf, flowSteps, instagramPosts } from "@/data/company";
@@ -16,14 +16,16 @@ export function AreaSection() {
   const totsuka = getArea("totsuka")!;
   const credit = creditOf("area/totsuka-aerial");
   return (
-    <section aria-labelledby="home-area" className="cv section bg-white">
-      <div className="container-x grid gap-x-12 gap-y-9 lg:grid-cols-12 lg:items-start">
-        <figure className="lg:col-span-6" {...reveal(0, "wipe")}>
-          <div className="relative aspect-[3/2] bg-silver-100">
-            <PhotoFill image="area/totsuka-aerial" alt={totsuka.imageAlt} sizes="(min-width: 1024px) 48vw, 100vw" className="object-[50%_40%]" />
+    <section aria-labelledby="home-area" className="cv band band-cream deco-tr section">
+      <div className="container-x grid items-center gap-x-14 gap-y-10 lg:grid-cols-2">
+        <figure {...reveal(0, "left")}>
+          <div className="photo-frame">
+            <div className="photo-card relative aspect-[3/2] border-[5px] border-white">
+              <PhotoFill image="area/totsuka-aerial" alt={totsuka.imageAlt} sizes="(min-width: 1024px) 44vw, 100vw" className="object-[50%_40%]" />
+            </div>
           </div>
           {credit && (
-            <figcaption className="mt-2 text-[0.6875rem] leading-relaxed text-ink-mute">
+            <figcaption className="mt-3 text-[0.6875rem] leading-relaxed text-ink-mute">
               戸塚駅周辺。写真：
               <a href={credit.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
                 {credit.author}
@@ -37,33 +39,34 @@ export function AreaSection() {
           )}
         </figure>
 
-        <div className="lg:col-span-6">
+        <div>
           <SectionHeading
             id="home-area"
+            eyebrow="戸塚区を中心に"
             title="対応エリア"
             lead="戸塚区深谷町にオフィスを置き、横浜を中心に神奈川・東京エリアで工事を行っています。戸塚区は、川沿いの低地と起伏のある台地に住宅地が広がる、横浜市でいちばん広い区です。敷地の条件が場所ごとに違うため、現地を見てからご提案しています。"
           />
-          <dl className="mt-7 border-t border-navy-900 text-[0.875rem] leading-[1.95]" {...reveal(80)}>
-            <div className="grid gap-x-6 gap-y-1 border-b border-silver-200 py-4 sm:grid-cols-[7.5rem_1fr]">
-              <dt className="font-bold text-ink">横浜市戸塚区</dt>
+          <dl className="card mt-7 px-5 py-1 text-[0.875rem] leading-[1.95] sm:px-7" {...reveal(80)}>
+            <div className="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[7.5rem_1fr]">
+              <dt className="font-heading font-bold text-navy-900">横浜市戸塚区</dt>
               <dd>
                 {totsuka.towns?.join("・")}
                 <span className="mt-1 block text-ink-mute">区内の駅：{totsuka.stations?.map((s) => s.name).join("・")}</span>
               </dd>
             </div>
-            <div className="grid gap-x-6 gap-y-1 border-b border-silver-200 py-4 sm:grid-cols-[7.5rem_1fr]">
-              <dt className="font-bold text-ink">横浜市</dt>
+            <div className="grid gap-x-6 gap-y-1 border-t-2 border-dotted border-silver-300 py-4 sm:grid-cols-[7.5rem_1fr]">
+              <dt className="font-heading font-bold text-navy-900">横浜市</dt>
               <dd>{yokohamaWards.join("・")}</dd>
             </div>
-            <div className="grid gap-x-6 gap-y-1 border-b border-silver-200 py-4 sm:grid-cols-[7.5rem_1fr]">
-              <dt className="font-bold text-ink">神奈川・東京</dt>
+            <div className="grid gap-x-6 gap-y-1 border-t-2 border-dotted border-silver-300 py-4 sm:grid-cols-[7.5rem_1fr]">
+              <dt className="font-heading font-bold text-navy-900">神奈川・東京</dt>
               <dd>神奈川県内・東京都内のエリアにも対応しています。対応できるかどうかは、ご住所をお知らせいただければお答えします。</dd>
             </div>
           </dl>
-          <p className="mt-7 flex flex-wrap gap-x-9 gap-y-3" {...reveal(120)}>
-            <Link href="/area/totsuka" className="link-arrow">
+          <p className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" {...reveal(120)}>
+            <Link href="/area/totsuka" className="btn btn-navy">
               戸塚区の住宅設備・リフォーム
-              <Icon name="arrowRight" className="size-4" />
+              <Icon name="arrowRight" className="btn-arrow size-4" />
             </Link>
             <Link href="/area/yokohama" className="link-arrow">
               横浜市の対応エリア
@@ -79,31 +82,35 @@ export function AreaSection() {
 /** 法人・工務店向け（くわしくは /business） */
 export function BusinessSection() {
   return (
-    <section aria-labelledby="home-business" className="cv section bg-silver-50">
-      <div className="container-x grid gap-x-12 gap-y-9 lg:grid-cols-12 lg:items-center">
-        <div className="lg:col-span-6">
+    <section aria-labelledby="home-business" className="cv section bg-white">
+      <div className="container-x grid items-center gap-x-14 gap-y-10 lg:grid-cols-2">
+        <div>
           <SectionHeading
             id="home-business"
+            eyebrow="法人のお客様"
+            color="navy"
             title="法人・工務店・ハウスメーカーの方へ"
             lead="個人のお客様だけでなく、法人・工務店・ハウスメーカーからのご依頼もお受けしています。住宅設備の取り付け、業務用エアコンの工事、空調配管の仕上げなど、現場の条件に合わせて対応します。"
           />
-          <ul className="dash-list mt-6 grid gap-x-8 gap-y-2 text-[0.9375rem] font-bold text-ink sm:grid-cols-2" {...reveal(80)}>
+          <ul className="dash-list mt-6 grid gap-x-8 gap-y-2 text-[0.9375rem] font-bold text-navy-900 sm:grid-cols-2" {...reveal(80)}>
             {["住宅設備の設置・交換工事", "業務用エアコンの設置・交換", "空調配管・ラッキングカバー", "リフォームに伴う解体と設備工事"].map((t) => (
               <li key={t}>{t}</li>
             ))}
           </ul>
           <p className="mt-7" {...reveal(120)}>
-            <Link href="/business" className="link-arrow">
+            <Link href="/business" className="btn btn-outline">
               法人・工務店向けのご案内
-              <Icon name="arrowRight" className="size-4" />
+              <Icon name="arrowRight" className="btn-arrow size-4" />
             </Link>
           </p>
         </div>
-        <figure className="lg:col-span-6" {...reveal(0, "wipe")}>
-          <div className="relative aspect-[4/3] bg-silver-100">
-            <PhotoFill image="works/lagging-3" alt="業務用の室外機の間を通る、ラッキングカバーを施工した空調配管" sizes="(min-width: 1024px) 48vw, 100vw" />
+        <figure {...reveal(0, "right")}>
+          <div className="photo-frame photo-frame-r">
+            <div className="photo-card relative aspect-[4/3]">
+              <PhotoFill image="works/lagging-3" alt="業務用の室外機の間を通る、ラッキングカバーを施工した空調配管" sizes="(min-width: 1024px) 44vw, 100vw" />
+            </div>
           </div>
-          <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">業務用空調の配管にラッキングカバーを施工した現場（当社施工）</figcaption>
+          <figcaption className="mt-3 text-xs leading-relaxed text-ink-mute">業務用空調の配管にラッキングカバーを施工した現場（当社施工）</figcaption>
         </figure>
       </div>
     </section>
@@ -116,26 +123,31 @@ const FLOW_PICK = ["contact", "survey", "estimate", "work", "handover"];
 export function FlowSection() {
   const steps = FLOW_PICK.map((id) => flowSteps.find((s) => s.id === id)!);
   return (
-    <section aria-labelledby="home-flow" className="cv section bg-white">
+    <section aria-labelledby="home-flow" className="cv band band-paper section">
       <div className="container-x">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-          <SectionHeading id="home-flow" title="工事の流れ" lead="お見積もりまでは無料です。内容にご納得いただいてから、ご契約となります。" />
-          <Link href="/flow" className="link-arrow shrink-0" {...reveal(80)}>
-            工事の流れをくわしく
-            <Icon name="arrowRight" className="size-4" />
-          </Link>
-        </div>
-        <ol className="mt-9 grid border-t border-navy-900 sm:grid-cols-2 lg:mt-11 lg:grid-cols-5">
+        <SectionHeading id="home-flow" eyebrow="ご相談から完了まで" title="工事の流れ" align="center" lead="お見積もりまでは無料です。内容にご納得いただいてから、ご契約となります。" />
+
+        <ol className="mt-10 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:mt-12 lg:grid-cols-5">
           {steps.map((s, i) => (
-            <li key={s.id} className="flex gap-4 border-b border-silver-200 py-5 lg:block lg:border-b-0 lg:border-r lg:px-6 lg:py-7 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0" {...reveal(i * 70)}>
-              <p className="num w-7 shrink-0 text-xl font-medium leading-snug text-silver-500 lg:w-auto lg:text-2xl">{i + 1}</p>
-              <div className="lg:mt-3">
-                <h3 className="text-[1.0313rem] font-bold leading-snug">{s.title}</h3>
-                <p className="mt-1 text-[0.8125rem] leading-relaxed text-ink-mute lg:mt-2">{s.lead}</p>
+            <li key={s.id} className="card relative flex items-center gap-4 px-5 py-5 lg:block lg:px-4 lg:pb-6 lg:pt-7 lg:text-center" {...reveal(i * 80, "pop")}>
+              <span className="num absolute -left-2 -top-2 grid size-8 place-items-center rounded-full bg-brand-600 text-sm font-semibold text-white shadow-card lg:left-3 lg:top-3">{i + 1}</span>
+              <div className="grid size-20 shrink-0 place-items-end overflow-hidden rounded-full bg-cream lg:mx-auto lg:size-24">
+                <Illust image={s.pose} width={96} className="mx-auto h-[88%] w-auto" />
+              </div>
+              <div className="lg:mt-4">
+                <h3 className="text-[1.0625rem] font-bold leading-snug">{s.title}</h3>
+                <p className="mt-1 text-[0.8125rem] leading-relaxed text-ink-mute lg:mt-1.5">{s.lead}</p>
               </div>
             </li>
           ))}
         </ol>
+
+        <p className="mt-10 text-center" {...reveal()}>
+          <Link href="/flow" className="btn btn-outline">
+            工事の流れをくわしく
+            <Icon name="arrowRight" className="btn-arrow size-4" />
+          </Link>
+        </p>
       </div>
     </section>
   );
@@ -146,19 +158,19 @@ export function InstagramSection() {
   const url = siteConfig.social.instagram;
   if (!url) return null;
   return (
-    <section aria-labelledby="home-instagram" className="cv section bg-silver-50">
+    <section aria-labelledby="home-instagram" className="cv section bg-white">
       <div className="container-x">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-          <SectionHeading id="home-instagram" title="現場の写真（Instagram）" lead="施工の前後や作業中の様子を、Instagram に投稿しています。メッセージでのご相談もお受けしています。" />
-          <a href={url} target="_blank" rel="noopener noreferrer" className="link-arrow shrink-0" {...reveal(80)}>
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+          <SectionHeading id="home-instagram" eyebrow="Instagram" color="sun" title="現場の写真（Instagram）" lead="施工の前後や作業中の様子を、Instagram に投稿しています。メッセージでのご相談もお受けしています。" />
+          <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm shrink-0" {...reveal(80)}>
+            <Icon name="instagram" className="size-4" />
             Instagram を開く
-            <Icon name="arrowUpRight" className="size-4" />
           </a>
         </div>
-        <ul className="mt-9 grid grid-cols-2 gap-x-1.5 gap-y-5 sm:grid-cols-3 sm:gap-x-2 lg:mt-11 lg:grid-cols-6">
+        <ul className="mt-9 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 lg:mt-11 lg:grid-cols-6">
           {instagramPosts.map((p, i) => (
-            <li key={p.url} {...reveal((i % 6) * 50)}>
-              <a href={p.url} target="_blank" rel="noopener noreferrer" className="zoom-wrap group relative block aspect-square bg-silver-100" aria-label={`${p.caption}（Instagram の投稿を開く）`}>
+            <li key={p.url} {...reveal((i % 6) * 60, "zoom")}>
+              <a href={p.url} target="_blank" rel="noopener noreferrer" className="zoom-wrap group relative block aspect-square overflow-hidden rounded-2xl bg-silver-100 shadow-card" aria-label={`${p.caption}（Instagram の投稿を開く）`}>
                 <PhotoFill image={p.image} alt={p.alt} sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw" className="zoom-img" />
               </a>
               <p className="mt-2 text-xs leading-relaxed text-ink-mute">{p.caption}</p>
@@ -170,29 +182,38 @@ export function InstagramSection() {
   );
 }
 
-/** コラム（新しい順に、題名だけの一覧で） */
+/** コラム（新しい3本を写真つきで、続く2本を題名の行で） */
 export function BlogSection() {
   const posts = getAllPosts().slice(0, 5);
   if (!posts.length) return null;
+  const cards = posts.slice(0, 3);
+  const rest = posts.slice(3);
   return (
-    <section aria-labelledby="home-blog" className="cv section bg-white">
-      <div className="container-x grid gap-x-12 gap-y-7 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <SectionHeading id="home-blog" title="住宅設備コラム" lead="交換の時期、機種の選び方、費用の考え方などを、設備ごとにまとめています。" />
-          <p className="mt-6" {...reveal(80)}>
-            <Link href="/blog" className="link-arrow">
-              コラムの一覧
-              <Icon name="arrowRight" className="size-4" />
-            </Link>
-          </p>
-        </div>
-        <ul className="rows lg:col-span-8" {...reveal(60)}>
-          {posts.map((p) => (
-            <li key={p.slug}>
-              <PostRow post={p} />
+    <section aria-labelledby="home-blog" className="cv band band-paper section">
+      <div className="container-x">
+        <SectionHeading id="home-blog" eyebrow="コラム" title="住宅設備コラム" align="center" lead="交換の時期、機種の選び方、費用の考え方などを、設備ごとにまとめています。" />
+        <ul className="scroller mt-10 gap-6 sm:grid sm:grid-cols-2 lg:mt-12 lg:grid-cols-3">
+          {cards.map((p, i) => (
+            <li key={p.slug} className={i === 2 ? "sm:hidden lg:block" : ""} {...reveal(i * 90)}>
+              <PostCard post={p} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 80vw" />
             </li>
           ))}
         </ul>
+        {rest.length > 0 && (
+          <ul className="rows rows-2 mt-6" {...reveal(60)}>
+            {rest.map((p) => (
+              <li key={p.slug}>
+                <PostRow post={p} />
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="mt-10 text-center" {...reveal()}>
+          <Link href="/blog" className="btn btn-outline">
+            コラムの一覧
+            <Icon name="arrowRight" className="btn-arrow size-4" />
+          </Link>
+        </p>
       </div>
     </section>
   );
@@ -201,14 +222,17 @@ export function BlogSection() {
 /** よくある質問（/faq の抜粋。構造化データは /faq にだけ出すので、ここでは出さない） */
 export function FaqSection() {
   return (
-    <section aria-labelledby="home-faq" className="cv section bg-silver-50">
-      <div className="container-x grid gap-x-12 gap-y-7 lg:grid-cols-12">
+    <section aria-labelledby="home-faq" className="cv band band-cream deco-bl section">
+      <div className="container-x grid gap-x-12 gap-y-8 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-4">
-          <SectionHeading id="home-faq" title="よくある質問" lead="見積もりの費用、対応エリア、補助金のことなど、ご相談の前によくいただく質問です。" />
+          <SectionHeading id="home-faq" eyebrow="ご相談の前に" title="よくある質問" lead="見積もりの費用、対応エリア、補助金のことなど、ご相談の前によくいただく質問です。" />
+          <div className="mt-4 hidden lg:block" {...reveal(120, "pop")}>
+            <Illust image="illust/people-woman-think" width={160} className="h-auto w-36 animate-float-slow" />
+          </div>
           <p className="mt-6" {...reveal(80)}>
-            <Link href="/faq" className="link-arrow">
+            <Link href="/faq" className="btn btn-outline">
               よくある質問の一覧
-              <Icon name="arrowRight" className="size-4" />
+              <Icon name="arrowRight" className="btn-arrow size-4" />
             </Link>
           </p>
         </div>
@@ -229,9 +253,9 @@ export function CompanySection() {
     <section aria-labelledby="home-company" className="cv section bg-white">
       <div className="container-x grid gap-x-12 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <SectionHeading id="home-company" title="会社概要" />
-          <figure className="mt-6 max-w-xs" {...reveal(80)}>
-            <div className="border border-silver-200">
+          <SectionHeading id="home-company" eyebrow="運営会社" color="navy" title="会社概要" />
+          <figure className="mt-7 max-w-xs" {...reveal(80)}>
+            <div className="photo-card-sm shadow-card">
               <Photo image="company/nameplate" alt="「株式会社 横浜総合住設」と書かれた表札" sizes="(min-width: 1024px) 24vw, 80vw" />
             </div>
             <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">事業所の表札</figcaption>
@@ -239,7 +263,7 @@ export function CompanySection() {
         </div>
 
         <div className="lg:col-span-8" {...reveal(60)}>
-          <dl className="dl-spec text-[0.9375rem]">
+          <dl className="dl-spec card card-line px-5 py-2 text-[0.9375rem] sm:px-8">
             <div>
               <dt>会社名</dt>
               <dd>
@@ -263,7 +287,7 @@ export function CompanySection() {
               <div>
                 <dt>電話</dt>
                 <dd>
-                  <a href={telHref(phone)} className="num text-lg font-medium tracking-wider text-navy-900 hover:text-brand-700" data-cv="tel">
+                  <a href={telHref(phone)} className="num text-lg font-semibold tracking-wider text-navy-900 hover:text-brand-700" data-cv="tel">
                     {phone}
                   </a>
                   {hours && <span className="ml-3 text-sm text-ink-mute">受付 {hours}</span>}
@@ -280,9 +304,9 @@ export function CompanySection() {
             </div>
           </dl>
           <p className="mt-7">
-            <Link href="/company" className="link-arrow">
+            <Link href="/company" className="btn btn-outline">
               会社案内
-              <Icon name="arrowRight" className="size-4" />
+              <Icon name="arrowRight" className="btn-arrow size-4" />
             </Link>
           </p>
         </div>

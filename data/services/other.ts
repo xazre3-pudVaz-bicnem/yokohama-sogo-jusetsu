@@ -13,7 +13,6 @@ export const other: Service = {
   shortName: "その他の設備工事",
   image: "works/bath-dryer-after-room",
   imageAlt: "浴室暖房乾燥機を取り替えたあとの浴室（横浜総合住設の施工）",
-  heroLayout: "side",
   imageCaption: "浴室暖房乾燥機を取り替えた浴室（当社施工）",
   subImage: "works/cupboard",
   subImageAlt: "キッチンに設置した青い扉のカップボード（横浜総合住設の施工）",

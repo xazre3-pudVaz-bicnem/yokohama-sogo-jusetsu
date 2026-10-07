@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownBody } from "@/components/blog/MarkdownBody";
 import { PostRow } from "@/components/cards/PostCard";
-import { ServiceRow } from "@/components/cards/ServiceCard";
+import { ServiceTile } from "@/components/cards/ServiceCard";
 import { WorkCard, WorkFeature } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -72,8 +72,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <article>
-        <header className="bg-white">
-          <div className="container-x pt-4 lg:pt-5">
+        <header className="relative overflow-hidden bg-cream">
+          <div className="container-x pb-9 pt-4 lg:pb-12 lg:pt-5">
             <Breadcrumbs
               items={[
                 { name: "住宅設備コラム", href: "/blog" },
@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             />
             <div className="mx-auto mt-7 max-w-[50rem] lg:mt-11">
               <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs tracking-wider text-ink-mute">
-                <Link href={`/blog/category/${p.category}`} className="inline-flex min-h-10 items-center font-bold text-ink underline decoration-silver-400 underline-offset-4 hover:text-brand-700">
+                <Link href={`/blog/category/${p.category}`} className="chip">
                   {p.cluster.name}
                 </Link>
                 <span className="num">
@@ -95,21 +95,24 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   )}
                 </span>
               </p>
-              <h1 className="h-page mt-2 text-balance">
+              <h1 className="h-page mt-3 text-balance">
                 <Phrase>{p.title}</Phrase>
               </h1>
               <p className="lead mt-5 max-w-none">{p.description}</p>
             </div>
           </div>
+          <svg className="block h-6 w-full text-white sm:h-10" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="currentColor" d="M0 30c180 26 420 26 720 6s540-22 720 4v20H0z" />
+          </svg>
         </header>
 
         <div className="bg-white">
           {/* 記事の写真。イメージ写真には「イメージ」と書き、出典の表示が必要な写真には出典を添える */}
-          <figure className="mx-auto mt-8 max-w-[58rem] lg:mt-10 lg:px-[clamp(1.25rem,4vw,2.5rem)]">
-            <div className="relative aspect-[16/9] bg-silver-100 sm:aspect-[21/9]">
+          <figure className="mx-auto mt-4 max-w-[58rem] px-[clamp(1.25rem,4vw,2.5rem)] lg:mt-6">
+            <div className="photo-card relative aspect-[16/9] sm:aspect-[21/9]">
               <PhotoFill image={p.photo.image} alt={p.photo.alt} sizes="(min-width: 1000px) 848px, 100vw" priority />
             </div>
-            <figcaption className="mt-2 px-[clamp(1.25rem,4vw,2.5rem)] text-xs leading-relaxed text-ink-mute lg:px-0">
+            <figcaption className="mt-3 text-xs leading-relaxed text-ink-mute">
               {coverCredit ? (
                 <>
                   写真：
@@ -158,7 +161,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             {/* 出典 */}
             {p.sources.length > 0 && (
-              <section aria-labelledby="post-sources" className="mt-12 bg-silver-50 p-5 sm:p-6">
+              <section aria-labelledby="post-sources" className="mt-12 rounded-2xl bg-paper-2 p-5 sm:p-6">
                 <h2 id="post-sources" className="text-sm font-bold text-ink">
                   出典・参考にした公式情報
                 </h2>
@@ -178,7 +181,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             )}
 
             {/* 著者 */}
-            <aside aria-label="この記事について" className="mt-10 border-y border-silver-200 py-5">
+            <aside aria-label="この記事について" className="card card-line mt-10 px-5 py-5 sm:px-6">
               <p className="text-xs font-bold tracking-wider text-ink-mute">この記事を書いた人</p>
               <p className="mt-1 text-base font-bold text-ink">{p.author}</p>
               <p className="mt-1 text-[0.8125rem] leading-relaxed">
@@ -198,7 +201,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <ul className="rows mt-4">
                   {relatedServices.map((s) => (
                     <li key={s.slug}>
-                      <ServiceRow service={s} />
+                      <ServiceTile service={s} />
                     </li>
                   ))}
                 </ul>
@@ -220,7 +223,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* 施工事例 */}
       {works.length > 0 && (
-        <section aria-labelledby="post-works" className="cv section bg-silver-50">
+        <section aria-labelledby="post-works" className="cv section band band-mist deco-tr">
           {works.length === 1 ? (
             <div className="container-x">
               <WorkFeature work={works[0]} heading={<SectionHeading id="post-works" title={`${relatedServices[0].shortName}の施工事例`} />} />
@@ -248,7 +251,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* 関連コラム */}
       {relatedPosts.length > 0 && (
-        <section aria-labelledby="post-related" className={`cv section ${works.length > 0 ? "bg-white" : "bg-silver-50"}`}>
+        <section aria-labelledby="post-related" className={`cv section ${works.length > 0 ? "bg-white" : "band band-paper"}`}>
           <div className="container-x">
             <SectionSplit heading={<SectionHeading id="post-related" title="関連コラム" />}>
               <ul className="rows" {...reveal(60)}>

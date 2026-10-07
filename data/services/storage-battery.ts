@@ -13,7 +13,6 @@ export const storageBattery: Service = {
   shortName: "蓄電池",
   image: "photos/house-white-gray",
   imageAlt: "白と濃いグレーの外壁の2階建て住宅",
-  heroLayout: "side",
   catch: "家庭用蓄電池の設置、太陽光発電への後付け",
   summary:
     "家庭用蓄電池の設置に対応します。太陽光発電との同時設置はもちろん、すでに太陽光がある家への後付けも、いまの機器との相性を確認してご提案します。",

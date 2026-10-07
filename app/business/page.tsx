@@ -128,7 +128,7 @@ export default function BusinessPage() {
       </div>
 
       {/* 現場の写真 */}
-      <section aria-labelledby="biz-works" className="cv section bg-silver-50">
+      <section aria-labelledby="biz-works" className="cv section band band-mist deco-tr">
         <div className="container-x">
           <div className="grid gap-x-12 gap-y-6 lg:grid-cols-12 lg:items-end">
             <SectionHeading id="biz-works" title="施工の例（空調配管のラッキング）" className="lg:col-span-5" />

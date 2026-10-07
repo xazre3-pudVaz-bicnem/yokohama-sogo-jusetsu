@@ -5,36 +5,42 @@ import { Phrase } from "@/components/ui/Phrase";
 import type { Service } from "@/data/services";
 
 /**
- * サービスへのリンク。枠つきのカードにはせず、細い線で区切った「行」として並べる（呼び出し側で .rows を付ける）。
- *   ServiceRow      … 名称と一言だけの行（トップページ・関連サービスなど）
- *   ServiceThumbRow … 小さな写真つきの行（サービス一覧ページ）
+ * サービスへのリンク。
+ *   ServiceTile     … 名称と一言を、1枚ずつ白い角丸のパネルにしたもの（トップページ・関連サービス）
+ *   ServiceThumbRow … 小さな写真つきのパネル（サービス一覧ページ）
  * サービスごとの色分けやアイコンは使わない。
  */
-export function ServiceRow({ service, onDark = false, headingLevel: H = "h3" }: { service: Service; onDark?: boolean; /** 名称の見出しの段。上の見出しが h3 のときは h4 にする */ headingLevel?: "h3" | "h4" }) {
+type Level = "h3" | "h4";
+
+export function ServiceTile({ service, headingLevel: H = "h3" }: { service: Service; headingLevel?: Level }) {
   return (
-    <Link href={`/service/${service.slug}`} className="group flex items-center gap-4 py-4">
+    <Link href={`/service/${service.slug}`} className="card card-line card-hover group flex h-full items-center gap-3 px-4 py-3.5 sm:px-5">
       <div className="flex-1">
-        <H className={`text-base font-bold leading-snug transition-colors ${onDark ? "!text-white group-hover:!text-sky-300" : "text-ink group-hover:text-brand-700"}`}>{service.name}</H>
-        <p className={`mt-1 text-[0.8125rem] leading-relaxed ${onDark ? "text-silver-300" : "text-ink-mute"}`}>{service.catch}</p>
+        <H className="text-[0.9688rem] font-bold leading-snug transition-colors group-hover:text-brand-700">{service.name}</H>
+        <p className="mt-1 text-xs leading-relaxed text-ink-mute">{service.catch}</p>
       </div>
-      <Icon name="arrowRight" className={`size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 ${onDark ? "text-silver-300" : "text-navy-900"}`} />
+      <span className="arrow-dot">
+        <Icon name="arrowRight" className="size-4" />
+      </span>
     </Link>
   );
 }
 
 export function ServiceThumbRow({ service, headingLevel: H = "h3" }: { service: Service; headingLevel?: "h2" | "h3" }) {
   return (
-    <Link href={`/service/${service.slug}`} className="group grid grid-cols-[6.5rem_1fr] items-start gap-4 py-5 sm:grid-cols-[11rem_1fr_auto] sm:items-center sm:gap-7 sm:py-6">
-      <div className="zoom-wrap relative aspect-[4/3] bg-silver-100">
+    <Link href={`/service/${service.slug}`} className="card card-line card-hover group grid grid-cols-[6.5rem_1fr] items-center gap-4 p-3 sm:grid-cols-[11rem_1fr_auto] sm:gap-6 sm:p-4">
+      <div className="photo-card-sm zoom-wrap relative aspect-[4/3]">
         <PhotoFill image={service.image} alt="" sizes="(min-width: 640px) 176px, 104px" className="zoom-img" />
       </div>
       <div>
-        <H className="text-[1.0625rem] font-bold leading-snug text-ink transition-colors group-hover:text-brand-700 sm:text-lg">
+        <H className="text-[1.0625rem] font-bold leading-snug transition-colors group-hover:text-brand-700 sm:text-lg">
           <Phrase>{service.name}</Phrase>
         </H>
         <p className="mt-1.5 text-sm leading-[1.85] text-ink-body sm:mt-2 sm:text-[0.9375rem]">{service.summary}</p>
       </div>
-      <Icon name="arrowRight" className="hidden size-4 text-navy-900 transition-transform duration-300 group-hover:translate-x-1 sm:block" />
+      <span className="arrow-dot hidden sm:grid">
+        <Icon name="arrowRight" className="size-4" />
+      </span>
     </Link>
   );
 }

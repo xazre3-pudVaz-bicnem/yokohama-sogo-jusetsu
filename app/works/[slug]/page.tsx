@@ -6,7 +6,7 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
-import { Photo, PhotoFill } from "@/components/ui/Photo";
+import { Illust, Photo, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getService } from "@/data/services";
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 function Labeled({ image, sizes, portrait }: { image: WorkImage; sizes: string; portrait: boolean }) {
   return (
     <figure>
-      <div className={`relative bg-silver-100 ${portrait ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
+      <div className={`photo-card-sm relative ${portrait ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
         <PhotoFill image={image.key} alt={image.alt} sizes={sizes} />
       </div>
       {image.label && <figcaption className="mt-2 text-xs font-bold tracking-wider text-ink">{image.label}</figcaption>}
@@ -94,8 +94,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
 
   const heading = (
     <>
-      <p className="eyebrow">施工事例　／　{w.category}</p>
-      <h1 className="h-page mt-2 text-balance">
+      <p className="mb-4 flex">
+        <span className="pill pill-navy">施工事例　／　{w.category}</span>
+      </p>
+      <h1 className="h-page text-balance">
         <Phrase>{w.title}</Phrase>
       </h1>
       <p className="lead mt-5">{w.summary}</p>
@@ -116,7 +118,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
     <>
       <article>
         {/* 見出しと概要 */}
-        <header className="bg-white">
+        <header className="relative overflow-hidden bg-cream">
           <div className="container-x pb-9 pt-4 lg:pb-12 lg:pt-5">
             <Breadcrumbs
               items={[
@@ -129,8 +131,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               <div className="mt-7 grid gap-x-14 gap-y-8 lg:mt-11 lg:grid-cols-12 lg:grid-rows-[auto_1fr]">
                 <div className="lg:col-span-7">{heading}</div>
                 <figure className="self-start lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1">
-                  <div className="bg-silver-100">
-                    <Photo image={w.cover.key} alt={w.cover.alt} sizes="(min-width: 1280px) 470px, (min-width: 1024px) 40vw, 100vw" priority />
+                  <div className="photo-frame photo-frame-r">
+                    <div className="photo-card border-[5px] border-white">
+                      <Photo image={w.cover.key} alt={w.cover.alt} sizes="(min-width: 1280px) 470px, (min-width: 1024px) 40vw, 100vw" priority />
+                    </div>
                   </div>
                   {w.photoNote && <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">{w.photoNote}</figcaption>}
                 </figure>
@@ -143,16 +147,19 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               </div>
             )}
           </div>
+          <svg className="block h-6 w-full text-white sm:h-10" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="currentColor" d="M0 30c180 26 420 26 720 6s540-22 720 4v20H0z" />
+          </svg>
         </header>
 
         {/* 写真（主）：横長の写真は、見出しの下に大きく */}
         {!coverPortrait && (
           <div className="bg-white">
-            <figure className="mx-auto max-w-[78rem] lg:px-[clamp(1.25rem,4vw,2.5rem)]">
-              <div className="bg-silver-100">
+            <figure className="container-x pt-2">
+              <div className="photo-card">
                 <Photo image={w.cover.key} alt={w.cover.alt} sizes="(min-width: 1280px) 1168px, 100vw" priority />
               </div>
-              {w.photoNote && <figcaption className="mt-2 px-[clamp(1.25rem,4vw,2.5rem)] text-xs leading-relaxed text-ink-mute lg:px-0">{w.photoNote}</figcaption>}
+              {w.photoNote && <figcaption className="mt-3 text-xs leading-relaxed text-ink-mute">{w.photoNote}</figcaption>}
             </figure>
           </div>
         )}
@@ -205,7 +212,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                   {w.gallery.map((g, i) => (
                     <li key={g.key} {...reveal((i % 2) * 80)}>
                       <figure>
-                        <div className="bg-silver-100">
+                        <div className="photo-card-sm">
                           <Photo image={g.key} alt={g.alt} sizes={w.gallery.length === 1 ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw"} />
                         </div>
                         <figcaption className="mt-2 text-[0.8125rem] leading-relaxed text-ink-mute">
@@ -239,7 +246,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             {w.comment && (
               <SectionSplit heading={<SectionHeading id="comment" title="横浜総合住設からのコメント" />}>
                 <figure {...reveal(60)}>
-                  <blockquote className="border-l-2 border-navy-900 pl-5 text-[1.0313rem] font-medium leading-[2] text-ink">{w.comment}</blockquote>
+                  <div className="flex items-end gap-3 sm:gap-5">
+                    <Illust image="illust/pose-ok" width={112} className="h-auto w-[4.75rem] shrink-0 sm:w-28" />
+                    <blockquote className="bubble flex-1 px-5 py-4 text-[1.0313rem] font-medium leading-[2] text-ink sm:px-7 sm:py-5">{w.comment}</blockquote>
+                  </div>
                   <figcaption className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-ink-mute">
                     <span>公式 Instagram の投稿より（{formatDateJa(w.source.postedAt)}）</span>
                     <a href={w.source.url} target="_blank" rel="noopener noreferrer" className="text-link inline-flex items-center gap-1">
@@ -267,7 +277,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       </article>
 
       {/* ほかの事例 */}
-      <section aria-labelledby="other-works" className="cv section bg-silver-50">
+      <section aria-labelledby="other-works" className="cv section band band-mist deco-tr">
         <div className="container-x">
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
             <SectionHeading id="other-works" title="ほかの施工事例" />

@@ -60,17 +60,18 @@ export default function WorksPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-family"
         title="施工事例"
         lead="当社が施工した現場の記録です。施工前と施工後の写真、工事で気をつけた点を、1件ずつ掲載しています。写真はすべて、現場で撮影したものです。"
         crumbs={[{ name: "施工事例", href: "/works" }]}
       >
-        <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-1 border-t border-silver-200 pt-4 text-[0.8125rem] font-bold">
+        <ul className="mt-7 flex flex-wrap gap-2">
           {[...byService.entries()].map(([slug, list]) => {
             const s = getService(slug);
             if (!s) return null;
             return (
               <li key={slug}>
-                <a href={anchorOf(slug)} className="inline-flex min-h-10 items-center gap-1.5 text-ink-body underline-offset-4 transition-colors hover:text-brand-700 hover:underline">
+                <a href={anchorOf(slug)} className="chip">
                   {s.shortName}
                   <span className="num font-medium text-ink-mute">{list.length}</span>
                 </a>
@@ -86,7 +87,7 @@ export default function WorksPage() {
             const grid = gridOf(g.list.length);
             return (
               <div key={g.id} id={g.id} className="scroll-mt-28">
-                <div className="rule-top flex flex-wrap items-end justify-between gap-x-8 gap-y-2 pt-6" {...reveal()}>
+                <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-2" {...reveal()}>
                   <h2 className="h-section">{g.title}</h2>
                   {g.link && (
                     <Link href={g.link.href} className="link-arrow !text-sm">
@@ -107,7 +108,7 @@ export default function WorksPage() {
           })}
 
           {siteConfig.social.instagram && (
-            <p className="max-w-3xl border-l-2 border-navy-900 py-1 pl-5 text-[0.9375rem] leading-[1.95]" {...reveal()}>
+            <p className="card card-line max-w-3xl px-6 py-5 text-[0.9375rem] leading-[1.95]" {...reveal()}>
               ここに載せている事例は、公式 Instagram に投稿した施工写真をもとにまとめたものです。新しい現場の様子は、
               <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="text-link">
                 Instagram

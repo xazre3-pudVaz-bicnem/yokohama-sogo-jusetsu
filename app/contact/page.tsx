@@ -40,6 +40,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-couple-talk"
         title="お問い合わせ・無料見積もり"
         lead="ご相談とお見積もりは無料です。「交換したほうがよいのか知りたい」「おおよその費用を知りたい」という段階のご相談も、お電話とフォームでお受けしています。"
         crumbs={[{ name: "お問い合わせ", href: "/contact" }]}
@@ -49,9 +50,9 @@ export default function ContactPage() {
         <div className="container-x grid gap-x-12 gap-y-12 lg:grid-cols-12">
           {/* 連絡方法 */}
           <aside className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
-            <dl className="border-t border-navy-900">
+            <dl className="card card-line px-5 sm:px-6">
               {phone && (
-                <div className="border-b border-silver-200 py-5">
+                <div className="border-b-2 border-dotted border-silver-300 py-5 last:border-b-0">
                   <dt className="text-[0.8125rem] font-bold tracking-wider text-ink-mute">お電話</dt>
                   <dd className="mt-1">
                     <a href={telHref(phone)} className="num text-[1.9rem] font-medium leading-tight tracking-wider text-navy-900 transition-colors hover:text-brand-700" data-cv="tel">
@@ -68,7 +69,7 @@ export default function ContactPage() {
                 </div>
               )}
               {instagram && (
-                <div className="border-b border-silver-200 py-5">
+                <div className="border-b-2 border-dotted border-silver-300 py-5 last:border-b-0">
                   <dt className="text-[0.8125rem] font-bold tracking-wider text-ink-mute">Instagram</dt>
                   <dd className="mt-1 text-[0.9375rem] leading-[1.9]">
                     メッセージでもご相談いただけます。
@@ -115,7 +116,7 @@ export default function ContactPage() {
               {enabled || preview ? (
                 <ContactForm topics={inquiryTopics} note={siteConfig.contact.formNote} preview={preview} />
               ) : (
-                <div className="border-l-2 border-navy-900 py-1 pl-5">
+                <div className="rounded-2xl bg-cream px-5 py-4">
                   <p className="text-lg font-bold text-ink">フォームは、ただいま準備中です。</p>
                   <p className="mt-2 text-[0.9375rem] leading-[1.95]">
                     お手数ですが、お電話{instagram ? "または Instagram のメッセージ" : ""}でご連絡ください。お見積もりは無料で、現地調査にもうかがいます。

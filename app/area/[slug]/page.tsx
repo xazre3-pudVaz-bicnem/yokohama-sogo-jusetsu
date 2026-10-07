@@ -93,11 +93,11 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
       />
 
       {/* 基礎データ */}
-      <section aria-label={`${a.shortName}の基礎データ`} className="border-b border-silver-200 bg-white">
+      <section aria-label={`${a.shortName}の基礎データ`} className="bg-white">
         <div className="container-x py-8 lg:py-10">
           <dl className={`grid gap-x-9 gap-y-6 sm:grid-cols-2 ${a.facts.length >= 5 ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
             {a.facts.map((f, i) => (
-              <div key={f.label} className="border-t border-navy-900 pt-3" {...reveal(i * 60)}>
+              <div key={f.label} className="card card-line px-4 py-3.5" {...reveal(i * 60)}>
                 <dt className="text-xs font-bold tracking-wider text-ink-mute">{f.label}</dt>
                 <dd className={`mt-1 text-navy-900 ${/^[0-9]/.test(f.value) ? "num text-[1.5rem] font-medium leading-tight" : "text-[1.0313rem] font-bold leading-snug"}`}>
                   <Phrase>{f.value}</Phrase>
@@ -121,7 +121,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
                   ))}
                 </div>
                 {sec.id === "office" && (
-                  <p className="mt-6 border-t border-silver-200 pt-4 text-sm leading-relaxed" {...reveal(100)}>
+                  <p className="mt-6 border-t-2 border-dotted border-silver-300 pt-4 text-sm leading-relaxed" {...reveal(100)}>
                     <span className="mr-3 font-bold text-ink">戸塚オフィス</span>
                     {officeAddressWithPostal("totsuka")}
                     <a href={officeMapUrl("totsuka")} target="_blank" rel="noopener noreferrer" className="text-link ml-3 inline-flex items-center gap-1">
@@ -150,18 +150,18 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
 
       {/* 町名・駅（区のページ） */}
       {(a.towns || a.stations) && (
-        <section aria-labelledby="towns" className="cv section bg-silver-50">
+        <section aria-labelledby="towns" className="cv section band band-mist deco-tr">
           <div className="container-x">
             <SectionSplit heading={<SectionHeading id="towns" title={`${a.shortName}の対応範囲`} lead={`${a.shortName}の全域にうかがいます。`} />}>
-              <dl className="text-[0.9375rem] leading-[2]" {...reveal(60)}>
+              <dl className="card px-5 pb-1 pt-5 text-[0.9375rem] leading-[2] sm:px-8" {...reveal(60)}>
                 {a.towns && (
-                  <div className="grid gap-x-9 gap-y-1 border-b border-silver-200 pb-5 md:grid-cols-[8rem_1fr]">
+                  <div className="grid gap-x-9 gap-y-1 border-b-2 border-dotted border-silver-300 pb-5 last:border-b-0 md:grid-cols-[8rem_1fr]">
                     <dt className="font-bold text-ink">町名</dt>
                     <dd>{a.towns.join("・")}</dd>
                   </div>
                 )}
                 {a.stations && (
-                  <div className="grid gap-x-9 gap-y-1 border-b border-silver-200 py-5 md:grid-cols-[8rem_1fr]">
+                  <div className="grid gap-x-9 gap-y-1 border-b-2 border-dotted border-silver-300 py-5 last:border-b-0 md:grid-cols-[8rem_1fr]">
                     <dt className="font-bold text-ink">区内の駅</dt>
                     <dd>
                       <ul className="space-y-1">
@@ -176,7 +176,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
                   </div>
                 )}
                 {a.neighbors && (
-                  <div className="grid gap-x-9 gap-y-1 border-b border-silver-200 py-5 md:grid-cols-[8rem_1fr]">
+                  <div className="grid gap-x-9 gap-y-1 border-b-2 border-dotted border-silver-300 py-5 last:border-b-0 md:grid-cols-[8rem_1fr]">
                     <dt className="font-bold text-ink">隣り合う区・市</dt>
                     <dd>{a.neighbors.join("・")}</dd>
                   </div>
@@ -189,7 +189,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
 
       {/* 18区（市のページ） */}
       {isCity && (
-        <section aria-labelledby="wards" className="cv section bg-silver-50">
+        <section aria-labelledby="wards" className="cv section band band-mist deco-tr">
           <div className="container-x">
             <SectionSplit heading={<SectionHeading id="wards" title="横浜市の対応範囲" lead="横浜市の18区すべてにうかがいます。" />}>
               <ul className="grid grid-cols-3 border-l border-t border-silver-300 text-center text-sm font-bold text-ink sm:grid-cols-6" {...reveal(60)}>
@@ -214,12 +214,12 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
       <section aria-labelledby="area-services" className="cv section bg-white">
         <div className="container-x">
           <SectionHeading id="area-services" title={`${a.shortName}での工事と、確認すること`} lead="工事の種類ごとに、この地域で確認しておきたい点をまとめました。くわしい内容は、それぞれのサービスページでご案内しています。" />
-          <ul className="mt-9 grid gap-x-12 border-t border-navy-900 md:grid-cols-2">
+          <ul className="mt-9 grid gap-4 md:grid-cols-2">
             {a.serviceNotes.map((n, i) => {
               const s = getService(n.service);
               if (!s) return null;
               return (
-                <li key={n.service} className="border-b border-silver-200 py-6" {...reveal((i % 2) * 70)}>
+                <li key={n.service} className="card card-line p-5 sm:p-6" {...reveal((i % 2) * 70)}>
                   <h3 className="text-[1.0313rem] font-bold leading-snug">
                     <Phrase>{n.title}</Phrase>
                   </h3>
@@ -244,7 +244,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
 
       {/* 市の支援制度（市のページ） */}
       {localSubsidies.length > 0 && (
-        <section aria-labelledby="subsidy" className="cv section bg-silver-50">
+        <section aria-labelledby="subsidy" className="cv section band band-cream deco-bl">
           <div className="container-x">
             <SectionHeading id="subsidy" title="横浜市の支援制度" lead="横浜市が行っている、住宅の省エネに関する事業です。公式ページで確認できた内容を、確認日つきで掲載しています。" />
             <div className="mt-9 grid gap-x-12 gap-y-12 lg:grid-cols-2">
@@ -260,7 +260,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
       )}
 
       {/* 施工事例 */}
-      <section aria-labelledby="area-works" className={`cv section ${localSubsidies.length > 0 ? "bg-white" : "bg-silver-50"}`}>
+      <section aria-labelledby="area-works" className={`cv section ${localSubsidies.length > 0 ? "bg-white" : "band band-paper"}`}>
         <div className="container-x">
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
             <SectionHeading
@@ -284,7 +284,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
       </section>
 
       {/* よくある質問・関連コラム */}
-      <section aria-labelledby="faq" className={`cv section ${localSubsidies.length > 0 ? "bg-silver-50" : "bg-white"}`}>
+      <section aria-labelledby="faq" className={`cv section ${localSubsidies.length > 0 ? "band band-paper" : "bg-white"}`}>
         <div className="container-x space-y-14 lg:space-y-16">
           <SectionSplit heading={<SectionHeading id="faq" title={`${a.shortName}での工事のよくある質問`} />}>
             <div {...reveal(60)}>

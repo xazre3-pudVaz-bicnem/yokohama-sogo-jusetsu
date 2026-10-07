@@ -13,8 +13,12 @@ import { SITE_URL, IS_PUBLIC } from "@/lib/seo";
 
 /**
  * 書体の方針（スマホの表示速度を優先）
- * - 日本語は端末に入っている書体（ヒラギノ／游ゴシック／BIZ UDゴシックなど）をそのまま使う。
- *   日本語の Web フォントは 1 ページで数百 KB の読み込みになり、スマホの最初の描画を大きく遅らせるため使わない。
+ * - 本文の日本語は、端末に入っている書体（ヒラギノ／游ゴシック／BIZ UDゴシックなど）をそのまま使う。
+ * - 見出し用の日本語フォント（Zen Kaku Gothic New・太字）は、画面幅 1024px 以上のときだけ読み込む。
+ *   日本語フォントは文字の範囲ごとに分割されていて、1ページで数十ファイル（数百 KB）を取りに行く。
+ *   スマホで読むと最初の描画が大きく遅れるため、スマホは端末の太字ゴシックのままにする。
+ *   PC でも、読み込みは最初の描画が終わってから（load のあと、最大の要素の描画が落ち着いてから。遅くとも4秒後）。
+ *   条件つきで後から足すため、<link> ではなく小さなスクリプトで読み込む（public/fonts/zen-kaku-gothic-new.css）。
  * - 欧文・数字（ロゴの英字、電話番号、番号）だけ、ロゴの書体に近い Jost を next/font で読み込む（ラテン文字のみ・自前配信）。
  */
 const jost = Jost({ subsets: ["latin"], variable: "--font-jost", display: "swap" });
@@ -42,6 +46,8 @@ export const metadata: Metadata = {
   },
 };
 
+const FONT_LOADER = `(function(){if(!window.matchMedia||!matchMedia("(min-width:1024px)").matches)return;var done=false,t;function add(){if(done)return;done=true;var l=document.createElement("link");l.rel="stylesheet";l.href="/fonts/zen-kaku-gothic-new.css";document.head.appendChild(l)}function arm(){clearTimeout(t);t=setTimeout(add,350)}function start(){try{new PerformanceObserver(arm).observe({type:"largest-contentful-paint",buffered:true})}catch(e){}arm();setTimeout(add,4000)}if(document.readyState==="complete")start();else addEventListener("load",start,{once:true})})();`;
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -53,6 +59,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja" data-scroll-behavior="smooth" className={jost.variable}>
       <body className="min-h-dvh">
+        <script dangerouslySetInnerHTML={{ __html: FONT_LOADER }} />
+        <noscript>
+          {/* JS が無効な環境向け。通常は上のスクリプトが、描画のあとで読み込む */}
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href="/fonts/zen-kaku-gothic-new.css" media="(min-width: 1024px)" />
+        </noscript>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[100] focus:rounded focus:bg-navy-900 focus:px-4 focus:py-2 focus:text-white"

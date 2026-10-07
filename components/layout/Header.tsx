@@ -72,7 +72,7 @@ export function Header() {
                     </Link>
                     {isService && (
                       <div className="invisible absolute inset-x-0 top-full z-40 px-[clamp(1.25rem,4vw,2.5rem)] opacity-0 transition-[opacity,visibility] duration-200 group-focus-within/mega:visible group-focus-within/mega:opacity-100 group-hover/mega:visible group-hover/mega:opacity-100">
-                        <div className="mx-auto max-w-[64rem] border border-t-0 border-silver-300 bg-white px-8 pb-5 pt-7 shadow-[0_18px_30px_-22px_rgb(6_21_55/0.45)]">
+                        <div className="card-pop mx-auto max-w-[64rem] rounded-t-none border border-t-0 border-silver-200 px-8 pb-5 pt-7">
                           <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] gap-x-9">
                             {MEGA_COLUMNS.map((ids) => (
                               <div key={ids.join("-")} className="space-y-6">
@@ -82,10 +82,10 @@ export function Header() {
                                   const wide = cat.links.length > 4;
                                   return (
                                     <div key={cat.id}>
-                                      <p className="border-b border-navy-900 pb-2 text-[0.75rem] font-bold tracking-[0.14em] text-ink-mute">{cat.name}</p>
+                                      <p className="border-b-2 border-brand-500 pb-2 font-heading text-[0.8125rem] font-bold tracking-[0.08em] text-brand-700">{cat.name}</p>
                                       <ul className={wide ? "grid grid-cols-2 gap-x-7" : ""}>
                                         {cat.links.map((s) => (
-                                          <li key={s.href} className="border-b border-silver-200">
+                                          <li key={s.href} className="border-b-2 border-dotted border-silver-200">
                                             <Link href={s.href} className="block py-2.5 text-[0.9375rem] font-bold leading-snug text-navy-900 transition-colors hover:text-brand-700">
                                               {s.label}
                                             </Link>

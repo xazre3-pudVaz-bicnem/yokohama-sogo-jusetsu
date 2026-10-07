@@ -23,6 +23,7 @@ export function BlogIndexView({ page, cluster }: { page: number; cluster?: BlogC
   return (
     <>
       <PageHero
+        illust="illust/pose-laptop"
         eyebrow={cluster ? "住宅設備コラム" : undefined}
         title={
           cluster ? (

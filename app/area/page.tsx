@@ -34,6 +34,7 @@ export default function AreaIndexPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-staff-point"
         eyebrow="対応エリア"
         title={
           <>
@@ -72,9 +73,9 @@ export default function AreaIndexPage() {
               title="横浜市戸塚区"
               lead="オフィスのある戸塚区が、いちばんの対応エリアです。戸塚区は横浜市でもっとも広い区で、川沿いの低地と起伏に富んだ台地に住宅地が広がっています。敷地の条件が場所ごとに違うため、現地を見てからご提案しています。"
             />
-            <dl className="mt-6 grid grid-cols-2 gap-x-9 border-t border-navy-900" {...reveal(80)}>
+            <dl className="mt-6 grid grid-cols-2 gap-3" {...reveal(80)}>
               {totsuka.facts.slice(0, 2).map((f) => (
-                <div key={f.label} className="border-b border-silver-200 py-4">
+                <div key={f.label} className="rounded-2xl bg-mist px-4 py-3.5">
                   <dt className="text-xs font-bold text-ink-mute">{f.label}</dt>
                   <dd className="num mt-0.5 text-[1.5rem] font-medium text-navy-900">{f.value}</dd>
                   {f.note && <dd className="mt-0.5 text-[0.6875rem] leading-snug text-ink-mute">{f.note}</dd>}
@@ -96,7 +97,7 @@ export default function AreaIndexPage() {
       </section>
 
       {/* 横浜市・神奈川・東京・拠点 */}
-      <section aria-label="横浜市・神奈川県・東京都" className="cv section bg-silver-50">
+      <section aria-label="横浜市・神奈川県・東京都" className="cv section band band-cream deco-tr">
         <div className="container-x space-y-14 lg:space-y-16">
           <SectionSplit heading={<SectionHeading id="area-yokohama" title="横浜市" lead="横浜市の18区すべてにうかがいます。" />}>
             <p className="text-[0.9688rem] leading-[2.05]" {...reveal(60)}>

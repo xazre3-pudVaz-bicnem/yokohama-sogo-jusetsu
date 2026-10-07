@@ -131,6 +131,7 @@ export default function CompanyPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-staff-ok"
         title="会社案内"
         lead={`${siteConfig.name}は、住宅設備の工事を軸に、住まいに関わる工事をお引き受けしている会社です。本社は相模原市南区、戸塚オフィスは横浜市戸塚区深谷町にあります。`}
         crumbs={[{ name: "会社案内", href: "/company" }]}
@@ -195,7 +196,7 @@ export default function CompanyPage() {
               <>
                 <SectionHeading id="outline" title="会社概要" />
                 <figure className="mt-6 max-w-xs" {...reveal(80)}>
-                  <div className="border border-silver-200">
+                  <div className="photo-card-sm shadow-card">
                     <Photo image="company/nameplate" alt="「株式会社 横浜総合住設」と書かれた表札" sizes="(min-width: 1024px) 24vw, 80vw" />
                   </div>
                   <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">事業所の表札</figcaption>
@@ -217,7 +218,7 @@ export default function CompanyPage() {
           <SectionSplit heading={<SectionHeading id="offices" title="本社・戸塚オフィス" />}>
             <ul className="grid gap-x-12 gap-y-8 sm:grid-cols-2" {...reveal(60)}>
               {offices.map((key) => (
-                <li key={key} className="rule-top pt-4">
+                <li key={key} className="card card-line p-5">
                   <h3 className="text-base font-bold">{siteConfig.offices[key].label}</h3>
                   <p className="mt-2 text-[0.9375rem] leading-[1.9]">{officeAddressWithPostal(key)}</p>
                   <p className="mt-2">
@@ -232,7 +233,7 @@ export default function CompanyPage() {
             <p className="mt-5 text-[0.8125rem] leading-relaxed text-ink-mute">ご来社の際は、事前にお電話でご連絡ください。</p>
             {/* Googleビジネスプロフィールの埋め込み URL が設定されたときだけ地図を出す */}
             {embed && (
-              <div className="mt-7 border border-silver-200">
+              <div className="photo-card mt-7">
                 <iframe src={embed} title="横浜総合住設 戸塚オフィスの地図" loading="lazy" className="block aspect-[16/9] w-full" referrerPolicy="no-referrer-when-downgrade" />
               </div>
             )}
@@ -242,7 +243,7 @@ export default function CompanyPage() {
           <SectionSplit heading={<SectionHeading id="services" title="対応工事" />}>
             <dl className="text-[0.9375rem] leading-[1.95]" {...reveal(60)}>
               {serviceCategories.map((cat, i) => (
-                <div key={cat.id} className={`grid gap-x-9 gap-y-1 border-b border-silver-200 py-4 md:grid-cols-[11rem_1fr] ${i === 0 ? "border-t border-t-navy-900" : ""}`}>
+                <div key={cat.id} className={`grid gap-x-9 gap-y-1 py-4 md:grid-cols-[11rem_1fr] ${i === 0 ? "" : "border-t-2 border-dotted border-silver-300"}`}>
                   <dt className="font-bold text-ink">{cat.name}</dt>
                   <dd className="flex flex-wrap gap-x-5 gap-y-1">
                     {servicesByCategory(cat.id).map((s) => (
@@ -269,7 +270,7 @@ export default function CompanyPage() {
       </div>
 
       {/* 写真について */}
-      <section aria-labelledby="photos" className="cv border-t border-silver-200 bg-silver-50 py-10">
+      <section aria-labelledby="photos" className="cv bg-paper-2 py-10">
         <div className="container-x">
           <h2 id="photos" className="text-sm font-bold text-ink">
             このサイトの写真について

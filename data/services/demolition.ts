@@ -14,7 +14,6 @@ export const demolition: Service = {
   shortName: "解体工事",
   image: "works/floor-protection",
   imageAlt: "工事の前に床一面を養生シートで覆った室内（横浜総合住設の現場）",
-  heroLayout: "side",
   imageCaption: "工事の前に、床を養生シートで覆った現場（当社の現場）",
   catch: "リフォームに伴う設備の撤去・内装の解体",
   summary:

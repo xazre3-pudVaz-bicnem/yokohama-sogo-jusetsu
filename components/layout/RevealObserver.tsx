@@ -16,8 +16,14 @@ import { usePathname } from "next/navigation";
  *    スクロールの途中で手前の区画が本当の高さに変わると着地点がずれるので、
  *    飛ぶ前に「行き先より手前にある区画」を先に描画させてから移動する。
  *
- * JS が動かなければ html[data-reveal-on] が付かないので、すべて表示されたままになる。
+ * 3. 飾りの動き（ふわふわ・きらきら）… 画面内にあるときだけ動かす。
+ *    クラス名に animate- を含む要素に data-anim を付け、画面内にある間だけ data-inview を付ける。
+ *    CSS 側で「data-anim があって data-inview が無い」要素のアニメーションを止めている。
+ *
+ * JS が動かなければ html[data-reveal-on] も data-anim も付かないので、すべて表示されたままになる。
  */
+const ANIMATED = '[class*="animate-"]';
+
 export function RevealObserver() {
   const pathname = usePathname();
 
@@ -44,12 +50,28 @@ export function RevealObserver() {
       { rootMargin: "0px 0px -6% 0px", threshold: 0.04 },
     );
 
+    const animIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const el = e.target as HTMLElement;
+          if (e.isIntersecting) el.dataset.inview = "1";
+          else delete el.dataset.inview;
+        }
+      },
+      { rootMargin: "60px 0px 60px 0px" },
+    );
+
     const seen = new WeakSet<Element>();
     const scan = () => {
       document.querySelectorAll("[data-reveal]:not([data-revealed])").forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
         io.observe(el);
+      });
+      document.querySelectorAll<HTMLElement>(ANIMATED).forEach((el) => {
+        if (el.dataset.anim) return;
+        el.dataset.anim = "1";
+        animIo.observe(el);
       });
     };
     scan();
@@ -97,6 +119,12 @@ export function RevealObserver() {
       document.removeEventListener("click", onClick, true);
       mo.disconnect();
       io.disconnect();
+      animIo.disconnect();
+      // ページを移動したら印を外す（次のページで付け直す）
+      document.querySelectorAll<HTMLElement>("[data-anim]").forEach((el) => {
+        delete el.dataset.anim;
+        delete el.dataset.inview;
+      });
     };
   }, [pathname]);
 

@@ -28,6 +28,7 @@ export default function FaqPage() {
   return (
     <>
       <PageHero
+        illust="illust/people-staff-point-3"
         title="よくある質問"
         lead="お見積もり、対応エリア、工事の進め方について、よくいただく質問にお答えします。ここに無いことは、お電話かフォームでおたずねください。"
         crumbs={[{ name: "よくある質問", href: "/faq" }]}
@@ -39,12 +40,12 @@ export default function FaqPage() {
           <aside className="lg:sticky lg:top-28 lg:col-span-3 lg:self-start">
             <nav aria-label="質問の分類">
               <p className="eyebrow">質問の分類</p>
-              <ul className="mt-2 flex flex-wrap gap-x-6 lg:block lg:border-t lg:border-navy-900">
+              <ul className="mt-3 flex flex-wrap gap-2 lg:flex-col lg:items-start">
                 {faqGroups.map((g) => (
-                  <li key={g.id} className="lg:border-b lg:border-silver-200">
-                    <a href={`#${g.id}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-ink underline-offset-4 transition-colors hover:text-brand-700 hover:underline lg:flex">
+                  <li key={g.id}>
+                    <a href={`#${g.id}`} className="chip">
                       {g.title}
-                      <span className="num text-xs font-medium text-ink-mute">{g.items.length}</span>
+                      <span className="num text-xs font-semibold text-brand-700">{g.items.length}</span>
                     </a>
                   </li>
                 ))}
@@ -70,9 +71,9 @@ export default function FaqPage() {
                 工事ごとの質問
               </h2>
               <p className="mt-2 text-[0.9375rem] leading-[1.95]">機種の選び方や工事にかかる時間など、工事の種類ごとの質問は、それぞれのサービスページにまとめています。</p>
-              <ul className="mt-5 grid gap-x-9 border-t border-navy-900 sm:grid-cols-2">
+              <ul className="rows rows-2 mt-5">
                 {services.map((s) => (
-                  <li key={s.slug} className="border-b border-silver-200">
+                  <li key={s.slug}>
                     <Link href={`/service/${s.slug}#faq`} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold text-ink transition-colors hover:text-brand-700">
                       {s.name}
                     </Link>
