@@ -12,7 +12,7 @@
  *
  * 写真を差し替えるときは、下の表の「元ファイル名」を新しいファイルに変えて、このスクリプトを実行する。
  * 表の3つ目に { left, top, width, height } を書くと、元画像のその範囲だけを切り出す
- * （遠景に実在しない街並みが写り込んでいる画像は、その部分を切り落として使う）。
+ * （遠景に実在しない街並みが写り込んでいる画像は、その部分を切り落とすか、かすみに置き換えて使う）。
  * public/ に元画像を直接置かないこと（置いたものはすべて公開される）。
  */
 import sharp from "sharp";
@@ -47,8 +47,6 @@ const PHOTOS = [
   ["17_31_48-8", "photos/house-modern-front"],
   ["17_31_50-9", "photos/garden-approach"],
   ["17_31_52-10", "photos/old-unit-and-tank"],
-  // 元画像の左端に、実在しない港の街並みの遠景が写っているため、右側だけを使う
-  ["17_34_34-1", "photos/hero-house", { left: 590, top: 0, width: 1082, height: 941 }],
   ["17_34_36-2", "photos/house-solar-hill"],
   ["17_34_38-3", "photos/gas-water-heater-side"],
   ["17_34_40-4", "photos/ecocute-wall"],
@@ -73,6 +71,33 @@ for (const [stamp, key, region] of PHOTOS) {
   if (!file) throw new Error(`写真が見つかりません: ${stamp}`);
   const source = sharp(path.join(photoDir, file));
   await emit(key, (region ? source.extract(region) : source).resize({ width: 1672, withoutEnlargement: true }), { quality: 86 });
+}
+
+// トップの冒頭の背景に使う、横長の写真。
+// 元の写真の左側（遠景）に、実在しない高層ビル・塔・湾が写っているため、その帯だけを強くぼかして「かすみ」にする。
+// ぼかした帯は、上下と右の端をなだらかに元の写真へつなぐ（境目が見えないように）。
+{
+  const file = photoFiles.find((f) => f.endsWith("17_34_34-1.png"));
+  if (!file) throw new Error("写真が見つかりません: 17_34_34-1");
+  const src = path.join(photoDir, file);
+  const R = { left: 0, top: 418, width: 500, height: 176 };
+  const hazy = await sharp(src).blur(30).extract(R).removeAlpha().toBuffer();
+  // マスク：左は全面、右端 18% でなだらかに 0 へ。上 22%・下 16% もなだらかに
+  const maskH = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${R.width}" height="${R.height}"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff"/><stop offset="0.8" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`,
+  );
+  const maskV = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${R.width}" height="${R.height}"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000"/><stop offset="0.22" stop-color="#fff"/><stop offset="0.84" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`,
+  );
+  const mask = await sharp(maskH)
+    .composite([{ input: maskV, blend: "multiply" }])
+    .removeAlpha()
+    .extractChannel(0)
+    .toBuffer();
+  const patch = await sharp(hazy).joinChannel(mask).png().toBuffer();
+  await emit("photos/hero-wide", sharp(src).composite([{ input: patch, left: R.left, top: R.top }]), { quality: 84 });
+  // スマホ用：縦長の画面に横長の写真を敷くと大きく引き伸ばされるので、建物が写る右側だけを切り出したものを使う
+  await emit("photos/hero-tall", sharp(src).extract({ left: 690, top: 0, width: 982, height: 941 }).resize({ width: 860 }), { quality: 82 });
 }
 
 /* ------------------------------------------------------------------ */

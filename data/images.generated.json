@@ -179,9 +179,14 @@
     "width": 1672,
     "height": 941
   },
-  "photos/hero-house": {
-    "src": "/images/photos/hero-house.webp",
-    "width": 1082,
+  "photos/hero-tall": {
+    "src": "/images/photos/hero-tall.webp",
+    "width": 860,
+    "height": 824
+  },
+  "photos/hero-wide": {
+    "src": "/images/photos/hero-wide.webp",
+    "width": 1672,
     "height": 941
   },
   "photos/house-dark-gray": {
