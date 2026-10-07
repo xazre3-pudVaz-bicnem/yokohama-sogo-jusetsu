@@ -625,6 +625,35 @@
     background: var(--color-silver-100);
   }
 
+  /*
+   * トップの冒頭：文字の後ろだけ、写真を淡くぼかす膜（白いパネルは置かない）。
+   * 文字の入る箱（position: relative）の中に置き、箱の外へ大きく広げる（はみ出した分は section の overflow で切れる）。
+   * スマホ・タブレットは文字の上から下へ、PC は文字の左から右へ向けて、mask でなだらかに消す。
+   * 説明文の入る範囲は、白 6 割以上の膜を保つ（写真が真っ黒の所でも、濃紺の文字と 7:1 以上になる）。
+   * backdrop-filter が効かないブラウザでは、淡い白だけが残る（文字は読める）。
+   */
+  .hero-veil {
+    position: absolute;
+    z-index: -10;
+    inset: -7rem -100vw -10rem;
+    pointer-events: none;
+    background: rgb(255 255 255 / 0.66);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.36) 2.5rem, rgb(0 0 0 / 0.8) 5rem, #000 7.5rem);
+    mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.36) 2.5rem, rgb(0 0 0 / 0.8) 5rem, #000 7.5rem);
+  }
+  @media (min-width: 64rem) {
+    .hero-veil {
+      inset: -40rem -11rem -40rem -100vw;
+      background: rgb(255 255 255 / 0.64);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 16rem), rgb(0 0 0 / 0.7) calc(100% - 11rem), rgb(0 0 0 / 0.3) calc(100% - 6rem), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 16rem), rgb(0 0 0 / 0.7) calc(100% - 11rem), rgb(0 0 0 / 0.3) calc(100% - 6rem), transparent);
+    }
+  }
+
   /* 人物のイラストに添える吹き出し */
   .bubble {
     position: relative;
