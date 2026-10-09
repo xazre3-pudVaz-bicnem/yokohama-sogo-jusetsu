@@ -3,10 +3,12 @@ import { PostCard, PostRow } from "@/components/cards/PostCard";
 import { FaqList } from "@/components/ui/FaqList";
 import { Icon } from "@/components/ui/Icon";
 import { Illust, Photo, PhotoFill } from "@/components/ui/Photo";
+import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getArea, yokohamaWards } from "@/data/areas";
 import { creditOf, flowSteps, instagramPosts } from "@/data/company";
 import { pickupFaqs } from "@/data/faq";
+import { greeting, representativeLabel } from "@/data/greeting";
 import { getAllPosts } from "@/lib/blog";
 import { reveal } from "@/lib/reveal";
 import { siteConfig, primaryPhone, telHref, receptionHours, officeAddressWithPostal, officeMapUrl, type OfficeKey } from "@/lib/site";
@@ -244,25 +246,65 @@ export function FaqSection() {
   );
 }
 
-/** 会社概要（表記は lib/site.ts から。未確認の項目は出ない） */
+/**
+ * 会社概要（表記は lib/site.ts から。未確認の項目は出ない）。
+ * 代表者が設定されているときは、代表の写真と、代表挨拶の抜粋を添える（全文は会社案内ページ。文章は data/greeting.ts）。
+ */
 export function CompanySection() {
   const phone = primaryPhone();
   const hours = receptionHours();
   const offices: OfficeKey[] = ["head", "totsuka"];
+  const c = siteConfig.company;
+  const rep = representativeLabel();
   return (
     <section aria-labelledby="home-company" className="cv section bg-white">
       <div className="container-x grid gap-x-12 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <SectionHeading id="home-company" eyebrow="運営会社" color="navy" title="会社概要" />
-          <figure className="mt-7 max-w-xs" {...reveal(80)}>
-            <div className="photo-card-sm shadow-card">
-              <Photo image="company/nameplate" alt="「株式会社 横浜総合住設」と書かれた表札" sizes="(min-width: 1024px) 24vw, 80vw" />
-            </div>
-            <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">事業所の表札</figcaption>
-          </figure>
+          {rep ? (
+            <figure className="mt-7 max-w-[13rem] pl-3 pt-3 lg:max-w-[15rem]" {...reveal(80)}>
+              <div className="photo-frame">
+                <div className="photo-card">
+                  <Photo image={greeting.photo} alt={`${siteConfig.name} ${rep}`} sizes="(min-width: 1024px) 240px, 208px" />
+                </div>
+              </div>
+              <figcaption className="mt-4 text-[0.8125rem] leading-snug text-ink-body">
+                {c.representativeTitle}
+                <span className="ml-2 font-heading text-base font-bold tracking-wider text-ink">{c.representative}</span>
+              </figcaption>
+            </figure>
+          ) : (
+            <figure className="mt-7 max-w-xs" {...reveal(80)}>
+              <div className="photo-card-sm shadow-card">
+                <Photo image="company/nameplate" alt="「株式会社 横浜総合住設」と書かれた表札" sizes="(min-width: 1024px) 24vw, 80vw" />
+              </div>
+              <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">事業所の表札</figcaption>
+            </figure>
+          )}
         </div>
 
         <div className="lg:col-span-8" {...reveal(60)}>
+          {rep && (
+            <div className="mb-9">
+              <h3 className="text-sm font-bold tracking-wider text-brand-700">代表挨拶より</h3>
+              <p className="mt-2.5 font-heading text-[1.1875rem] font-bold leading-[1.75] text-ink sm:text-[1.375rem]">
+                <span className="marker">
+                  <Phrase>{greeting.title}</Phrase>
+                </span>
+              </p>
+              <div className="mt-4 space-y-2 text-[0.9375rem] leading-[2]">
+                {greeting.excerpt.map((t) => (
+                  <p key={t}>{t}</p>
+                ))}
+              </div>
+              <p className="mt-5">
+                <Link href="/company#message" className="link-arrow">
+                  代表挨拶の全文
+                  <Icon name="arrowRight" className="size-4" />
+                </Link>
+              </p>
+            </div>
+          )}
           <dl className="dl-spec card card-line px-5 py-2 text-[0.9375rem] sm:px-8">
             <div>
               <dt>会社名</dt>
@@ -271,6 +313,12 @@ export function CompanySection() {
                 <span className="block text-sm text-ink-mute">{siteConfig.nameEn}</span>
               </dd>
             </div>
+            {c.representative && (
+              <div>
+                <dt>{c.representativeTitle ?? "代表者"}</dt>
+                <dd>{c.representative}</dd>
+              </div>
+            )}
             {offices.map((key) => (
               <div key={key}>
                 <dt>{siteConfig.offices[key].label}</dt>
@@ -290,7 +338,7 @@ export function CompanySection() {
                   <a href={telHref(phone)} className="num text-lg font-semibold tracking-wider text-navy-900 hover:text-brand-700" data-cv="tel">
                     {phone}
                   </a>
-                  {hours && <span className="ml-3 text-sm text-ink-mute">受付 {hours}</span>}
+                  {hours && <span className="ml-3 inline-block text-sm text-ink-mute">受付 {hours}</span>}
                 </dd>
               </div>
             )}

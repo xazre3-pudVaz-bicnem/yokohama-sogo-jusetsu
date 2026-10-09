@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/layout/Logo";
 import { Icon } from "@/components/ui/Icon";
+import { LineIcon } from "@/components/ui/LineIcon";
 import { footerNav, footerAreaNav, serviceNav } from "@/lib/nav";
-import { siteConfig, primaryPhone, telHref, receptionHours, officeAddressWithPostal, officeMapUrl, type OfficeKey } from "@/lib/site";
+import { siteConfig, primaryPhone, telHref, lineUrl, receptionHours, officeAddressWithPostal, officeMapUrl, type OfficeKey } from "@/lib/site";
 
 /**
  * フッター。会社名・所在地・電話番号（NAP）は lib/site.ts から出す。表記を全ページでそろえるため、ここに直接書かない。
@@ -11,6 +12,7 @@ import { siteConfig, primaryPhone, telHref, receptionHours, officeAddressWithPos
 export function Footer() {
   const phone = primaryPhone();
   const hours = receptionHours();
+  const line = lineUrl();
   const offices: OfficeKey[] = ["totsuka", "head"];
   const year = new Date().getFullYear();
 
@@ -49,16 +51,32 @@ export function Footer() {
             )}
           </dl>
 
-          {siteConfig.social.instagram && (
-            <a
-              href={siteConfig.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-7 inline-flex min-h-11 items-center gap-2 border border-white/30 px-4 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
-            >
-              <Icon name="instagram" className="size-5" />
-              Instagram（施工写真）
-            </a>
+          {(line || siteConfig.social.instagram) && (
+            <div className="mt-7 flex flex-wrap gap-3">
+              {line && (
+                <a
+                  href={line}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center gap-2 border border-white/30 px-4 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
+                  data-cv="line"
+                >
+                  <LineIcon onDark className="size-5" />
+                  LINE で相談
+                </a>
+              )}
+              {siteConfig.social.instagram && (
+                <a
+                  href={siteConfig.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center gap-2 border border-white/30 px-4 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
+                >
+                  <Icon name="instagram" className="size-5" />
+                  Instagram（施工写真）
+                </a>
+              )}
+            </div>
           )}
         </div>
 

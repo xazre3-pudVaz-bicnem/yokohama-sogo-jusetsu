@@ -9,7 +9,8 @@ import { headingId } from "@/lib/blog";
  * コラム本文（Markdown）を表示する。
  * - 見出し（h2・h3）には、目次から飛べるよう id を付ける（lib/blog.ts の extractHeadings と同じ作り方）
  * - サイト内のリンクは next/link、外部のリンクは別タブ＋ rel を付ける
- * - 表は、幅が足りないとき横にスクロールできる（app/globals.css の .prose-jp table）
+ * - 表は、幅が足りないとき横にスクロールできる枠で包む（app/globals.css の .prose-table）。
+ *   キーボードでも横に動かせるよう、枠にフォーカスが当たるようにする
  * 本文の h1 は使わない（ページの見出しが h1）。Markdown に # があっても h2 として出す。
  */
 function textOf(node: ReactNode): string {
@@ -34,6 +35,8 @@ export function MarkdownBody({ body }: { body: string }) {
     seen.set(base, n + 1);
     return n > 0 ? `${base}-${n + 1}` : base;
   };
+  // 表の枠の名前が重ならないよう、出た順に番号を付ける
+  const count = { tables: 0 };
 
   return (
     <div className="prose-jp">
@@ -55,6 +58,14 @@ export function MarkdownBody({ body }: { body: string }) {
               <Phrase>{plain(children)}</Phrase>
             </h3>
           ),
+          table: ({ children }) => {
+            count.tables += 1;
+            return (
+              <div className="prose-table" role="region" aria-label={`表${count.tables}`} tabIndex={0}>
+                <table>{children}</table>
+              </div>
+            );
+          },
           a: ({ href = "", children }) => {
             if (href.startsWith("/") || href.startsWith("#")) return <Link href={href}>{children}</Link>;
             return (

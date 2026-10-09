@@ -2,7 +2,7 @@
 
 import { inquirySchema, isContactFormEnabled, type Inquiry } from "@/lib/contact";
 import { INQUIRY_FIELDS, inquiryLabels, type InquiryField, type InquiryState } from "@/lib/contact-fields";
-import { siteConfig, primaryPhone } from "@/lib/site";
+import { siteConfig, primaryPhone, lineUrl } from "@/lib/site";
 
 /**
  * お問い合わせフォームの送信処理（Server Action）。
@@ -10,7 +10,8 @@ import { siteConfig, primaryPhone } from "@/lib/site";
  * - 送信先・API キーは環境変数から読む（README の「お問い合わせフォーム」を参照）。
  *     RESEND_API_KEY     … Resend の API キー（必須）
  *     CONTACT_TO_EMAIL   … 受け取るメールアドレス。複数はカンマ区切り（必須）
- *     CONTACT_FROM_EMAIL … 差出人。Resend で認証したドメインのアドレス（任意。未設定なら Resend の既定の差出人）
+ *     CONTACT_FROM_EMAIL … 差出人（任意）。未設定なら、本番ドメインの noreply@（下の defaultFrom）。
+ *                           Resend で、そのドメインを認証しておくこと（yokohama-sogo-jusetsu.com は 2026-10-09 に認証済み）
  *     CONTACT_AUTOREPLY  … "1" にすると、メールアドレスを入力した方へ受付のお知らせを送る（差出人のドメイン認証が必要）
  * - 迷惑送信の対策：人には見えない入力欄（honeypot）と、表示から送信までの時間。
  * - 検査に落ちたときは、入力値をそのまま返す（React 19 のフォームは送信後に入力欄を空にするため）。
@@ -40,7 +41,7 @@ export async function submitInquiry(prev: InquiryState, formData: FormData): Pro
     const phone = primaryPhone();
     return {
       status: "unavailable",
-      message: `ただいまフォームからの送信を準備しています。お手数ですが、${phone ? `お電話（${phone}）` : "お電話"}でご連絡ください。`,
+      message: `ただいまフォームからの送信を準備しています。お手数ですが、${phone ? `お電話（${phone}）` : "お電話"}${lineUrl() ? "または LINE " : ""}でご連絡ください。`,
       values: raw,
       attempt,
     };
@@ -58,21 +59,29 @@ export async function submitInquiry(prev: InquiryState, formData: FormData): Pro
     const phone = primaryPhone();
     return {
       status: "error",
-      message: `送信できませんでした。時間をおいてもう一度お試しいただくか、${phone ? `お電話（${phone}）` : "お電話"}でご連絡ください。`,
+      message: `送信できませんでした。時間をおいてもう一度お試しいただくか、${phone ? `お電話（${phone}）` : "お電話"}${lineUrl() ? "または LINE " : ""}でご連絡ください。`,
       values: raw,
       attempt,
     };
   }
 }
 
-const DEFAULT_FROM = "お問い合わせフォーム <onboarding@resend.dev>";
+/**
+ * 差出人の既定。本番ドメイン（lib/site.ts の productionUrl）の noreply@ を使う（www は外す）。
+ * 本番ドメインが未定のときは、Resend の試験用アドレス（Resend に登録した本人のアドレスにしか届かない）。
+ */
+function defaultFrom(): string {
+  const url: string = siteConfig.productionUrl;
+  const host = url ? new URL(url).hostname.replace(/^www\./, "") : "";
+  return host ? `${siteConfig.shortName} お問い合わせフォーム <noreply@${host}>` : "お問い合わせフォーム <onboarding@resend.dev>";
+}
 
 async function sendMail(payload: { to: string[]; subject: string; text: string; replyTo?: string }) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL || DEFAULT_FROM,
+      from: process.env.CONTACT_FROM_EMAIL || defaultFrom(),
       to: payload.to,
       subject: payload.subject,
       text: payload.text,

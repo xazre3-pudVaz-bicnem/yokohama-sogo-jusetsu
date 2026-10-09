@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "site:check": "node scripts/check-site.mjs",
+    "seo:audit": "tsx scripts/seo-audit.ts",
     "images:prepare": "node scripts/prepare-images.mjs",
     "blog:generate": "tsx scripts/generate-blog-post.ts",
     "blog:dry-run": "cross-env DRY_RUN=1 tsx scripts/generate-blog-post.ts",

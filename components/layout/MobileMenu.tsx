@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type MouseEvent } from "react";
+import { LineIcon } from "@/components/ui/LineIcon";
 
 type LinkItem = { href: string; label: string };
 
@@ -18,6 +19,7 @@ export function MobileMenu({
   telHref,
   hours,
   instagram,
+  line,
 }: {
   main: LinkItem[];
   sub: LinkItem[];
@@ -26,6 +28,7 @@ export function MobileMenu({
   telHref: string;
   hours: string;
   instagram: string;
+  line: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -75,14 +78,21 @@ export function MobileMenu({
           {/* 連絡先 */}
           <div className="grid grid-cols-2 gap-3">
             {phone && (
-              <a href={telHref} className="btn btn-outline btn-sm flex-col !gap-0.5 !py-2.5" data-cv="tel">
+              <a href={telHref} className="btn btn-outline btn-sm flex-col !gap-0.5 !px-2 !py-2.5" data-cv="tel">
                 <span className="text-xs font-semibold">電話で相談</span>
-                <span className="num text-lg font-semibold tracking-wider">{phone}</span>
+                {/* 幅 320px でも1行に収まる大きさにする（番号が2行に割れると読み違える） */}
+                <span className="num whitespace-nowrap text-[1.0625rem] font-semibold tracking-wide">{phone}</span>
               </a>
             )}
             <Link href="/contact" className={`btn btn-primary btn-sm ${phone ? "" : "col-span-2"}`}>
               無料見積もり
             </Link>
+            {line && (
+              <a href={line} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm col-span-2" data-cv="line">
+                <LineIcon className="size-5" />
+                LINE で相談する
+              </a>
+            )}
           </div>
           {hours && <p className="mt-2 text-center text-xs text-ink-mute">電話受付 {hours}</p>}
 
@@ -95,7 +105,7 @@ export function MobileMenu({
                 <ul className="mt-1 grid grid-cols-2 gap-x-4">
                   {cat.links.map((l) => (
                     <li key={l.href} className="border-b border-silver-200">
-                      <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900">
+                      <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900 text-balance">
                         {l.label}
                       </Link>
                     </li>
@@ -113,7 +123,7 @@ export function MobileMenu({
           <ul className="mt-2 grid grid-cols-2 gap-x-4">
             {[...main.filter((l) => l.href !== "/service"), ...sub].map((l) => (
               <li key={l.href} className="border-b border-silver-200">
-                <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900">
+                <Link href={l.href} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold leading-snug text-navy-900 text-balance">
                   {l.label}
                 </Link>
               </li>

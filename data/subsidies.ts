@@ -72,7 +72,7 @@ export const subsidies: Subsidy[] = [
       { label: "撤去加算について", url: "https://kyutou-shoene2026.meti.go.jp/about_tekkyo_kasan/" },
     ],
     checkedAt: "2026-10-06",
-    services: ["water-heater", "eco-one", "ene-farm"],
+    services: ["ecocute", "eco-one", "ene-farm"],
   },
   {
     id: "mado-reno",
@@ -163,7 +163,7 @@ export const subsidies: Subsidy[] = [
       { label: "申請の特設サイト", url: "https://ygrep2026.city.yokohama.lg.jp/" },
     ],
     checkedAt: "2026-10-06",
-    services: ["solar", "storage-battery", "water-heater"],
+    services: ["solar", "storage-battery", "ecocute"],
   },
   {
     id: "kanagawa-solar",

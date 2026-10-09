@@ -5,17 +5,18 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { getService } from "@/data/services";
-import { worksSorted, type Work } from "@/data/works";
+import { getService, servicePath } from "@/data/services";
+import { MIN_WORKS_FOR_LIST, workListPath, worksSorted, type Work } from "@/data/works";
 import { reveal } from "@/lib/reveal";
 import { itemListSchema } from "@/lib/schema";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 /**
  * 施工事例一覧
  * 役割：経験と実績を写真で示す。各事例から、該当するサービスページへ送る。
- * 担当する検索意図：横浜総合住設 施工事例／戸塚区 エアコン 取替 事例／外壁塗装 施工事例 横浜 など
+ * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く。
  * 載せるのは、当社が実際に施工した現場だけ（イメージ写真は使わない）。
  */
 export const metadata: Metadata = buildMetadata({
@@ -23,17 +24,17 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設の施工事例です。エアコンの取替、配管の化粧カバー仕上げ、浴室暖房乾燥機、ウッドデッキ、外壁・屋根の塗装など、実際の現場の写真を施工前後とポイントつきでご紹介します。",
   path: "/works",
-  keywords: ["横浜総合住設 施工事例", "エアコン 取替 事例", "外壁塗装 施工事例", "ウッドデッキ 施工事例"],
+  keywords: keywordsFor("/works"),
 });
 
 /**
- * 1つのサービスで見出しを立てるのに必要な件数。
+ * 1つのサービスで見出しを立てるのに必要な件数（サービス別の事例一覧のページを作る件数と同じ）。
  * これより少ないサービスの事例は「そのほかの施工事例」にまとめる（1件だけの見出しが並ぶと、空きの多いページになるため）。
- * 事例が増えて、この件数に届いたサービスは、自動で独立した見出しになる。
+ * 事例が増えて、この件数に届いたサービスは、自動で独立した見出しになり、サービス別の一覧のページ（/works/service/…）もできる。
  */
-const GROUP_MIN = 3;
+const GROUP_MIN = MIN_WORKS_FOR_LIST;
 
-type Group = { id: string; title: string; link?: { href: string; label: string }; list: Work[] };
+type Group = { id: string; title: string; links?: { href: string; label: string }[]; list: Work[] };
 
 /** 件数に合わせた列数（PC）。2件・4件は2列で大きく見せ、それ以外は3列 */
 function gridOf(count: number) {
@@ -51,7 +52,9 @@ export default function WorksPage() {
     .sort((a, b) => b[1].length - a[1].length)
     .map(([slug, list]) => {
       const s = getService(slug)!;
-      return { id: `service-${slug}`, title: `${s.shortName}の施工事例`, link: { href: `/service/${s.slug}`, label: `${s.shortName}のサービス内容` }, list };
+      const listPath = workListPath(slug);
+      const links = [...(listPath ? [{ href: listPath, label: `${s.shortName}の施工事例だけを見る` }] : []), { href: servicePath(s), label: `${s.shortName}のサービス内容` }];
+      return { id: `service-${slug}`, title: `${s.shortName}の施工事例`, links, list };
     });
   const rest = worksSorted.filter((w) => countOf(w.services[0]) < GROUP_MIN);
   if (rest.length) groups.push({ id: "service-others", title: groups.length ? "そのほかの施工事例" : "施工事例", list: rest });
@@ -89,11 +92,15 @@ export default function WorksPage() {
               <div key={g.id} id={g.id} className="scroll-mt-28">
                 <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-2" {...reveal()}>
                   <h2 className="h-section">{g.title}</h2>
-                  {g.link && (
-                    <Link href={g.link.href} className="link-arrow !text-sm">
-                      {g.link.label}
-                      <Icon name="arrowRight" className="size-3.5" />
-                    </Link>
+                  {g.links && (
+                    <p className="flex flex-wrap items-center gap-x-6 gap-y-1">
+                      {g.links.map((l) => (
+                        <Link key={l.href} href={l.href} className="link-arrow !text-sm">
+                          {l.label}
+                          <Icon name="arrowRight" className="size-3.5" />
+                        </Link>
+                      ))}
+                    </p>
                   )}
                 </div>
                 <ul className={`mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 ${grid.cls}`}>

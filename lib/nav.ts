@@ -1,4 +1,4 @@
-import { services, serviceCategories } from "@/data/services";
+import { mainServices, serviceCategories, servicePath } from "@/data/services";
 
 /**
  * メニュー（ヘッダー・スマホのメニュー・フッター）の定義。
@@ -28,7 +28,7 @@ export const serviceNav = serviceCategories.map((c) => ({
   id: c.id,
   name: c.name,
   description: c.description,
-  links: services.filter((s) => s.category === c.id).map((s) => ({ href: `/service/${s.slug}`, label: s.shortName })),
+  links: mainServices.filter((s) => s.category === c.id).map((s) => ({ href: servicePath(s), label: s.shortName })),
 }));
 
 /** フッターの「サイトの案内」 */

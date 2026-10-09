@@ -40,7 +40,8 @@ export function RevealObserver() {
           // 初回だけは「少しでも画面にかかっている」ものを全部表示済みにする
           const inView = e.isIntersecting || (first && r.height > 0 && r.top < vh && r.bottom > 0);
           if (inView) {
-            (e.target as HTMLElement).dataset.revealed = "1";
+            // "0"＝最初から画面内にあった／"1"＝スクロールして入ってきた（CSS の wipe が、後者だけを動かす）
+            (e.target as HTMLElement).dataset.revealed = first ? "0" : "1";
             io.unobserve(e.target);
           }
         }

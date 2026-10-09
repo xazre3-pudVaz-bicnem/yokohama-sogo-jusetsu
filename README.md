@@ -30,11 +30,13 @@ Node.js は 20.9 以上。
 | `npm run typecheck` | 型の検査 |
 | `npm run lint` | ESLint |
 | `npm run build && npm run site:check` | 全ページの title・description・h1・リンク切れ・alt・JSON-LD・noindex / canonical |
+| `npm run build && npm run seo:audit` | 検索語の取り合い・内部リンクのそろい方・ページの一覧との食い違い。結果は [docs/seo-audit-report.md](docs/seo-audit-report.md) |
 | `npm run blog:audit` | 公開済みのコラムを、自動投稿と同じ基準で点検 |
 | `npm run blog:selftest` | コラムの検査の仕組みが正しく働いているか（API は呼ばない） |
 | `npx tsx scripts/phrase-check.ts` | 見出しの折り返し位置（文節の区切り）が、語の途中になっていないか |
 
-文章やデータを直したら、`build` と `site:check` を通してから push してください。
+文章やデータを直したら、`build`・`site:check`・`seo:audit` を通してから push してください。
+ページ・施工事例・コラムの題材を足したときは、`seo:audit` が「同じ検索語を2つのページが狙っていないか」を確かめます。
 
 ---
 
@@ -42,21 +44,22 @@ Node.js は 20.9 以上。
 
 1. [docs/TODO.md](docs/TODO.md) の項目を会社に確認し、`lib/site.ts` などに反映する
 2. GitHub にリポジトリを作って push し、Vercel に接続する
-3. 本番ドメインが決まったら、`lib/site.ts` の `productionUrl` に書く（例：`https://www.example.jp`）
+3. 本番ドメインを `lib/site.ts` の `productionUrl` に書く（設定済み：`https://www.yokohama-sogo-jusetsu.com`。変えるときも、ここを書き換えるだけ）
 4. Vercel に環境変数を登録する（下の表）
 5. GitHub に `ANTHROPIC_API_KEY` を登録する（コラムの自動投稿を使う場合）
 6. 公開後、Google Search Console に sitemap（`/sitemap.xml`）を登録する
 
 ### 公開前のサイトが検索に載らない仕組み
 
-`productionUrl`（または環境変数 `NEXT_PUBLIC_SITE_URL`）が空のあいだは、
+検索に出るのは、Vercel の本番デプロイ（`productionUrl` のドメイン）だけです。手元のビルドとプレビューのデプロイ、
+そして `productionUrl`（または環境変数 `NEXT_PUBLIC_SITE_URL`）が空のあいだは、
 
 - 全ページに `noindex` が付く
 - `canonical`・OGP の URL・`sitemap.xml` の中身を出さない
 - `robots.txt` は `Disallow: /`
 
 になります。プレビューの URL（`*.vercel.app`）には、設定に関係なく常に `X-Robots-Tag: noindex` が付きます。
-本番ドメインを設定した時点で、はじめて検索エンジンに公開されます。
+本番ドメインを設定した版を `main` に push した時点で、はじめて検索エンジンに公開されます。
 
 ## 環境変数
 
@@ -65,17 +68,18 @@ Node.js は 20.9 以上。
 | 変数 | 置き場所 | 内容 |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Vercel（任意） | 本番 URL。`lib/site.ts` の `productionUrl` を書いてあれば不要 |
-| `RESEND_API_KEY` | Vercel | お問い合わせメールの送信（[Resend](https://resend.com/)） |
+| `RESEND_API_KEY` | Vercel | お問い合わせメールの送信（[Resend](https://resend.com/) の「API keys」で作る。ドメイン yokohama-sogo-jusetsu.com は認証済み） |
 | `CONTACT_TO_EMAIL` | Vercel | お問い合わせを受け取るアドレス（カンマ区切りで複数可） |
-| `CONTACT_FROM_EMAIL` | Vercel | 差出人。Resend で認証したドメインのアドレス |
+| `CONTACT_FROM_EMAIL` | Vercel（任意） | 差出人。空なら、本番ドメインの `noreply@`（横浜総合住設 お問い合わせフォーム <noreply@yokohama-sogo-jusetsu.com>）から送る |
 | `CONTACT_AUTOREPLY` | Vercel（任意） | `1` でお客様にも受付の控えを送る |
 | `ANTHROPIC_API_KEY` | GitHub の Secrets | コラムの自動投稿 |
 | `ANTHROPIC_MODEL` / `ANTHROPIC_REVIEW_MODEL` | GitHub の Variables（任意） | 書くモデル／読み直すモデル |
 | `ANTHROPIC_FALLBACKS` | GitHub の Variables（任意） | `off` で代替モデルへの切り替えを止める |
 | `GOOGLE_SITE_VERIFICATION` / `BING_SITE_VERIFICATION` | Vercel（任意） | 検索エンジンの所有確認 |
 
-`RESEND_API_KEY` と `CONTACT_TO_EMAIL` がそろうまで、本番の `/contact` はフォームを出さず、電話と Instagram の案内だけを出します
-（送れないフォームを公開しないため）。
+`RESEND_API_KEY` と `CONTACT_TO_EMAIL` がそろうまで、本番の `/contact` はフォームを出さず、電話・LINE・Instagram の案内だけを出します
+（送れないフォームを公開しないため）。このあいだは、ページ末尾の案内の「お問い合わせフォーム」のボタンや、各ページの「フォームでお受けしています」という文も出ません
+（`lib/contact.ts` の `isContactFormShown()`）。2つの値を Vercel に登録して公開し直すと、フォームと案内が自動で出ます。
 
 ---
 
@@ -85,8 +89,10 @@ Node.js は 20.9 以上。
 
 | 内容 | ファイル |
 | --- | --- |
-| 会社名・電話番号・住所・受付時間・SNS・本番 URL | `lib/site.ts` |
-| サービス（13件）の内容 | `data/services/*.ts`（一覧と分類は `index.ts`） |
+| 会社名・代表者・電話番号・住所・受付時間・LINE・SNS・本番 URL | `lib/site.ts` |
+| 代表挨拶（文章と写真。代表ご本人の文章なので、言い換えない） | `data/greeting.ts` |
+| サービスの内容 | `data/services/*.ts`（一覧と分類は `index.ts`） |
+| **検索語の割り当て**（どの検索語を、どの URL で取りにいくか） | `data/seo-keyword-map.ts` |
 | 施工事例 | `data/works.ts` |
 | 対応エリア（戸塚区・横浜市） | `data/areas.ts` |
 | 補助金・支援制度（出典と確認日つき） | `data/subsidies.ts` |
@@ -94,7 +100,8 @@ Node.js は 20.9 以上。
 | 特徴・工事の流れ・Instagram の投稿・写真のクレジット | `data/company.ts` |
 | メニュー | `lib/nav.ts` |
 | コラムのカテゴリ（19の SEO クラスタ） | `lib/blog-clusters.ts` |
-| コラムの題材 | `lib/blog-generator/topics.ts` |
+| コラムの題材（すぐに書けるもの） | `lib/blog-generator/topics.ts` |
+| コラムの題材の候補（検索意図の洗い出し） | `lib/blog-generator/backlog.ts` |
 | コラムに書いてよい事実 | `docs/VERIFIED_FACTS.md` |
 | コラムの本文 | `content/blog/*.md` |
 
@@ -108,9 +115,18 @@ Node.js は 20.9 以上。
 **会社概要を足す** … `lib/site.ts` の `company`（代表者・設立・資本金など）と `trust`（許認可・資格・保証・保険・取扱メーカー）に
 値を入れると、会社案内ページと構造化データに表示されます。`null` の項目は画面に出ません。**推測で埋めないでください。**
 
-**施工事例を足す** … 写真を `assets/` に置いて `scripts/prepare-images.mjs` の表に足し、`npm run images:prepare` を実行。
-`data/works.ts` に1件足します。施工地域（`area`）・時期・期間・使用機器は、分かったものだけ入れてください（空の項目は表示されません）。
-`area.areaSlug` に `totsuka` などを入れると、その地域ページにも事例が出ます。
+**施工事例を足す**（Instagram の投稿や、現場の写真から） … 写真を `assets/` に置いて `scripts/prepare-images.mjs` の表に足し、
+`npm run images:prepare` を実行。画像のキー（＝ファイル名）は、`works/water-heater-wall-after` のように内容が分かる英語にします。
+`data/works.ts` に1件足し、`keyword`（その事例が代表になる検索語）を書きます。
+施工地域（`area`。**市区まで**）・時期・期間・取り替える前の機器（`existing`）・新しい機器（`products`。型番は `model`）・難しかった点（`difficulty`）は、
+分かったものだけ入れてください（空の項目は表示されません。確認できていない地域を、推測で入れないこと）。
+足した事例は、施工事例の一覧・代表サービスのページ・地域ページ（`area.areaSlug` を入れたとき）・関係するコラムの下・サイトマップに自動で出ます。
+同じサービスの事例が3件に届くと、サービス別の一覧（`/works/service/…`）も自動でできます。
+
+**サービスのページを足す** … 先に `data/seo-keyword-map.ts` に、そのページで取りにいく検索語を1行足します
+（ほかのページが担当している検索語なら、ページは作らず、担当のページを直します）。そのうえで `data/services/` に1ファイル足し、
+`index.ts` の一覧に加えます。`parent: "reform"` と書くと、`/service/reform/<slug>` の形の下のページになります。
+作る条件は [docs/SEO_ROADMAP.md](docs/SEO_ROADMAP.md) にあります（中身がそろわないうちは作らない）。
 
 **対応エリアのページを足す**（泉区・栄区・港南区など） … `data/areas.ts` に1件足すと、ページ・メニュー・sitemap に反映されます。
 地域名だけを差し替えたページは作らないでください。その区の地形・住宅の特徴・制度・施工事例など、**そこにしか当てはまらない内容**が
@@ -140,28 +156,42 @@ Node.js は 20.9 以上。
 
 ## コラムの自動投稿
 
-毎日 9:20（日本時間）に GitHub Actions（`.github/workflows/daily-blog.yml`）が動き、コラムを1本書いて `content/blog/` に追加し、
-`main` へ push します。push を受けて Vercel が本番を更新します。
+毎日 9:20（日本時間）に GitHub Actions（`.github/workflows/daily-blog.yml`）が動き、**コラムを1本書いて `content/blog/` に追加するか、
+公開済みの記事を1本見直して**、`main` へ push します。push を受けて Vercel が本番を更新します。
 
 Vercel の Cron ではなく GitHub Actions を使っているのは、記事をリポジトリのファイルとして残すためです
 （Vercel の関数からはリポジトリに書き込めません）。
 
 ### 仕組み
 
-1. **題材を選ぶ** … `lib/blog-generator/topics.ts` から、記事の少ないカテゴリを優先して1つ選びます。ランダムではありません。
-   1題材＝1つの検索意図で、すでにある記事と slug・検索意図が重なるものは選びません。
+1. **題材を選ぶ** … `lib/blog-generator/topics.ts` から、優先度（P0 → P1 → P2）の順に、同じ優先度なら記事の少ないカテゴリを先に、
+   1つ選びます。ランダムではありません。1題材＝1つの検索意図＝1つの主キーワードで、すでにある記事や固定ページと
+   slug・主キーワード・検索意図が重なるものは選びません（同じ検索意図の記事を2本作らない）。
 2. **書く** … Claude に、題材と事実シート（`docs/VERIFIED_FACTS.md`）を渡して書かせます。
 3. **機械の検査**（`lib/blog-generator/validate.ts`）
    - 「徹底解説」「いかがでしたか」などの決まり文句、「重要です」「おすすめです」の使いすぎ
    - 「地域No.1」・施工件数・満足度・創業年・保証年数・資格・費用の相場など、根拠を示せない表現
    - **数値の突き合わせ** … 記事の中の「数字＋単位」が、その題材で使ってよい事実シートの節に無ければ不合格
    - リンク先が実在するか、親ページ（サービス・地域ページ）へのリンクがあるか
-   - 既存の記事と、題名・検索意図・本文が重なっていないか
+   - 既存の記事と、題名・検索意図・本文が重なっていないか。主キーワードが、固定ページ（`data/seo-keyword-map.ts`）やほかの記事と同じでないか
 4. **読み直し** … 別の呼び出しで、原稿を1文ずつ事実シートと照らし合わせます。
 5. 3 と 4 の両方に通ったときだけ保存します。通らなければ指摘を渡して書き直させ（最大4回）、それでも通らなければ**その日は公開しません**。
 
 「毎日かならず公開する」より「基準を満たした日だけ公開する」を優先しています。公開しなかった日は、
 GitHub Actions の実行結果に理由と試行の記録が残ります。
+
+### 公開済みの記事の見直し（リライト）
+
+新しい記事を書く日のほかに、公開済みの記事を1本見直す日があります。見直すのは、次の理由がある記事だけです。
+
+- 記事が出典にしている事実シートの節が、記事の更新日より後に確認し直された（補助金の額や期限が変わった、など）
+- カテゴリの親ページ・主なサービスページへのリンクが、本文に無い（ページを分けた・足したとき）
+- そのサービスの施工事例があるのに、本文から1件もリンクしていない
+
+理由のある記事があるとき、およそ3割の日（変数 `BLOG_REFRESH_RATIO`。既定 0.3）が見直しに回ります。どの日が見直しになるかは日付から決まり、
+ランダムではありません。見直しでも、新しい記事と同じ検査と読み直しを通します。
+**理由に対応した変更が本文に入ったときだけ保存し、更新日を直します。日付だけを新しくする更新はしません。**
+理由のある記事が無ければ、新しい記事を書きます。
 
 ### はじめる
 
@@ -177,6 +207,7 @@ GitHub のリポジトリ → Settings → Secrets and variables → Actions →
 npm run blog:selftest                 # 検査の仕組みの確認（API なし）
 npm run blog:dry-run                  # 書いて検査するが、保存しない（API を使う）
 TOPIC=ecocute-how-it-works npm run blog:generate   # 題材を指定して書く
+BLOG_MODE=refresh npm run blog:dry-run              # 見直しを試す（REFRESH=<slug> で記事を指定できる）
 ```
 
 GitHub の Actions 画面から「Run workflow」で、`dry_run`（試し書き）・題材・モデルを指定して実行することもできます。
@@ -191,8 +222,12 @@ GitHub の Actions 画面から「Run workflow」で、`dry_run`（試し書き�
 
 ### 題材と事実を足す
 
-- **題材** … `topics.ts` に足します。数値や制度に触れる題材は、先に `docs/VERIFIED_FACTS.md` に**出典と確認日つき**で事実を書き、
-  題材の `facts` にその節の名前を入れます。足したら `npm run blog:selftest` を実行してください。
+- **題材** … `topics.ts` に足します。`keyword`（主キーワード）は、ほかの題材・公開済みの記事・固定ページと同じ語にしません。
+  数値や制度に触れる題材は、先に `docs/VERIFIED_FACTS.md` に**出典と確認日つき**で事実を書き、
+  題材の `facts` にその節の名前を入れます。足したら `npm run blog:selftest` と `npm run build && npm run seo:audit` を実行してください。
+- **候補** … `backlog.ts` に、サービスごとの検索意図の候補があります。書けるようになったものを、題材に上げます
+  （`needs` に、記事にする前に要る確認が書いてあります）。
+- **固定ページと同じ検索意図の題材は作りません。** 内容を足したいときは、そのページを直します。
 - **事実シート** … ここに無い数値は、記事に書けません。補助金のように変わる情報は、節ごとの「確認日」を更新しながら使います。
 - 残りの題材は `npm run blog:selftest` の最後に表示されます。無くなると、その日は「書く題材がありません」で終わります。
 
@@ -205,11 +240,23 @@ GitHub の Actions 画面から「Run workflow」で、`dry_run`（試し書き�
 
 ## SEO の設計
 
-- **ページの役割分担** … トップ（会社名＋戸塚区の総合）／サービスページ（工事名×戸塚区）／地域ページ（地域の事情）／
-  施工事例（実績）／コラム（1記事1疑問）。同じ検索語を複数のページで取り合わないようにしています。
-- **内部リンク** … コラム → 親のサービス・地域ページ → お問い合わせ、の流れを全記事で守ります（検査で確認）。
-- **構造化データ** … Organization（本社）・HomeAndConstructionBusiness（戸塚オフィス）・WebSite・BreadcrumbList・Service・
-  BlogPosting・ItemList。FAQPage は、**そのページに表示している質問だけ**を出します。
+計画の全体は [docs/SEO_ROADMAP.md](docs/SEO_ROADMAP.md)、いまの状態の一覧は [docs/seo-audit-report.md](docs/seo-audit-report.md)、
+会社への確認事項は [docs/TODO_SEO_VERIFICATION.md](docs/TODO_SEO_VERIFICATION.md) にあります。
+
+- **1つの検索意図は、1つの URL だけが担当します。** どの検索語をどのページで取りにいくかは、`data/seo-keyword-map.ts` の表に書きます
+  （施工事例は `data/works.ts` の `keyword`、コラムは記事の `keywords` の先頭、題材は `topics.ts` の `keyword`）。
+  `npm run seo:audit` が、同じ検索語を2つのページが狙っていないかを確かめます。
+- **ページの役割分担** … トップ（社名での検索）／サービスページ（工事名×戸塚区。その工事の親ページ）／地域ページ（その地域の事情）／
+  施工事例（実際の工事の記録）／コラム（1記事1疑問）。給湯器とエコキュート、外壁塗装と屋根塗装は、検索意図が違うのでページを分けています。
+- **内部リンク** … サービスページ ⇄ 施工事例 ⇄ コラム ⇄ 地域ページを、データのつながりから自動でつなぎます
+  （サービスページ：その工事の事例・関連コラム・地域ページ・別ページにまとめた工事の案内／施工事例：代表サービス・関連コラム・サービス別の一覧／
+  コラム：親ページ・関連サービス・施工事例・関連記事）。そろっているかは `seo:audit` が確かめます。
+- **構造化データ** … Organization（本社）・HomeAndConstructionBusiness（戸塚オフィス）・WebSite・BreadcrumbList（トップ以外の全ページ）・
+  Service・BlogPosting・Article（施工事例）・ItemList。FAQPage は、**そのページに表示している質問だけ**を出します。
+  評価・口コミ・価格・資格は、確認できていないので入れていません。
+- **サイトマップの更新日** … ページごとに、内容を実際に直した日を入れます（サービスは `updatedAt`、施工事例は投稿日か `updatedAt`、
+  コラムは記事の `updatedAt`、固定ページは `lib/routes.ts`）。文章を直したら、その日付も直してください。
+- **本番ドメインの www の有無** … `productionUrl` に書いた側へ、もう一方から自動で転送します。
 - **会社名・住所・電話番号（NAP）** … `lib/site.ts` の1か所から出すので、全ページで同じ表記になります。
   Google ビジネスプロフィールの表記も、これに合わせてください。
 - コラムのカテゴリページは、記事が3本に満たないうちは `noindex` です（内容の薄い一覧を検索に出さないため）。

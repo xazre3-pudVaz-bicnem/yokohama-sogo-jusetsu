@@ -76,8 +76,8 @@ export type ServiceBlock =
   | { type: "guide"; id: string; variant: "columns" | "rows" | "steps" | "photo"; photos?: BlockPhoto[]; table?: boolean; signs?: boolean }
   /** 対応範囲の注記（scope） */
   | { type: "scope"; heading: string }
-  /** 当社の施工現場の写真 */
-  | { type: "photos"; heading: string; lead?: string; photos: BlockPhoto[] }
+  /** 当社の施工現場の写真。compact: true は、元の写真が小さいとき（幅を抑えて2枚を横に並べる） */
+  | { type: "photos"; heading: string; lead?: string; photos: BlockPhoto[]; compact?: boolean }
   /** 現場の実務にもとづく補足（note） */
   | { type: "note" }
   /** 費用の考え方（cost） */
@@ -91,6 +91,12 @@ export type ServiceBlock =
 
 export type Service = {
   slug: string;
+  /**
+   * 親のサービス（data/services のスラッグ）。入れると、このサービスは親の下のページになる
+   * （URL は /service/<親>/<slug>。パンくずにも親が入る。例：住宅リフォームの下の「キッチンリフォーム」）。
+   * 親にできるのは、parent を持たないサービスだけ（2段まで）。
+   */
+  parent?: string;
   category: ServiceCategoryId;
   /** ページ・一覧に出す名称 */
   name: string;
@@ -108,9 +114,21 @@ export type Service = {
   catch: string;
   /** 一覧ページの説明 */
   summary: string;
-  seo: { title: string; description: string; keywords: string[] };
+  /**
+   * title は検索結果向け、h1 は読む人向け。同じ検索語を入れてよいが、同じ文にそろえる必要はない。
+   * どの検索語をこのページで取りにいくかは、data/seo-keyword-map.ts に書く（ここには書かない）。
+   */
+  seo: { title: string; description: string };
   h1: string;
   lead: string;
+  /** 内容を最後に見直した日（YYYY-MM-DD）。sitemap.xml の lastmod に使う。文章や表を直したら、この日付も直す */
+  updatedAt: string;
+  /**
+   * このページでは扱わず、別のサービスページにまとめている工事（冒頭の下に、リンクつきで案内する）。
+   * 検索意図を分けたページ同士を、内容の分かる言葉でつなぐために使う（例：給湯器のページ → エコキュートのページ）。
+   * text は「〜は」に続く形で書く（例：「ガス給湯器からエコキュートへの切り替え」）。
+   */
+  seeAlso?: { service: string; text: string }[];
   /** 対応範囲についての注意書き（例：解体はリフォームに伴うものだけ） */
   scope?: string;
   /** 相談のきっかけ・症状 */

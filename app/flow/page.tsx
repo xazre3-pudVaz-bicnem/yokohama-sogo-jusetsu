@@ -8,12 +8,13 @@ import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { flowSteps } from "@/data/company";
 import { reveal } from "@/lib/reveal";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
 
 /**
  * お問い合わせ〜工事完了までの流れ
  * 役割：はじめて工事を頼む人に、進め方と、各段階で用意するものを伝える（不安を減らし、問い合わせにつなげる）。
- * 担当する検索意図：リフォーム 流れ／給湯器 交換 流れ／見積もり 現地調査 何を見る
+ * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く。
  * 順番のある内容なので、番号を付ける。人物のイラストは、手順を説明するこのページにだけ、小さく添えている。
  */
 export const metadata: Metadata = buildMetadata({
@@ -21,7 +22,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設にご相談いただいてから、工事が完了するまでの流れです。お問い合わせ、現地調査、お見積もり、ご契約、施工、お引き渡しまで。それぞれの段階で用意していただくものも合わせてご案内します。",
   path: "/flow",
-  keywords: ["リフォーム 流れ", "給湯器 交換 流れ", "現地調査 見積もり 無料", "横浜総合住設 工事の流れ"],
+  keywords: keywordsFor("/flow"),
 });
 
 const NOTES = [

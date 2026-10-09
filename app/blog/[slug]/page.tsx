@@ -22,7 +22,7 @@ import { img } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
 import { blogPostingSchema, faqSchema } from "@/lib/schema";
 import { buildMetadata, formatDateJa } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import { officeAddress, siteConfig } from "@/lib/site";
 
 /**
  * コラムの記事ページ（content/blog/<slug>.md の1ファイルが1ページ）。
@@ -180,16 +180,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </section>
             )}
 
-            {/* 著者 */}
+            {/* 執筆・更新日・運営会社（「監修」とは書かない。資格のある第三者の監修ではないため） */}
             <aside aria-label="この記事について" className="card card-line mt-10 px-5 py-5 sm:px-6">
-              <p className="text-xs font-bold tracking-wider text-ink-mute">この記事を書いた人</p>
-              <p className="mt-1 text-base font-bold text-ink">{p.author}</p>
-              <p className="mt-1 text-[0.8125rem] leading-relaxed">
-                {siteConfig.name}は、横浜市戸塚区を中心に住宅設備の工事・リフォームを行っています。
-                <Link href="/company" className="text-link ml-1">
-                  会社案内
-                </Link>
-              </p>
+              <dl className="grid gap-x-6 gap-y-1.5 text-[0.8125rem] leading-relaxed sm:grid-cols-[6.5rem_1fr]">
+                <dt className="font-bold text-ink-mute">執筆</dt>
+                <dd className="font-bold text-ink">{p.author}</dd>
+                <dt className="font-bold text-ink-mute">公開日</dt>
+                <dd>
+                  <time dateTime={p.publishedAt}>{formatDateJa(p.publishedAt)}</time>
+                </dd>
+                <dt className="font-bold text-ink-mute">最終更新日</dt>
+                <dd>
+                  <time dateTime={p.updatedAt}>{formatDateJa(p.updatedAt)}</time>
+                </dd>
+                <dt className="font-bold text-ink-mute">運営会社</dt>
+                <dd>
+                  {siteConfig.name}（{siteConfig.offices.totsuka.label}：{officeAddress("totsuka")}）
+                  <Link href="/company" className="text-link ml-2">
+                    会社案内
+                  </Link>
+                </dd>
+              </dl>
             </aside>
 
             {/* 関連するサービス */}

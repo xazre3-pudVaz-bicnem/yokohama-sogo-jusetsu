@@ -16,15 +16,20 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   const [state, action, pending] = useActionState(submitInquiry, initialInquiryState);
   const formRef = useRef<HTMLFormElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
+  // フォームを最初に表示した時刻。検査に落ちて作り直しても、この値を使い続ける
+  const firstShownAt = useRef(0);
   const v = state.values ?? {};
   const err = state.errors ?? {};
 
   useEffect(() => {
     const form = formRef.current;
     if (!form) return;
-    // 表示した時刻（迷惑送信の判定に使う）
+    // 表示した時刻（迷惑送信の判定に使う。表示から 1.5 秒未満の送信は、サーバー側で受け付けない）。
+    // 検査に落ちるたびに「いま」に直すと、足りない1項目だけを直してすぐ送り直した人が、迷惑送信と判定されて
+    // 「受け付けました」と出るのに届かない、ということが起きる。最初に表示した時刻を使い続ける
+    if (!firstShownAt.current) firstShownAt.current = Date.now();
     const shownAt = form.elements.namedItem("shownAt") as HTMLInputElement | null;
-    if (shownAt) shownAt.value = String(Date.now());
+    if (shownAt) shownAt.value = String(firstShownAt.current);
     // 法人向けページから来たときの初期選択
     const select = form.elements.namedItem("topic") as HTMLSelectElement | null;
     if (select && !select.value && new URLSearchParams(window.location.search).get("topic") === "business") {
@@ -34,8 +39,10 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   }, [state.attempt]);
 
   useEffect(() => {
-    // 結果が返ってきたら、メッセージの位置まで戻す
-    if (state.status !== "idle") topRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // 結果が返ってきたら、メッセージの位置まで戻す。
+    // 検査に落ちたときは、案内の文と最初の入力欄がヘッダーのすぐ下に来るよう、フォームの先頭に合わせる
+    // （フォーム全体は画面より長いので、中央に合わせると、案内の文が画面の上に隠れる）
+    if (state.status !== "idle") topRef.current?.scrollIntoView({ behavior: "smooth", block: state.status === "success" ? "center" : "start" });
   }, [state.status, state.attempt]);
 
   if (state.status === "success") {

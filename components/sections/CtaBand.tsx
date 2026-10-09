@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import { LineIcon } from "@/components/ui/LineIcon";
 import { Illust } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
+import { isContactFormShown } from "@/lib/contact";
 import { reveal } from "@/lib/reveal";
-import { siteConfig, primaryPhone, telHref, receptionHours } from "@/lib/site";
+import { siteConfig, primaryPhone, telHref, lineUrl, receptionHours } from "@/lib/site";
 
 /**
  * ページの最後に置く、お問い合わせの案内。
@@ -26,6 +28,9 @@ export function CtaBand({
   const phone = primaryPhone();
   const hours = receptionHours();
   const instagram = siteConfig.social.instagram;
+  const line = lineUrl();
+  // フォームが使えないあいだ（設定前の本番）は、フォームへのボタンを出さない
+  const form = isContactFormShown();
 
   return (
     <section aria-labelledby={`${id}-title`} data-cta-zone className="band band-cream py-14 sm:py-20">
@@ -45,17 +50,31 @@ export function CtaBand({
             </div>
 
             <div className="flex min-w-0 flex-col gap-3 lg:w-[20.5rem]">
-              <Link href="/contact" className="btn btn-primary min-h-14 w-full text-base">
-                お問い合わせフォーム
-                <Icon name="arrowRight" className="btn-arrow size-4" />
-              </Link>
+              {form && (
+                <Link href="/contact" className="btn btn-primary min-h-14 w-full text-base">
+                  お問い合わせフォーム
+                  <Icon name="arrowRight" className="btn-arrow size-4" />
+                </Link>
+              )}
+              {line && (
+                <a
+                  href={line}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-14 items-center justify-center gap-2.5 rounded-full border-2 border-navy-900 bg-white px-5 py-1.5 font-heading text-base font-bold tracking-wider text-navy-900 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-cream"
+                  data-cv="line"
+                >
+                  <LineIcon className="size-7" />
+                  LINE で相談する
+                </a>
+              )}
               {phone && (
                 <a href={telHref(phone)} className="flex min-h-14 items-center justify-center gap-3 rounded-full border-2 border-navy-900 bg-white px-5 py-1.5 text-navy-900 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-cream" data-cv="tel">
                   <Icon name="phone" className="size-5 shrink-0 text-brand-600" />
                   <span className="text-left leading-none">
                     <span className="block text-xs font-bold text-ink-mute">
                       お電話でのご相談
-                      {hours && <span className="ml-1 font-normal">（受付 {hours}）</span>}
+                      {hours && <span className="ml-1 inline-block font-normal">（受付 {hours}）</span>}
                     </span>
                     <span className="num mt-1 block text-[1.3125rem] font-semibold tracking-wider">{phone}</span>
                   </span>

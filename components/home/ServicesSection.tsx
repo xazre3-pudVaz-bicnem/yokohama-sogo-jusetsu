@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ServiceTile } from "@/components/cards/ServiceCard";
 import { Icon } from "@/components/ui/Icon";
 import { PhotoFill } from "@/components/ui/Photo";
+import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { services, type ServiceCategoryId } from "@/data/services";
+import { mainServices, type ServiceCategoryId } from "@/data/services";
 import { getSubsidy } from "@/data/subsidies";
 import type { ImageKey } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
@@ -12,7 +13,7 @@ import { formatDateJa } from "@/lib/seo";
 /**
  * 事業内容（トップページでサービスを紹介するのは、この区画の1か所だけ）。
  *
- * 13のサービスを、3つのまとまりに分けて見せる。それぞれ「写真（色の板つき）＋短い説明＋サービスへのリンク」で、
+ * サービスを、3つのまとまりに分けて見せる。それぞれ「写真（色の板つき）＋短い説明＋サービスへのリンク」で、
  * くわしい内容は各サービスページに任せる。
  * 写真は、当社が施工した現場のものだけを使う（イメージ写真は使わない）。写真の無い「省エネ・創エネ設備」は、制度の情報を添える。
  * 同じサービスの一覧を、ページの中で繰り返さないこと。
@@ -64,12 +65,12 @@ export function ServicesSection() {
           eyebrow="サービス"
           title="事業内容"
           align="center"
-          lead="給湯器やエアコンの交換から、太陽光発電、外壁の塗り替え、リフォーム、庭の手入れまで、13の工事をお引き受けしています。どの工事も、現地で設置場所と使い方を確認してからご提案します。"
+          lead={`給湯器やエアコンの交換から、太陽光発電、外壁の塗り替え、リフォーム、庭の手入れまで、${mainServices.length}の工事をお引き受けしています。どの工事も、現地で設置場所と使い方を確認してからご提案します。`}
         />
 
         <div className="mt-12 space-y-16 lg:mt-16 lg:space-y-24">
           {BLOCKS.map((b, bi) => {
-            const list = services.filter((s) => b.categories.includes(s.category));
+            const list = mainServices.filter((s) => b.categories.includes(s.category));
             const flip = bi % 2 === 1 || b.id === "exterior";
             return (
               <div key={b.id} className="grid items-center gap-x-14 gap-y-9 lg:grid-cols-2">
@@ -93,11 +94,14 @@ export function ServicesSection() {
                       使える制度の例（{subsidy.level}）
                     </p>
                     <p className="mt-2 font-heading text-lg font-black text-navy-900">{subsidy.name}</p>
-                    <dl className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
+                    {/* 幅 380px 未満では、3列に並べると金額が箱からはみ出すので、1行ずつ（項目名｜金額）に並べる */}
+                    <dl className="mt-4 grid grid-cols-1 gap-2 min-[380px]:grid-cols-3 sm:gap-3">
                       {subsidy.amounts.slice(0, 3).map((a) => (
-                        <div key={a.label} className="rounded-2xl bg-mist px-2 py-3 text-center">
-                          <dt className="text-xs font-bold leading-snug text-navy-900">{a.label}</dt>
-                          <dd className="num mt-1 whitespace-nowrap text-[1rem] font-semibold leading-tight text-brand-700 sm:text-[1.25rem]">{a.value}</dd>
+                        <div key={a.label} className="flex items-center justify-between gap-3 rounded-2xl bg-mist px-4 py-2.5 min-[380px]:block min-[380px]:px-2 min-[380px]:py-3 min-[380px]:text-center">
+                          <dt className="text-xs font-bold leading-snug text-navy-900">
+                            <Phrase>{a.label}</Phrase>
+                          </dt>
+                          <dd className="num whitespace-nowrap text-[1rem] font-semibold leading-tight text-brand-700 min-[380px]:mt-1 sm:text-[1.25rem]">{a.value}</dd>
                         </div>
                       ))}
                     </dl>

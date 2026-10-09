@@ -10,10 +10,16 @@ import type { ImageKey } from "@/lib/images";
  *   - comment は投稿文の言葉を、絵文字を除いてそのまま使う（言い換えない）
  * 情報が分かったら、該当の項目に値を入れるだけで、詳細ページと一覧に表示される。
  *
- * 事例を増やすとき
+ * 事例を増やすとき（Instagram の投稿や、現場で撮った写真から）
  *   1. 写真を assets/instagram/ か assets/source/ に置き、scripts/prepare-images.mjs の表に足して実行
+ *      （ファイル名＝画像のキーは、内容が分かる英語にする。例：works/water-heater-wall-after）
  *   2. 下の配列に1件足す（services の先頭が、その事例の代表サービス）
- *   3. area.areaSlug に data/areas.ts の slug を入れると、地域ページにもその事例が出る
+ *   3. keyword に、その事例が代表になる検索語を書く（ほかのページと同じ語にしない。npm run seo:audit が重複を知らせる）
+ *   4. area に地域を入れると、題名と title に地域名が付き、地域ページにもその事例が出る
+ *      （市区まで。町名・番地など、お宅が特定される情報は書かない。確認できていない地域を、推測で入れない）
+ * 足した事例は、何もしなくても次の場所に出る：
+ *   施工事例の一覧／代表サービスのページ／サービス別の事例一覧（3件以上あるサービス）／地域ページ（area があるとき）／
+ *   関係するコラムの記事の下／サイトマップ
  */
 
 export type WorkImage = {
@@ -23,25 +29,38 @@ export type WorkImage = {
   label?: string;
 };
 
+/** 機器（メーカー・型番は、投稿文や銘板の写真で確かめられたものだけ） */
+export type WorkProduct = { maker?: string; name: string; model?: string };
+
 export type Work = {
   slug: string;
+  /** 題名。工事の内容が分かる言葉にする（「施工事例01」のような題名にしない）。地域名は area から自動で付くので、ここには書かない */
   title: string;
+  /** この事例のページが代表になる検索語（例：エアコン 高所 取替 施工事例） */
+  keyword: string;
   /** 関係するサービスのスラッグ（先頭が代表） */
   services: string[];
   /** 一覧に出す区分 */
   category: string;
   summary: string;
   cover: WorkImage;
-  /** 施工地域。確認できたものだけ（例：{ areaSlug: "totsuka", label: "横浜市戸塚区" }） */
-  area: { areaSlug?: string; label: string } | null;
+  /**
+   * 施工地域。確認できたものだけ（例：{ areaSlug: "totsuka", city: "横浜市", ward: "戸塚区", label: "横浜市戸塚区" }）。
+   * 市区まで。町名・番地は書かない。areaSlug は、data/areas.ts に公開中の地域ページがあるときだけ入れる。
+   */
+  area: { areaSlug?: string; city?: string; ward?: string; label: string } | null;
   /** 施工時期（例："2026年8月"）。未確認なら null */
   completedAt: string | null;
   /** 施工期間（例："1日"）。未確認なら null */
   duration: string | null;
-  /** 使用した商品・メーカー */
-  products: { maker?: string; name: string }[];
+  /** 取り付けた機器・使用した商品 */
+  products: WorkProduct[];
+  /** 取り替える前の機器（分かるものだけ） */
+  existing?: WorkProduct[];
   /** お客様のお悩み（投稿に書かれているものだけ） */
   worry: string | null;
+  /** 工事で難しかった点（分かるものだけ。創作しない） */
+  difficulty?: string;
   /** 施工内容 */
   content: string[];
   /** 施工のポイント */
@@ -54,13 +73,21 @@ export type Work = {
   gallery: WorkImage[];
   /** 写真についての注記 */
   photoNote?: string;
+  /** 関連するコラムの記事のスラッグ（省略すると、この事例にリンクしている記事と、同じサービスの記事から選ぶ） */
+  relatedArticles?: string[];
   source: { url: string; postedAt: string };
+  /** 内容を最後に直した日（YYYY-MM-DD。省略時は投稿日）。sitemap.xml の lastmod と構造化データの dateModified に使う */
+  updatedAt?: string;
 };
+
+/** サービス別の事例一覧のページを作るのに必要な件数（これ未満のサービスは、一覧のページを作らない） */
+export const MIN_WORKS_FOR_LIST = 3;
 
 export const works: Work[] = [
   {
     slug: "aircon-replace-decorative-cover",
     title: "エアコン取替工事 ── 配管を化粧テープ仕上げから化粧カバー仕上げへ",
+    keyword: "エアコン 取替 化粧カバー 施工事例",
     services: ["air-conditioner"],
     category: "エアコン",
     summary: "古いエアコンを新しい機種に取り替え、屋外の配管をテープ巻きから化粧カバーの仕上げに変更しました。",
@@ -103,6 +130,7 @@ export const works: Work[] = [
   {
     slug: "aircon-high-place-replacement",
     title: "他社で断られた、高所でのエアコン取替",
+    keyword: "エアコン 高所 取替 施工事例",
     services: ["air-conditioner"],
     category: "エアコン",
     summary: "別の業者に断られたエアコンの取替を、ご相談を受けて施工しました。長いはしごを使った高所での作業です。",
@@ -135,6 +163,7 @@ export const works: Work[] = [
   {
     slug: "aircon-replace-two-units",
     title: "エアコン取替工事（2台）── 室内機・室外機の入れ替え",
+    keyword: "エアコン 2台 取替 施工事例",
     services: ["air-conditioner"],
     category: "エアコン",
     summary: "2台のエアコンを、室内機・室外機とも新しい機種に取り替えました。取替前と取替後の写真を並べてご紹介します。",
@@ -187,6 +216,7 @@ export const works: Work[] = [
   {
     slug: "air-conditioning-pipe-lagging",
     title: "空調配管のラッキングカバー施工",
+    keyword: "空調配管 ラッキングカバー 施工事例",
     services: ["air-conditioner"],
     category: "業務用空調",
     summary: "屋外に並ぶ室外機につながる空調配管に、金属製のラッキングカバーを施工しました。曲がりの部分まで形を合わせて仕上げています。",
@@ -228,6 +258,7 @@ export const works: Work[] = [
   {
     slug: "bathroom-heater-dryer-rinnai",
     title: "リンナイの浴室暖房乾燥機の施工",
+    keyword: "リンナイ 浴室暖房乾燥機 交換 施工事例",
     services: ["other", "reform"],
     category: "浴室暖房乾燥機",
     summary: "浴室の天井の暖房乾燥機を、リンナイの浴室暖房乾燥機に取り替えました。壁のリモコンも新しくしています。",
@@ -273,6 +304,7 @@ export const works: Work[] = [
   {
     slug: "wood-deck-installation",
     title: "ウッドデッキの設置 ── 整地から完成まで",
+    keyword: "ウッドデッキ 設置 施工事例",
     services: ["garden"],
     category: "外構・ウッドデッキ",
     summary: "土のままだった建物の横のスペースに、ステップつきのウッドデッキを設置しました。整地から完成までの写真です。",
@@ -316,10 +348,11 @@ export const works: Work[] = [
   },
   {
     slug: "cupboard-installation",
-    title: "キッチンのカップボード設置",
+    title: "キッチンのカップボード設置 ── 施工前から完成まで",
+    keyword: "カップボード 設置 施工事例",
     services: ["reform", "kitchen-equipment"],
     category: "キッチン",
-    summary: "キッチンの背面に、吊り戸棚とカウンターが一体になったカップボード（食器棚）を設置しました。",
+    summary: "キッチンの背面に、吊り戸棚とカウンターが一体になったカップボード（食器棚）を設置しました。施工前から完成までの写真です。",
     cover: { key: "works/cupboard", alt: "キッチンの背面に設置した、青い扉のカップボード", label: "施工後" },
     area: null,
     completedAt: null,
@@ -328,6 +361,7 @@ export const works: Work[] = [
     worry: null,
     content: [
       "キッチンの背面の壁に、カップボードを設置しました。上に吊り戸棚、下に引き出しの収納、その間が家電を置けるカウンターになっています。",
+      "床に養生のマットを敷き、まず端の背の高い収納を据えました。壁に取り付け位置の印を付けてから、吊り戸棚、下の引き出し収納、カウンターの天板の順に取り付けています。",
     ],
     points: [
       {
@@ -340,14 +374,27 @@ export const works: Work[] = [
       },
     ],
     comment: "カップボード設置。大掃除のシーズンが近づくと、ガスコンロ、レンジフードの取替が増えてくるはず。",
-    beforeAfter: [],
-    gallery: [],
+    // 施工前と工程の写真は、会社から受け取ったもの（2026-10-09。LINE のアルバム「カップボード完成まで」）。冒頭の写真は Instagram の投稿
+    beforeAfter: [
+      {
+        title: "施工前と設置後",
+        before: { key: "works/cupboard-before-wall", alt: "カップボードを設置する前の、何も置かれていないキッチン背面の壁", label: "施工前" },
+        after: { key: "works/cupboard-counter-fitted", alt: "カウンターの天板まで取り付けた、設置後のカップボード", label: "施工後" },
+      },
+    ],
+    gallery: [
+      { key: "works/cupboard-step-tall-unit", alt: "端に背の高い収納を据え、壁に取り付け位置の印を付けたところ", label: "施工中" },
+      { key: "works/cupboard-step-wall-cabinets", alt: "壁に吊り戸棚を取り付けたところ。下の収納は、これから据える", label: "施工中" },
+      { key: "works/cupboard-step-base-cabinets", alt: "下の引き出し収納を据えたところ。カウンターの天板を載せる前", label: "施工中" },
+    ],
     source: { url: "https://www.instagram.com/p/DdtS3dmTOlS/", postedAt: "2026-09-25" },
+    updatedAt: "2026-10-09",
   },
   {
     slug: "exterior-roof-painting-process",
     title: "外壁塗装・屋根塗装 ── 施工の工程をご紹介",
-    services: ["exterior-painting"],
+    keyword: "外壁塗装 屋根塗装 施工事例",
+    services: ["exterior-painting", "roof-painting"],
     category: "外壁・屋根塗装",
     summary: "当社で外壁と屋根を塗装した現場の記録です。施工前の屋根の状態から、塗装後の仕上がり、破風の様子、塗り重ねによる違いまで。",
     cover: { key: "works/painting-process-card", alt: "外壁塗装・屋根塗装の施工工程をまとめた画像。施工前の屋根と、塗装が完了した屋根", label: "工程の紹介" },
@@ -402,6 +449,43 @@ export function worksByService(serviceSlug: string): Work[] {
 /** その地域の事例（area.areaSlug が一致するもの） */
 export function worksByArea(areaSlug: string): Work[] {
   return worksSorted.filter((w) => w.area?.areaSlug === areaSlug);
+}
+
+/** 代表サービスがそのサービスの事例（サービス別の事例一覧のページに出すもの） */
+export function worksOfMainService(serviceSlug: string): Work[] {
+  return worksSorted.filter((w) => w.services[0] === serviceSlug);
+}
+
+/** サービス別の事例一覧のページを持つサービスのスラッグ（事例が MIN_WORKS_FOR_LIST 件以上あるもの） */
+export function serviceSlugsWithWorkList(): string[] {
+  const count = new Map<string, number>();
+  for (const w of works) count.set(w.services[0], (count.get(w.services[0]) ?? 0) + 1);
+  return [...count.entries()].filter(([, n]) => n >= MIN_WORKS_FOR_LIST).map(([slug]) => slug);
+}
+
+/** サービス別の事例一覧のページの URL（ページが無いサービスでは undefined） */
+export function workListPath(serviceSlug: string): string | undefined {
+  return serviceSlugsWithWorkList().includes(serviceSlug) ? `/works/service/${serviceSlug}` : undefined;
+}
+
+/** サービス別の事例一覧のページの検索語（例：エアコン 施工事例） */
+export function workListKeyword(serviceShortName: string): string {
+  return `${serviceShortName} 施工事例`;
+}
+
+/** 題名の主な部分（「 ── 」より前） */
+export function workShortTitle(w: Work): string {
+  return w.title.split(" ── ")[0];
+}
+
+/** 画面の見出し・一覧に出す題名（地域が分かっている事例は、先頭に地域名を付ける。例：横浜市戸塚区｜給湯器交換） */
+export function workDisplayTitle(w: Work): string {
+  return w.area ? `${w.area.label}｜${w.title}` : w.title;
+}
+
+/** 内容を最後に直した日 */
+export function workUpdatedAt(w: Work): string {
+  return w.updatedAt ?? w.source.postedAt;
 }
 
 /** 一覧の絞り込みに使う区分 */

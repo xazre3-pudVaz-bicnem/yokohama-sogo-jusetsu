@@ -29,7 +29,7 @@ export function FieldNote({
 }) {
   const right = side === "right";
   return (
-    <aside className={`flex items-end gap-3 sm:gap-5 ${right ? "flex-row-reverse" : ""} ${className}`} {...reveal(0, right ? "right" : "left")}>
+    <aside aria-label={label} className={`flex items-end gap-3 sm:gap-5 ${right ? "flex-row-reverse" : ""} ${className}`} {...reveal(0, right ? "right" : "left")}>
       <Illust image={pose} width={112} className="h-auto w-[4.75rem] shrink-0 sm:w-28" />
       <div className={`bubble flex-1 px-4 py-3.5 sm:px-6 sm:py-4 ${right ? "bubble-r" : ""}`}>
         <p className="mb-1.5">

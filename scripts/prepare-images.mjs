@@ -9,6 +9,7 @@
  *   assets/source/                … ロゴ・チラシ・看板・表札の写真（担当者の連絡先が載っているため公開しない）
  *   assets/instagram/             … 公式 Instagram の施工写真（index.json に投稿日とキャプション）
  *   assets/stock/                 … 出典の表示が必要な写真（横浜市オープンデータなど。data/credits.ts に出典）
+ *   assets/line/                  … 会社から LINE で受け取った素材（代表の写真・LINE の QR コード・施工の工程写真）
  *
  * 写真を差し替えるときは、下の表の「元ファイル名」を新しいファイルに変えて、このスクリプトを実行する。
  * 表の3つ目に { left, top, width, height } を書くと、元画像のその範囲だけを切り出す
@@ -213,12 +214,44 @@ await emit("works/painting-roof-before", sharp(path.join(igDir, "p01-1.jpg")).ex
 await emit("works/painting-gable-before", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 260, top: 964, width: 344, height: 258 }));
 await emit("works/painting-roof-after", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 676, top: 546, width: 332, height: 336 }));
 await emit("works/painting-gable-after", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 656, top: 908, width: 350, height: 330 }));
+// 屋根塗装のページ用：塗装の途中（白い塗料を塗った段階）と、仕上がりの比較（2回塗り・1回塗り。写真の中のラベルごと切り出す）
+await emit("works/painting-roof-mid", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 200, top: 600, width: 368, height: 276 }));
+await emit("works/painting-coat-two", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 190, top: 1395, width: 340, height: 255 }));
+await emit("works/painting-coat-one", sharp(path.join(igDir, "p01-1.jpg")).extract({ left: 600, top: 1395, width: 340, height: 255 }));
 // ステッカーの写真（ステッカーの部分だけを切り出す）
 await emit("company/stickers", sharp(path.join(igDir, "p02-1.jpg")).extract({ left: 60, top: 230, width: 600, height: 450 }));
 
 /* ------------------------------------------------------------------ */
+/* 3'. 会社から LINE で受け取った施工写真                               */
+/* ------------------------------------------------------------------ */
+const lineDir = path.join(ROOT, "assets", "line");
+// カップボードの設置（/works/cupboard-installation と同じ現場。2026-10-09 に受領）。
+// 元のファイル名は「LINE_ALBUM_カップボード完成まで_261009_1〜5.jpg」。アルバムの番号は作業の順ではないので、出力名に段階を書く
+const CUPBOARD = [
+  ["cupboard-1.jpg", "works/cupboard-before-wall"],
+  ["cupboard-2.jpg", "works/cupboard-step-tall-unit"],
+  // 右端に人が写り込んでいるため、その部分を外す
+  ["cupboard-5.jpg", "works/cupboard-step-wall-cabinets", { left: 0, top: 0, width: 1030, height: 1373 }],
+  ["cupboard-3.jpg", "works/cupboard-step-base-cabinets"],
+  ["cupboard-4.jpg", "works/cupboard-counter-fitted"],
+];
+for (const [file, key, region] of CUPBOARD) {
+  const source = sharp(path.join(lineDir, file)).rotate();
+  await emit(key, (region ? source.extract(region) : source).resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }));
+}
+
+/* ------------------------------------------------------------------ */
 /* 4. 会社の写真・出典の表示が必要な写真                                */
 /* ------------------------------------------------------------------ */
+// 代表の写真（代表ご本人から受領。2026-10-09）
+await emit("company/representative", sharp(path.join(lineDir, "representative.jpg")).rotate().resize({ width: 1000, withoutEnlargement: true }), { quality: 88 });
+// LINE 公式アカウントの QR コード（会社から受領）。読み取りやすさを保つため、写真のような圧縮をせず PNG のまま書き出す
+{
+  const out = path.join(OUT, "brand", "line-qr.png");
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  const info = await sharp(path.join(lineDir, "line-qr-green.png")).flatten({ background: "#ffffff" }).png({ compressionLevel: 9, palette: true, colours: 32 }).toFile(out);
+  manifest["brand/line-qr"] = { src: "/images/brand/line-qr.png", width: info.width, height: info.height };
+}
 // 表札（下の段の「株式会社 横浜総合住設」の部分）
 await emit("company/nameplate", sharp(path.join(ROOT, "assets", "source", "S__49709077_0.jpg")).rotate().extract({ left: 120, top: 880, width: 820, height: 200 }));
 // 戸塚駅周辺の空撮（横浜市オープンデータ・CC BY 4.0）

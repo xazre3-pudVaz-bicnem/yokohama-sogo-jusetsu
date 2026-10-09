@@ -41,3 +41,14 @@ export type Inquiry = z.infer<typeof inquirySchema>;
 export function isContactFormEnabled(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL);
 }
+
+/**
+ * お問い合わせフォームを画面に出すかどうか（サーバー側でだけ使う）。
+ * - メール送信の設定が済んでいれば出す。
+ * - 設定前でも、本番（VERCEL_ENV=production）以外では、確認用に出す。
+ * 設定前の本番では、フォームを出さない。このとき、サイトの文章とボタンからも「お問い合わせフォーム」の案内を外す
+ * （送れないフォームを案内しないため）。Vercel に設定を入れて公開し直せば、自動で元に戻る。
+ */
+export function isContactFormShown(): boolean {
+  return isContactFormEnabled() || process.env.VERCEL_ENV !== "production";
+}

@@ -25,7 +25,8 @@ export type Area = {
   shortName: string;
   kind: "ward" | "city";
   published: boolean;
-  seo: { title: string; description: string; keywords: string[] };
+  /** 取りにいく検索語は data/seo-keyword-map.ts に書く */
+  seo: { title: string; description: string };
   h1: string;
   lead: string;
   image: ImageKey;
@@ -43,7 +44,10 @@ export type Area = {
   neighbors?: string[];
   faqs: { q: string; a: string }[];
   sources: { label: string; url: string }[];
+  /** 出典のページで事実を確かめた日 */
   checkedAt: string;
+  /** ページの内容を最後に直した日（YYYY-MM-DD）。sitemap.xml の lastmod に使う */
+  updatedAt: string;
 };
 
 export const areas: Area[] = [
@@ -57,7 +61,6 @@ export const areas: Area[] = [
       title: "横浜市戸塚区の住宅設備・リフォーム",
       description:
         "横浜市戸塚区の住宅設備・リフォームは、区内にオフィスのある横浜総合住設へ。給湯器・エアコン・トイレ・外壁塗装・太陽光・蓄電池まで、起伏の多い戸塚の住まいに合わせてご提案します。見積もり・現地調査は無料です。",
-      keywords: ["戸塚区 住宅設備", "横浜市戸塚区 住宅設備", "戸塚区 リフォーム", "戸塚区 給湯器交換", "戸塚区 エアコン工事", "戸塚区 外壁塗装", "戸塚 東戸塚 リフォーム"],
     },
     h1: "横浜市戸塚区の住宅設備・リフォーム",
     lead: "戸塚区は、横浜市でいちばん広い区です。区の中央を柏尾川が流れ、そのまわりを起伏に富んだ台地が囲んでいます。駅前のマンションから、丘の上の戸建て住宅地、昭和の時期に開発された団地まで、住まいの姿はさまざまです。横浜総合住設は、戸塚区深谷町にオフィスを置き、この地域の住まいの工事をお引き受けしています。",
@@ -104,8 +107,13 @@ export const areas: Area[] = [
     serviceNotes: [
       {
         service: "water-heater",
-        title: "戸塚区の給湯器交換・エコキュート",
-        body: "横浜市では、エコジョーズのドレン排水は汚水の系統へ流すのが原則ですが、認証を受けた機器であれば雨水の系統への排水も認められています。排水の流し先を現地で確かめたうえで、機種を選びます。エコキュートは、タンクを運び入れる経路の確認が欠かせません。",
+        title: "戸塚区の給湯器交換",
+        body: "横浜市では、エコジョーズのドレン排水は汚水の系統へ流すのが原則ですが、認証を受けた機器であれば雨水の系統への排水も認められています。排水の流し先を現地で確かめたうえで、機種を選びます。駅の周辺に多いマンションでは、パイプスペースに収まる機種を、いまの型番から確認します。",
+      },
+      {
+        service: "ecocute",
+        title: "戸塚区のエコキュート",
+        body: "エコキュートは、貯湯タンクを運び入れる経路の確認が欠かせません。道路と敷地に高さの差がある家では、階段の幅と段数、通路の曲がり角を、現地で実際に測ります。",
       },
       {
         service: "air-conditioner",
@@ -114,8 +122,13 @@ export const areas: Area[] = [
       },
       {
         service: "exterior-painting",
-        title: "戸塚区の外壁塗装・屋根塗装",
+        title: "戸塚区の外壁塗装",
         body: "谷戸の入り組んだ土地では、家の向きと周囲の地形で、日当たりと湿気が面ごとに変わります。南面は色あせ、北面はコケ。傷み方の違いを見て、下地の補修の範囲を決めます。高低差のある敷地では、足場の組み方も計画に含めます。",
+      },
+      {
+        service: "roof-painting",
+        title: "戸塚区の屋根塗装",
+        body: "高低差のある敷地では、道路から屋根がまったく見えない家もあります。屋根の状態は現地で確かめ、塗装が要るのか、割れや板金の補修で足りるのかをお伝えします。外壁の塗装と時期を合わせれば、足場は1回で済みます。",
       },
       {
         service: "solar",
@@ -210,6 +223,7 @@ export const areas: Area[] = [
       { label: "国土地理院：全国都道府県市区町村別面積調", url: "https://www.gsi.go.jp/KOKUJYOHO/MENCHO-title.htm" },
     ],
     checkedAt: "2026-10-06",
+    updatedAt: "2026-10-07",
   },
   {
     slug: "yokohama",
@@ -221,7 +235,6 @@ export const areas: Area[] = [
       title: "横浜市の住宅設備・リフォーム｜対応エリアと支援制度",
       description:
         "横浜総合住設は、戸塚区を中心に横浜市の全域で、給湯器・エアコン・トイレ・外壁塗装・太陽光・蓄電池・リフォームの工事を行っています。横浜市のポイント還元事業や排水の決まりなど、市内で工事をするときに役立つ情報もまとめました。",
-      keywords: ["横浜市 住宅設備", "横浜 給湯器交換", "横浜市 外壁塗装", "横浜市 リフォーム", "横浜市 蓄電池 補助", "横浜市 エコキュート"],
     },
     h1: "横浜市の住宅設備・リフォーム",
     lead: "横浜総合住設は、戸塚区のオフィスを拠点に、横浜市の18区すべてで工事をお引き受けしています。横浜市には、省エネ設備の導入を後押しする市の事業や、給湯器の排水についての独自の決まりがあります。このページでは、市内で工事をするときの決まりと、使える支援制度を、公式の情報をもとにまとめています。",
@@ -264,8 +277,8 @@ export const areas: Area[] = [
     ],
     serviceNotes: [
       {
-        service: "water-heater",
-        title: "横浜市の給湯器交換",
+        service: "ecocute",
+        title: "横浜市のエコキュート",
         body: "エコキュートを新しく設置し、太陽光発電設備も備える場合は、横浜市のポイント還元事業の対象になります。国の給湯省エネ事業と併用できる制度です。買い替えは対象外のため、条件を先に確認します。",
       },
       {
@@ -312,6 +325,7 @@ export const areas: Area[] = [
       { label: "厚生労働省：石綿総合情報ポータルサイト", url: "https://www.ishiwata.mhlw.go.jp/business/reform-contractor/" },
     ],
     checkedAt: "2026-10-06",
+    updatedAt: "2026-10-07",
   },
 ];
 

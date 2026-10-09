@@ -5,10 +5,13 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { FaqList } from "@/components/ui/FaqList";
 import { PageHero } from "@/components/ui/PageHero";
 import { faqGroups, allFaqs } from "@/data/faq";
-import { services } from "@/data/services";
+import { servicePath, services } from "@/data/services";
 import { reveal } from "@/lib/reveal";
 import { faqSchema } from "@/lib/schema";
+import { keywordsFor } from "@/data/seo-keyword-map";
+import { isContactFormShown } from "@/lib/contact";
 import { buildMetadata } from "@/lib/seo";
+import { contactWays } from "@/lib/site";
 
 /**
  * よくある質問
@@ -21,7 +24,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設によくいただく質問をまとめました。見積もりは無料か、対応エリアはどこまでか、小さな工事や他社で断られた工事も頼めるか、補助金は使えるか。はじめてのご相談の前にご覧ください。",
   path: "/faq",
-  keywords: ["横浜総合住設 よくある質問", "住宅設備 見積もり 無料", "戸塚区 リフォーム 相談", "給湯器 補助金 申請"],
+  keywords: keywordsFor("/faq"),
 });
 
 export default function FaqPage() {
@@ -30,7 +33,7 @@ export default function FaqPage() {
       <PageHero
         illust="illust/people-staff-point-3"
         title="よくある質問"
-        lead="お見積もり、対応エリア、工事の進め方について、よくいただく質問にお答えします。ここに無いことは、お電話かフォームでおたずねください。"
+        lead={`お見積もり、対応エリア、工事の進め方について、よくいただく質問にお答えします。ここに無いことは、${contactWays({ instagram: false, form: isContactFormShown() }).join("・")}でおたずねください。`}
         crumbs={[{ name: "よくある質問", href: "/faq" }]}
       />
 
@@ -74,7 +77,7 @@ export default function FaqPage() {
               <ul className="rows rows-2 mt-5">
                 {services.map((s) => (
                   <li key={s.slug}>
-                    <Link href={`/service/${s.slug}#faq`} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold text-ink transition-colors hover:text-brand-700">
+                    <Link href={`${servicePath(s)}#faq`} className="flex min-h-12 items-center py-2 text-[0.9375rem] font-bold text-ink transition-colors hover:text-brand-700">
                       {s.name}
                     </Link>
                   </li>

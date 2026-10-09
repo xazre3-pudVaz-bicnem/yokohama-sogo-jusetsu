@@ -16,6 +16,18 @@ const resolvedSiteUrl = (
   (process.env.VERCEL_ENV === "production" ? siteConfig.productionUrl : "")
 ).replace(/\/+$/, "");
 
+/**
+ * 本番ドメインの「www あり／なし」を、NEXT_PUBLIC_SITE_URL に書いた側へそろえる（もう一方から 301 で転送する）。
+ * 同じページが2つの URL で見えると、評価が分かれるため。http → https と末尾のスラッシュは、Vercel と Next.js が自動でそろえる。
+ */
+function hostRedirects() {
+  if (!resolvedSiteUrl) return [];
+  const host = new URL(resolvedSiteUrl).hostname;
+  const other = host.startsWith("www.") ? host.slice(4) : `www.${host}`;
+  // has の value は正規表現として扱われるので、ホスト名の「.」を文字どおりの点にする
+  return [{ source: "/:path*", has: [{ type: "host" as const, value: other.replace(/\./g, "\\.") }], destination: `${resolvedSiteUrl}/:path*`, permanent: true }];
+}
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   env: { NEXT_PUBLIC_SITE_URL: resolvedSiteUrl },
@@ -34,6 +46,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      ...hostRedirects(),
       // 一覧の1ページ目は /blog（/blog/page/1 という URL は作らない）
       { source: "/blog/page/1", destination: "/blog", permanent: true },
       // 単数・複数の打ち間違いを正規の URL へ

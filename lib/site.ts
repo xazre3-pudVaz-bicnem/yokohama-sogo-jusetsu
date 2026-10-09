@@ -41,11 +41,13 @@ export const siteConfig = {
     "横浜市戸塚区を中心に、給湯器・エコキュート・エアコン・トイレ・太陽光発電・蓄電池・外壁塗装・リフォーム・造園まで対応する株式会社 横浜総合住設の公式サイトです。住まいの工事をまとめてご相談いただけます。",
 
   /**
-   * 本番ドメイン（未定）。決まったらここに "https://www.example.jp" の形で書く。
+   * 本番ドメイン（2026-10-09 に決定。www あり）。変えるときは "https://www.example.jp" の形で書く（末尾のスラッシュは付けない）。
    * canonical・OGP・sitemap.xml・robots.txt・RSS・構造化データの URL は、すべてここから作る。
-   * 空のあいだは、Vercel に置いても全ページ noindex になり、検索結果には出ない（next.config.ts を参照）。
+   * この値が使われるのは、Vercel の本番デプロイだけ。手元のビルドとプレビューは、全ページ noindex のまま（next.config.ts を参照）。
+   * www なしの URL は、www ありへ転送する（Vercel のドメイン設定と、next.config.ts の両方）。
+   * 空にすると、本番も全ページ noindex になり、検索結果には出ない。
    */
-  productionUrl: "",
+  productionUrl: "https://www.yokohama-sogo-jusetsu.com",
 
   /** 最重要エリア（Local SEO の軸。data/areas.ts と一致させる） */
   primaryArea: {
@@ -105,10 +107,14 @@ export const siteConfig = {
     } satisfies Office,
   },
 
-  /** 会社概要のうち未確認のもの。値を入れると会社案内ページと構造化データに出る */
+  /**
+   * 会社概要。値を入れると会社案内ページと構造化データに出る（null の項目は出ない）。
+   * 代表者は、代表ご本人から受け取った代表挨拶の署名（2026-10-09）で確認した。読みがなは未確認なので書かない。
+   * 代表挨拶の文章と写真は data/greeting.ts。
+   */
   company: {
-    representative: null as string | null,
-    representativeTitle: null as string | null,
+    representative: "加太 駆" as string | null,
+    representativeTitle: "代表取締役" as string | null,
     founded: null as string | null,
     capital: null as string | null,
     employees: null as string | null,
@@ -148,7 +154,14 @@ export const siteConfig = {
     instagram: "https://www.instagram.com/yokohamatotalhousingsolutions/",
     instagramHandle: "yokohamatotalhousingsolutions",
     threads: "",
-    line: "",
+    /**
+     * LINE 公式アカウントの「友だち追加」の URL。会社から受け取った QR コード（2026-10-09）の中身。
+     * QR コードの画像は assets/line/ → public/images/brand/line-qr.png（お問い合わせページで、パソコンの方向けに出す）。
+     * 空にすると、サイトのどこにも LINE の案内は出ない。
+     */
+    line: "https://lin.ee/RIQLO6n",
+    /** LINE の ID（上の URL の転送先 line.me/R/ti/p/@… で確認）。お問い合わせページに、ID 検索用として出す */
+    lineId: "@326qvkdi",
     x: "",
     youtube: "",
   },
@@ -201,6 +214,21 @@ export function telIntl(display: string = primaryPhone()): string {
 export function mobilePhone(): string {
   const c = siteConfig.contact;
   return c.showMobile && c.companyMobile && c.companyMobile !== primaryPhone() ? c.companyMobile : "";
+}
+
+/** LINE 公式アカウントの友だち追加の URL。LINE の URL の形をしているときだけ返す（それ以外は空文字） */
+export function lineUrl(): string {
+  const url: string = siteConfig.social.line;
+  return /^https:\/\/(?:lin\.ee|line\.me|page\.line\.me)\//.test(url) ? url : "";
+}
+
+/**
+ * 連絡方法の一覧（設定があるものだけ）。文章の中で連絡方法を並べるときは、ここから作る
+ * （LINE や Instagram の設定を外したときに、文章だけが残らないようにするため）。
+ *   contactWays().join("、") → 「お電話、LINE、お問い合わせフォーム、Instagram のメッセージ」
+ */
+export function contactWays({ form = true, instagram = true }: { form?: boolean; instagram?: boolean } = {}): string[] {
+  return [primaryPhone() ? "お電話" : "", lineUrl() ? "LINE" : "", form ? "お問い合わせフォーム" : "", instagram && siteConfig.social.instagram ? "Instagram のメッセージ" : ""].filter(Boolean);
 }
 
 /** 受付時間の表記（例：8:00〜18:00（平日））。未設定なら空文字 */

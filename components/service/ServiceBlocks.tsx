@@ -10,9 +10,11 @@ import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import type { Service } from "@/data/services";
 import type { BlockPhoto, ServiceBlock, ServiceGuide } from "@/data/services/types";
 import type { Subsidy } from "@/data/subsidies";
-import type { Work } from "@/data/works";
+import { workListPath, type Work } from "@/data/works";
+import { isContactFormShown } from "@/lib/contact";
 import { img, type ImageKey } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
+import { lineUrl } from "@/lib/site";
 
 /**
  * サービスページの本文の区画。
@@ -425,13 +427,24 @@ export function ServiceBlockView({
       return (
         <Shell id="photos" tone={tone} lazy={lazy}>
           <SectionHeading id="photos" eyebrow="当社の現場から" color="navy" title={block.heading} lead={block.lead} align="center" />
-          <div className={`mt-10 grid gap-x-5 gap-y-7 ${block.photos.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
-            {block.photos.map((p, i) => (
-              <div key={p.image} {...reveal(i * 90, "zoom")}>
-                <Fig photo={p} sizes="(min-width: 640px) 32vw, 100vw" aspect="aspect-[4/3] sm:aspect-square" />
-              </div>
-            ))}
-          </div>
+          {block.compact ? (
+            /* 元の写真が小さいとき：引き伸ばされてぼやけないよう、幅を抑えて2枚を横に並べる */
+            <div className="mx-auto mt-10 grid max-w-[44rem] grid-cols-2 gap-x-4 gap-y-6 sm:gap-x-6">
+              {block.photos.map((p, i) => (
+                <div key={p.image} {...reveal(i * 90, "zoom")}>
+                  <Fig photo={p} sizes="(min-width: 768px) 340px, 50vw" aspect="aspect-[4/3]" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={`mt-10 grid gap-x-5 gap-y-7 ${block.photos.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+              {block.photos.map((p, i) => (
+                <div key={p.image} {...reveal(i * 90, "zoom")}>
+                  <Fig photo={p} sizes="(min-width: 640px) 32vw, 100vw" aspect="aspect-[4/3] sm:aspect-square" />
+                </div>
+              ))}
+            </div>
+          )}
         </Shell>
       );
 
@@ -471,11 +484,24 @@ export function ServiceBlockView({
               ))}
             </ul>
             <p className="mt-6 rounded-2xl bg-white/70 px-5 py-4 text-[0.9375rem] leading-[1.95]">
-              お見積もりは無料です。現地調査にうかがい、内訳の分かる見積書をお出しします。ご依頼は
-              <Link href="/contact" className="text-link">
-                お問い合わせフォーム
-              </Link>
-              か、お電話でお受けしています。
+              お見積もりは無料です。現地調査にうかがい、内訳の分かる見積書をお出しします。
+              {isContactFormShown() ? (
+                <>
+                  ご依頼は
+                  <Link href="/contact" className="text-link">
+                    お問い合わせフォーム
+                  </Link>
+                  ・お電話{lineUrl() ? "・LINE" : ""}でお受けしています。
+                </>
+              ) : (
+                <>
+                  ご依頼は、お電話{lineUrl() ? "・LINE" : ""}でお受けしています（
+                  <Link href="/contact" className="text-link">
+                    お問い合わせ先
+                  </Link>
+                  ）。
+                </>
+              )}
             </p>
           </SectionSplit>
         </Shell>
@@ -525,8 +551,8 @@ export function ServiceBlockView({
         <Shell id="works" tone={tone} lazy={lazy}>
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
             <SectionHeading id="works" eyebrow="当社の現場から" color="navy" title={`${service.shortName}の施工事例`} lead="当社が施工した現場の写真です。" />
-            <Link href="/works" className="link-arrow shrink-0" {...reveal(80)}>
-              施工事例の一覧
+            <Link href={workListPath(service.slug) ?? "/works"} className="link-arrow shrink-0" {...reveal(80)}>
+              {workListPath(service.slug) ? `${service.shortName}の施工事例の一覧` : "施工事例の一覧"}
               <Icon name="arrowRight" className="size-4" />
             </Link>
           </div>

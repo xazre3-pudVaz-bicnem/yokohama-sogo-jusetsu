@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PostRow } from "@/components/cards/PostCard";
 import { WorkCard } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -9,8 +10,9 @@ import { Icon } from "@/components/ui/Icon";
 import { Illust, Photo, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
-import { getService } from "@/data/services";
-import { getWork, works, worksSorted, type WorkImage } from "@/data/works";
+import { getService, servicePath } from "@/data/services";
+import { getWork, workDisplayTitle, workListPath, workShortTitle, workUpdatedAt, works, worksSorted, type WorkImage, type WorkProduct } from "@/data/works";
+import { getPostsForWork } from "@/lib/blog";
 import { img } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
 import { workArticleSchema } from "@/lib/schema";
@@ -20,7 +22,9 @@ import { buildMetadata, formatDateJa } from "@/lib/seo";
  * 施工事例の詳細ページ（data/works.ts の1件が1ページになる）。
  * 役割：経験・実績を、実際の現場の写真と施工のポイントで示す。
  * 表示する項目は、データに値があるものだけ（施工地域・時期・期間・メーカーは、未確認なら出ない）。
- * 内部リンク：該当するサービスページ／同じサービスのほかの事例／地域ページ（地域が分かっている場合）。
+ * 内部リンク：該当するサービスページ／サービス別の事例一覧（あるサービスだけ）／関連するコラム／同じサービスのほかの事例／
+ *            地域ページ（地域が分かっている場合）。
+ * title と見出しには、地域が分かっている事例だけ、先頭に地域名が付く（data/works.ts の area）。
  * 問い合わせのボタンは本文に置かない（ヘッダーとページの最後にある）。
  */
 export function generateStaticParams() {
@@ -35,12 +39,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!w) return {};
   const cover = img(w.cover.key);
   return buildMetadata({
-    title: `${w.title.replace(/ ── /g, "｜")}｜施工事例`,
+    title: `${workDisplayTitle(w).replace(/ ── /g, "｜")}｜施工事例`,
     description: `${w.summary}横浜総合住設の施工事例です。`,
     path: `/works/${w.slug}`,
+    keywords: [w.keyword],
     type: "article",
     publishedTime: w.source.postedAt,
-    modifiedTime: w.source.postedAt,
+    modifiedTime: workUpdatedAt(w),
     section: "施工事例",
     image: { src: cover.src, width: cover.width, height: cover.height, alt: w.cover.alt },
   });
@@ -58,6 +63,11 @@ function Labeled({ image, sizes, portrait }: { image: WorkImage; sizes: string; 
   );
 }
 
+/** 機器の表記（メーカー・名称・型番を、あるものだけつなぐ） */
+function productLabel(p: WorkProduct): string {
+  return [p.maker, p.name, p.model].filter(Boolean).join(" ");
+}
+
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const w = getWork(slug);
@@ -69,6 +79,9 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
   const cover = img(w.cover.key);
   const coverPortrait = cover.height > cover.width;
   const makers = Array.from(new Set(w.products.map((p) => p.maker).filter(Boolean)));
+  const listPath = workListPath(mainService.slug);
+  const imageKeys = Array.from(new Set([w.cover.key, ...w.beforeAfter.flatMap((b) => [b.before.key, b.after.key]), ...w.gallery.map((g) => g.key)]));
+  const posts = getPostsForWork({ slug: w.slug, services: w.services, relatedArticles: w.relatedArticles, imageKeys }, 3);
 
   // 概要の表（値のある項目だけ）
   const spec: { label: string; value: React.ReactNode }[] = [
@@ -76,14 +89,15 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
     ...(w.area ? [{ label: "施工地域", value: w.area.areaSlug ? <Link href={`/area/${w.area.areaSlug}`} className="text-link">{w.area.label}</Link> : w.area.label }] : []),
     ...(w.completedAt ? [{ label: "施工時期", value: w.completedAt }] : []),
     ...(w.duration ? [{ label: "施工期間", value: w.duration }] : []),
-    ...(w.products.length ? [{ label: "使用した商品", value: w.products.map((p) => (p.maker ? `${p.maker} ${p.name}` : p.name)).join("、") }] : []),
+    ...(w.existing?.length ? [{ label: "取り替える前の機器", value: w.existing.map(productLabel).join("、") }] : []),
+    ...(w.products.length ? [{ label: "使用した商品", value: w.products.map(productLabel).join("、") }] : []),
     ...(makers.length ? [{ label: "メーカー", value: makers.join("、") }] : []),
     {
       label: "関連サービス",
       value: (
         <span className="flex flex-wrap gap-x-4 gap-y-1">
           {relatedServices.map((s) => (
-            <Link key={s.slug} href={`/service/${s.slug}`} className="text-link">
+            <Link key={s.slug} href={servicePath(s)} className="text-link">
               {s.name}
             </Link>
           ))}
@@ -98,6 +112,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         <span className="pill pill-navy">施工事例　／　{w.category}</span>
       </p>
       <h1 className="h-page text-balance">
+        {w.area && <span className="mb-1 block text-[0.6em] font-bold tracking-[0.04em] text-brand-700">{w.area.label}</span>}
         <Phrase>{w.title}</Phrase>
       </h1>
       <p className="lead mt-5">{w.summary}</p>
@@ -123,7 +138,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             <Breadcrumbs
               items={[
                 { name: "施工事例", href: "/works" },
-                { name: w.title.split(" ── ")[0], href: `/works/${w.slug}` },
+                ...(listPath ? [{ name: mainService.shortName, href: listPath }] : []),
+                { name: workShortTitle(w), href: `/works/${w.slug}` },
               ]}
             />
             {coverPortrait ? (
@@ -175,6 +191,15 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               </SectionSplit>
             )}
 
+            {/* 工事で難しかった点（データにあるときだけ） */}
+            {w.difficulty && (
+              <SectionSplit heading={<SectionHeading id="difficulty" title="この現場で難しかった点" />}>
+                <p className="text-[0.9688rem] leading-[2.05]" {...reveal(60)}>
+                  {w.difficulty}
+                </p>
+              </SectionSplit>
+            )}
+
             {/* 施工内容 */}
             <SectionSplit heading={<SectionHeading id="content" title="施工内容" />}>
               <div className="space-y-5 text-[0.9688rem] leading-[2.05]" {...reveal(60)}>
@@ -215,9 +240,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                         <div className="photo-card-sm">
                           <Photo image={g.key} alt={g.alt} sizes={w.gallery.length === 1 ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw"} />
                         </div>
+                        {/* 説明文は写真の代替テキストと同じ文なので、読み上げでは1回だけ読まれるようにする */}
                         <figcaption className="mt-2 text-[0.8125rem] leading-relaxed text-ink-mute">
                           {g.label && <span className="mr-2 font-bold text-ink">{g.label}</span>}
-                          {g.alt}
+                          <span aria-hidden="true">{g.alt}</span>
                         </figcaption>
                       </figure>
                     </li>
@@ -265,13 +291,32 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
             <SectionSplit heading={<SectionHeading title="この工事について" />}>
               <p className="text-lg font-bold text-ink">{mainService.name}</p>
               <p className="mt-2 text-[0.9375rem] leading-[1.95]">{mainService.summary}</p>
-              <p className="mt-6">
-                <Link href={`/service/${mainService.slug}`} className="link-arrow">
+              <p className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3">
+                <Link href={servicePath(mainService)} className="link-arrow">
                   {mainService.shortName}のサービス内容
                   <Icon name="arrowRight" className="size-4" />
                 </Link>
+                {listPath && (
+                  <Link href={listPath} className="link-arrow">
+                    {mainService.shortName}の施工事例の一覧
+                    <Icon name="arrowRight" className="size-4" />
+                  </Link>
+                )}
               </p>
             </SectionSplit>
+
+            {/* 関連するコラム（この事例にリンクしている記事・同じ工事を扱う記事） */}
+            {posts.length > 0 && (
+              <SectionSplit heading={<SectionHeading id="work-posts" title="この工事に関するコラム" />}>
+                <ul className="rows" {...reveal(60)}>
+                  {posts.map((p) => (
+                    <li key={p.slug}>
+                      <PostRow post={p} />
+                    </li>
+                  ))}
+                </ul>
+              </SectionSplit>
+            )}
           </div>
         </div>
       </article>
@@ -297,7 +342,20 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       </section>
 
       <CtaBand id={`cta-${w.slug}`} />
-      <JsonLd data={workArticleSchema({ slug: w.slug, title: w.title, summary: w.summary, image: cover.src, postedAt: w.source.postedAt, serviceName: mainService.name, serviceSlug: mainService.slug })} />
+      <JsonLd
+        data={workArticleSchema({
+          slug: w.slug,
+          title: workDisplayTitle(w),
+          summary: w.summary,
+          images: imageKeys.map((k) => img(k).src),
+          postedAt: w.source.postedAt,
+          updatedAt: workUpdatedAt(w),
+          serviceName: mainService.name,
+          serviceSlug: mainService.slug,
+          areaLabel: w.area?.label,
+          keyword: w.keyword,
+        })}
+      />
     </>
   );
 }

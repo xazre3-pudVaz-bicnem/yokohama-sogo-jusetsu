@@ -1,4 +1,6 @@
 import type { ImageKey } from "@/lib/images";
+import { isContactFormShown } from "@/lib/contact";
+import { contactWays, lineUrl } from "@/lib/site";
 
 /**
  * 会社の強み・工事の流れ・Instagram の投稿など、会社紹介に使うデータ。
@@ -29,7 +31,7 @@ export const strengths: Strength[] = [
   {
     id: "survey",
     title: "見積もり・現地調査は無料",
-    body: "お見積もりは無料です。現地にうかがって設置場所と配管を確かめ、内訳の分かる見積書をお出しします。お電話でも、Instagram のメッセージでもご相談いただけます。",
+    body: `お見積もりは無料です。現地にうかがって設置場所と配管を確かめ、内訳の分かる見積書をお出しします。${contactWays({ form: false }).join("・")}でもご相談いただけます。`,
   },
   {
     id: "difficult",
@@ -76,8 +78,8 @@ export const flowSteps: FlowStep[] = [
   {
     id: "contact",
     title: "お問い合わせ",
-    lead: "電話・フォーム・Instagram から",
-    body: "お電話、お問い合わせフォーム、Instagram のメッセージのいずれかでご連絡ください。「何から聞けばよいか分からない」という段階でかまいません。困っていることを、そのままお聞かせください。",
+    lead: `電話・${lineUrl() ? "LINE・" : ""}${isContactFormShown() ? "フォーム・" : ""}Instagram から`,
+    body: `${contactWays({ form: isContactFormShown() }).join("、")}のいずれかでご連絡ください。「何から聞けばよいか分からない」という段階でかまいません。困っていることを、そのままお聞かせください。`,
     prepare: ["気になっている場所と症状", "ご住所（市区町村まででも可）", "ご希望の連絡方法と時間帯"],
     pose: "illust/pose-phone",
   },

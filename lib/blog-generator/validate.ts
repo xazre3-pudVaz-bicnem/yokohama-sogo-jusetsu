@@ -1,6 +1,7 @@
 import { publishedAreas } from "@/data/areas";
-import { services } from "@/data/services";
-import { works } from "@/data/works";
+import { fixedKeywordOwners, normalizeKeyword } from "@/data/seo-keyword-map";
+import { servicePath, services } from "@/data/services";
+import { serviceSlugsWithWorkList, works } from "@/data/works";
 import { bodyLength, type Post } from "@/lib/blog";
 import { getCluster } from "@/lib/blog-clusters";
 import { postFrontmatterSchema, type PostFrontmatter } from "@/lib/blog-schema";
@@ -72,9 +73,10 @@ export function knownPaths(existingSlugs: string[]): Set<string> {
     "/faq",
     "/contact",
     "/blog",
-    ...services.map((s) => `/service/${s.slug}`),
+    ...services.map((s) => servicePath(s)),
     ...publishedAreas.map((a) => `/area/${a.slug}`),
     ...works.map((w) => `/works/${w.slug}`),
+    ...serviceSlugsWithWorkList().map((s) => `/works/service/${s}`),
     ...existingSlugs.map((s) => `/blog/${s}`),
   ]);
 }
@@ -88,7 +90,7 @@ export function validateArticle(
   ctx: {
     sheet: FactSheet;
     /** 公開済みの記事（重複の判定に使う）。点検のときは自分自身を除いて渡す */
-    existing: Pick<Post, "slug" | "title" | "intent" | "body">[];
+    existing: Pick<Post, "slug" | "title" | "intent" | "body" | "keywords">[];
     /**
      * この記事で数値・出典を使ってよい事実シートの節（題材の facts）。
      * 渡すと、「会社」「施工事例」「設備の一般的な知識」と、ここに挙げた節の数値だけを通す。
@@ -123,6 +125,12 @@ export function validateArticle(
     if (/^#{2,3}\s*(?:まとめ|はじめに|おわりに|最後に|さいごに)\s*$/.test(h)) errors.push(`「まとめ」「はじめに」だけの見出しは使わない（内容を表す見出しにする）：${h}`);
   }
   if (/^\s*##\s/.test(body.trimStart().split(/\r?\n/)[0] ?? "")) warnings.push("本文が見出しから始まっています（最初に導入の段落を置く）");
+  // 表の見出しの行（区切りの行 | --- | のすぐ上）に、空のセルを作らない（読み上げで、何の列かが分からなくなる）
+  lines.forEach((line, i) => {
+    if (!/^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i + 1] ?? "")) return;
+    const cells = line.trim().replace(/^\||\|$/g, "").split("|");
+    if (cells.some((c) => !c.trim())) errors.push(`表の見出しの行に、空のセルがあります（すべての列に名前を入れる。左上なら「比べる点」など）：${line.trim().slice(0, 40)}`);
+  });
 
   /* 3. 決まり文句・売り文句 */
   const allText = [draft.title, draft.description, body, ...draft.faq.flatMap((f) => [f.q, f.a])].join("\n");
@@ -172,7 +180,7 @@ export function validateArticle(
   for (const s of draft.relatedServices) if (!services.some((x) => x.slug === s)) errors.push(`relatedServices の ${s} というサービスはありません`);
   for (const a of draft.relatedAreas ?? []) if (!publishedAreas.some((x) => x.slug === a)) errors.push(`relatedAreas の ${a} という地域ページはありません`);
   for (const r of draft.relatedArticles ?? []) if (!ctx.existing.some((e) => e.slug === r)) errors.push(`relatedArticles の ${r} という記事はありません`);
-  if (draft.relatedServices.length && !draft.relatedServices.some((s) => distinctInternal.has(`/service/${s}`))) errors.push("relatedServices に挙げたサービスページへのリンクが、本文に1本もありません");
+  if (draft.relatedServices.length && !draft.relatedServices.some((s) => distinctInternal.has(servicePath(s)))) errors.push("relatedServices に挙げたサービスページへのリンクが、本文に1本もありません");
 
   /* 7. 出典 */
   const sourceUrls = allowedSourceUrls(ctx.sheet, ctx.factSections);
@@ -183,7 +191,14 @@ export function validateArticle(
   const needsSource = draft.category === "subsidy" || /[0-9]\s*(?:万円|円|%)/.test(allText.replace(/[０-９％]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0)));
   if (needsSource && !(draft.sources ?? []).length) errors.push("金額・割合・制度に触れているのに、sources（出典）が空です");
 
-  /* 8. 重複（1記事1検索意図） */
+  /* 8. 重複（1記事1検索意図・1主キーワード） */
+  // 主キーワード（keywords の先頭）は、固定ページが担当している検索語や、ほかの記事の主キーワードと同じにしない
+  const primary = normalizeKeyword(draft.keywords[0] ?? "");
+  const fixedOwner = fixedKeywordOwners().get(primary);
+  if (fixedOwner) errors.push(`主キーワード「${draft.keywords[0]}」は、固定ページ ${fixedOwner} が担当している検索語です（同じ語を2つのページで狙わない。data/seo-keyword-map.ts）`);
+  for (const e of ctx.existing) {
+    if (e.slug !== draft.slug && primary && normalizeKeyword(e.keywords[0] ?? "") === primary) errors.push(`主キーワード「${draft.keywords[0]}」は、既存の記事「${e.title}」と同じです`);
+  }
   for (const e of ctx.existing) {
     if (e.slug === draft.slug) {
       errors.push(`同じ slug の記事がすでにあります：${e.slug}`);

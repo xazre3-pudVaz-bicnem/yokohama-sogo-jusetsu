@@ -8,7 +8,7 @@ import { RevealObserver } from "@/components/layout/RevealObserver";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { services } from "@/data/services";
 import { graph, organizationSchema, localBusinessSchema, websiteSchema } from "@/lib/schema";
-import { siteConfig, primaryPhone, telHref } from "@/lib/site";
+import { siteConfig, primaryPhone, telHref, lineUrl } from "@/lib/site";
 import { SITE_URL, IS_PUBLIC } from "@/lib/seo";
 
 /**
@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         */}
         <main id="main">{children}</main>
         <Footer />
-        <MobileCtaBar phone={phone} telHref={telHref(phone)} />
+        <MobileCtaBar phone={phone} telHref={telHref(phone)} line={lineUrl()} />
         <RevealObserver />
         <JsonLd data={graph(organizationSchema(), localBusinessSchema(services.map((s) => ({ name: s.name, slug: s.slug, summary: s.summary }))), websiteSchema())} />
       </body>

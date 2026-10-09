@@ -1,7 +1,9 @@
 name: コラムの自動投稿
 
-# 1日1本、コラムを書いて content/blog/ に追加し、main へ push する（push を受けて Vercel が本番を更新する）。
-# 題材は lib/blog-generator/topics.ts から順に選ぶ。機械の検査と読み直しの両方に通った日だけ公開する。
+# 1日1本、コラムを書いて content/blog/ に追加するか、公開済みの記事を1本見直して、main へ push する
+# （push を受けて Vercel が本番を更新する）。
+# 題材は lib/blog-generator/topics.ts から優先度の順に選ぶ。機械の検査と読み直しの両方に通った日だけ公開する。
+# 見直しは、記事に「見直す理由」があるときだけ行う（日付だけの更新はしない）。割合は変数 BLOG_REFRESH_RATIO（既定 0.3）。
 # くわしい説明は README の「コラムの自動投稿」。
 on:
   schedule:
@@ -15,6 +17,14 @@ on:
         default: false
       topic:
         description: "題材の slug（空欄なら自動で選ぶ）"
+        type: string
+        required: false
+      mode:
+        description: "new＝新しい記事／refresh＝公開済みの記事の見直し（空欄なら日付から決める）"
+        type: string
+        required: false
+      refresh:
+        description: "見直す記事の slug（mode が refresh のとき。空欄なら自動で選ぶ）"
         type: string
         required: false
       model:
@@ -78,6 +88,9 @@ jobs:
           ANTHROPIC_REVIEW_MODEL: ${{ inputs.review_model || vars.ANTHROPIC_REVIEW_MODEL }}
           ANTHROPIC_FALLBACKS: ${{ vars.ANTHROPIC_FALLBACKS }}
           TOPIC: ${{ inputs.topic }}
+          BLOG_MODE: ${{ inputs.mode }}
+          REFRESH: ${{ inputs.refresh }}
+          BLOG_REFRESH_RATIO: ${{ vars.BLOG_REFRESH_RATIO }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
         run: npm run blog:generate
 
@@ -91,20 +104,23 @@ jobs:
         run: |
           npm run build
           npm run site:check
+          npm run seo:audit
 
       - name: コミットして push する
         if: steps.generate.outputs.published == 'true'
         env:
           # 記事の題名はモデルが書いた文字列なので、コマンドに直接埋め込まず、環境変数で渡す
           TITLE: ${{ steps.generate.outputs.title }}
+          ACTION: ${{ steps.generate.outputs.action }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/blog
-          if git diff --cached --quiet; then
-            echo "追加する記事はありません"
+          # 記事と、監査の結果（docs/seo-audit-report.md・SEO_ROADMAP.md の表）を一緒に入れる
+          git add content/blog docs/seo-audit-report.md docs/SEO_ROADMAP.md
+          if git diff --cached --quiet -- content/blog; then
+            echo "追加・更新する記事はありません"
             exit 0
           fi
-          git commit -m "コラムを追加：${TITLE}"
+          git commit -m "コラムを${ACTION:-追加}：${TITLE}"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"

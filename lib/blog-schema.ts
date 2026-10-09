@@ -30,13 +30,15 @@ export const postFrontmatterSchema = z.object({
   description: z.string().min(60).max(130),
   /** カテゴリ（lib/blog-clusters.ts の id） */
   category: z.enum(blogClusterIds),
+  /** 検索キーワード。**先頭が主キーワード**（この記事が代表になる検索語。ほかの記事・固定ページと同じ語にしない） */
   keywords: z.array(z.string().min(2)).min(2).max(8),
   /** この記事が答える検索意図（1記事1意図。重複の判定に使う） */
   intent: z.string().min(6).max(60),
   publishedAt: isoDate,
   updatedAt: isoDate,
   author: z.string().min(2),
-  faq: z.array(postFaqSchema).min(2).max(5),
+  /** 質問と答え。本文で答えきれなかった関連する疑問があるときだけ書く（無くてよい） */
+  faq: z.array(postFaqSchema).max(5).default([]),
   /** 関連するサービスのスラッグ（data/services）。先頭が親ページ */
   relatedServices: z.array(z.string()).min(1).max(4),
   /** 関連する記事のスラッグ（無ければ空配列。表示のときに同じカテゴリから補う） */

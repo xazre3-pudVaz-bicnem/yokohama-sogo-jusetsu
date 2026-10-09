@@ -171,6 +171,15 @@
     /* 見出しは、文節の切れ目で折り返す（対応しているブラウザだけ。そのほかは従来どおり） */
     word-break: auto-phrase;
   }
+  /* 短い文字（小見出し・写真の説明・項目名・質問）は、行の長さをそろえて折り返す。
+     最後の行に1文字だけ残る折り返しを防ぐ（対応しているブラウザだけ。そのほかは従来どおり） */
+  h3,
+  h4,
+  figcaption,
+  dt,
+  summary {
+    text-wrap: balance;
+  }
   a {
     text-underline-offset: 0.2em;
   }
@@ -212,11 +221,18 @@
   }
 
   /* 画面外の区画は、近づくまで描画しない（長いページの初期表示を軽くする）。
-     角丸のカードの影が区画の端で切れないよう、切り抜きの範囲を少し広げる */
+     角丸のカードの影が区画の端で切れないよう、切り抜きの範囲を少し広げる。
+     描画する前の仮の高さは、1段組みになる幅では高めにする。仮の高さが実際よりずっと低いと、区画の末尾のリンクが
+     計算上は次の区画のリンクと重なり、Lighthouse（target-size）が「リンクどうしが重なっている」と誤って指摘する */
   .cv {
     content-visibility: auto;
-    contain-intrinsic-size: auto 640px;
+    contain-intrinsic-size: auto 1000px;
     overflow-clip-margin: 3rem;
+  }
+  @media (min-width: 64rem) {
+    .cv {
+      contain-intrinsic-size: auto 640px;
+    }
   }
 
   /* ── 地色の帯と、隅の丸い飾り ───────────────────── */
@@ -276,6 +292,14 @@
     line-height: 1.6;
     letter-spacing: 0.06em;
     box-shadow: 0 1px 2px rgb(6 21 55 / 0.12);
+  }
+  /* 幅の狭いスマホ（360px 未満）では、長いラベルの最後の1文字だけが次の行に落ちるので、少し小さくする */
+  @media (max-width: 22.49rem) {
+    .pill {
+      padding-inline: 0.9rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
   }
   .pill::after {
     content: "";
@@ -377,6 +401,7 @@
     text-align: center;
     text-decoration: none;
     word-break: auto-phrase;
+    text-wrap: balance;
     transition:
       transform 0.2s var(--ease-out-soft),
       background-color 0.2s var(--ease-out-soft),
@@ -908,13 +933,20 @@
     padding: 0.25em 0 0.25em 1.2em;
     color: var(--color-ink-mute);
   }
+  .prose-jp h2 {
+    text-wrap: balance;
+  }
+  /* 表は、幅が足りないとき、外側の枠（.prose-table）ごと横にスクロールする。
+     table 自体を display: block にすると、読み上げで表として扱われなくなることがあるため、枠のほうを動かす */
+  .prose-jp .prose-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .prose-jp table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9375rem;
     line-height: 1.7;
-    display: block;
-    overflow-x: auto;
   }
   .prose-jp th,
   .prose-jp td {
@@ -1048,6 +1080,7 @@
  * JS が動かないときは何も隠れない。最初から画面内にある要素も隠れない。
  *   既定 … 下から      left / right … 横から      zoom … 少し拡大しながら
  *   pop  … 小さく跳ねる（人物のイラスト）       fade … その場で      wipe … 写真が左から開く
+ * data-revealed の値は、"0"＝最初から画面内にあった／"1"＝スクロールして入ってきた。
  * transition は「現れた後」の状態にだけ付ける（読み込み直後に、画面外の要素がいっせいに消えていく様子を見せないため）。
  */
 @media (prefers-reduced-motion: no-preference) {
@@ -1081,13 +1114,34 @@
   html[data-reveal-on] [data-reveal="fade"]:not([data-revealed]) {
     transform: none;
   }
-  html[data-reveal-on] [data-reveal="wipe"] {
-    clip-path: inset(0 0 0 0 round 2rem);
-  }
+  /*
+   * wipe：写真が左から開く。
+   * - 切り抜き（clip-path）は、data-reveal を付けた要素そのものではなく、その「子」に付ける。
+   *   切り抜きで見える面積が 0 になった要素は、Chrome では「画面に入った」と判定されず、いつまでも現れない
+   *   （Safari では現れる。片方のブラウザだけ見ていると気づかない）。
+   * - 開き終わったら、切り抜きを残さない。残すと四隅が丸く欠け、写真の下の説明文の、最後の行の頭と末尾が切れる。
+   *   そのため、動きは transition ではなく animation にしてある（終わると clip-path の無い状態に戻る）。
+   *   角の丸みは、写真の枠（.photo-card・.photo-card-sm）の側で付けること。
+   * - 上下左に 2rem 広げているのは、影や色の板など、要素の外へはみ出す飾りを切らないため。
+   * - 最初から画面内にあった要素（data-revealed="0"）は、動かさない（一度隠して開き直すと、ちらつくため）。
+   */
   html[data-reveal-on] [data-reveal="wipe"]:not([data-revealed]) {
     opacity: 1;
     transform: none;
-    clip-path: inset(0 100% 0 0 round 2rem);
+  }
+  html[data-reveal-on] [data-reveal="wipe"]:not([data-revealed]) > * {
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+  html[data-reveal-on] [data-reveal="wipe"][data-revealed="1"] > * {
+    animation: reveal-wipe 1s var(--ease-out-soft) var(--reveal-delay, 0ms) backwards;
+  }
+  /* スマホの横にスクロールする一覧（.scroller）の札は、隠して待たせない。
+     画面の右に隠れている札は、横に送って初めて「画面に入った」と判定されるので、送った直後に白いまま遅れて現れてしまう */
+  @media (max-width: 39.99rem) {
+    html[data-reveal-on] .scroller > [data-reveal]:not([data-revealed]) {
+      opacity: 1;
+      transform: none;
+    }
   }
   /* 左右の余白が小さい幅（1280px 未満）では、横からの登場を「下から」に置き換える
      （ずらした分が画面の外にはみ出して、横スクロールが出るのを防ぐ） */
@@ -1104,6 +1158,15 @@
   }
   html[data-reveal-on] [data-reveal]:not([data-revealed]) .marker {
     background-size: 0% 100%;
+  }
+}
+
+@keyframes reveal-wipe {
+  from {
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+  to {
+    clip-path: inset(-2rem -2rem -2rem -2rem);
   }
 }
 

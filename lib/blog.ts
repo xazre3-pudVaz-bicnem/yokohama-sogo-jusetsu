@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { postFrontmatterSchema, type PostFrontmatter } from "@/lib/blog-schema";
 import { blogClusters, getCluster, type BlogCluster } from "@/lib/blog-clusters";
+import { getService, servicePath } from "@/data/services";
 import { hasImage, type ImageKey } from "@/lib/images";
 
 /**
@@ -83,7 +84,7 @@ function photoOf(fm: PostFrontmatter, cluster: BlogCluster, file: string): Post[
     return { image: fm.cover, alt: fm.coverAlt ?? cluster.imageAlt };
   }
   if (AREA_CLUSTER_IDS.includes(cluster.id)) {
-    const byService = blogClusters.find((c) => c.pillar.href === `/service/${fm.relatedServices[0]}`);
+    const byService = blogClusters.find((c) => c.pillar.href === servicePath(fm.relatedServices[0]));
     if (byService) return { image: byService.image, alt: byService.imageAlt };
   }
   return { image: cluster.image, alt: cluster.imageAlt };
@@ -146,13 +147,35 @@ export function getPostsByService(serviceSlug: string, limit = 4): Post[] {
     .slice(0, limit);
 }
 
+/**
+ * 施工事例のページの下に出す記事。
+ * 1. 事例のデータで指定した記事　2. 本文からその事例へリンクしている記事・その事例の写真を冒頭に使っている記事
+ * 3. 同じサービスを扱う記事　の順に選ぶ。
+ */
+export function getPostsForWork(work: { slug: string; services: string[]; relatedArticles?: string[]; imageKeys: string[] }, limit = 3): Post[] {
+  const all = getAllPosts();
+  const picked: Post[] = [];
+  const add = (p?: Post) => {
+    if (p && !picked.includes(p) && picked.length < limit) picked.push(p);
+  };
+  (work.relatedArticles ?? []).forEach((slug) => add(all.find((p) => p.slug === slug)));
+  all.filter((p) => p.body.includes(`(/works/${work.slug})`) || (p.cover !== undefined && work.imageKeys.includes(p.cover))).forEach(add);
+  // 同じサービスの記事。記事の「主なサービス」（relatedServices の先頭）が一致するものだけ
+  // （2番目以降まで見ると、カップボードの事例にトイレの記事、のように、関係の薄い記事が出る）
+  for (const s of work.services) all.filter((p) => p.relatedServices[0] === s).forEach(add);
+  return picked;
+}
+
 export function getPostsByArea(areaSlug: string, limit = 4): Post[] {
   return getAllPosts()
     .filter((p) => p.relatedAreas.includes(areaSlug) || p.category === areaSlug)
     .slice(0, limit);
 }
 
-/** 記事の下に出す関連記事。指定があればそれを、足りなければ同じカテゴリ → 同じサービスの順に補う */
+/**
+ * 記事の下に出す関連記事。指定があればそれを、足りなければ 同じカテゴリ → 同じサービス →
+ * 主なサービスの「関連するサービス」を扱う記事 の順に補う（記事どうしを2本以上つなぐため）。
+ */
 export function getRelatedPosts(post: Post, limit = 3): Post[] {
   const all = getAllPosts().filter((p) => p.slug !== post.slug);
   const picked: Post[] = [];
@@ -162,6 +185,8 @@ export function getRelatedPosts(post: Post, limit = 3): Post[] {
   post.relatedArticles.forEach((slug) => add(all.find((p) => p.slug === slug)));
   all.filter((p) => p.category === post.category).forEach(add);
   all.filter((p) => p.relatedServices.some((s) => post.relatedServices.includes(s))).forEach(add);
+  const neighbors = getService(post.relatedServices[0] ?? "")?.related ?? [];
+  all.filter((p) => neighbors.includes(p.relatedServices[0])).forEach(add);
   return picked;
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BlogIndexView } from "@/components/blog/BlogIndexView";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
 
 /**
@@ -12,7 +13,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設の住宅設備コラムです。給湯器・エコキュート・エアコン・トイレ・外壁塗装・太陽光・蓄電池・リフォームについて、交換の時期、機種の選び方、費用の考え方、補助金の情報をまとめています。",
   path: "/blog",
-  keywords: ["住宅設備 コラム", "給湯器 交換時期", "外壁塗装 時期", "エアコン 交換 目安", "戸塚区 住宅設備"],
+  keywords: keywordsFor("/blog"),
 });
 
 export default function BlogPage() {

@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const ENACTED = "2026-10-06";
-const REVISED: string | null = null;
+const REVISED: string | null = "2026-10-09";
 
 export default function PrivacyPage() {
   const phone = primaryPhone();
@@ -35,7 +35,7 @@ export default function PrivacyPage() {
       title: "2. 取得する情報",
       body: (
         <>
-          <p>当社は、このサイトのお問い合わせフォーム、お電話、Instagram のメッセージなどを通じて、次の情報を取得します。</p>
+          <p>当社は、このサイトのお問い合わせフォーム、お電話、LINE、Instagram のメッセージなどを通じて、次の情報を取得します。</p>
           <ul>
             <li>お名前、電話番号、メールアドレス、ご住所</li>
             <li>ご相談の内容（工事の種類、設備の状況、お送りいただいた写真など）</li>

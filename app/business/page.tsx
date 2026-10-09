@@ -11,12 +11,13 @@ import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { reveal } from "@/lib/reveal";
 import { faqSchema } from "@/lib/schema";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
 
 /**
  * 法人・工務店・ハウスメーカー向け
  * 役割：設備工事・リフォーム工事の協力先を探している事業者に、頼める内容と進め方を伝える。
- * 担当する検索意図：住宅設備 協力業者 横浜／設備工事 下請け 横浜／業務用エアコン 工事 横浜／空調配管 ラッキング 施工
+ * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く。
  * 書かないこと：個人のお客様向けの機種選びの話（各サービスページ）。
  * 取引実績の社名・件数など、確認できていないことは書かない。
  * 冒頭に問い合わせのボタンは置かない（ヘッダーとページの最後にある）。
@@ -26,7 +27,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設は、法人・工務店・ハウスメーカーからの住宅設備工事・リフォーム工事のご依頼をお受けしています。給湯器・エアコンの設置、業務用エアコン、空調配管のラッキング施工まで。横浜を中心に神奈川・東京エリアへうかがいます。",
   path: "/business",
-  keywords: ["住宅設備 協力業者 横浜", "設備工事 協力会社 神奈川", "業務用エアコン 工事 横浜", "空調配管 ラッキング 施工", "工務店 設備工事 依頼"],
+  keywords: keywordsFor("/business"),
 });
 
 const SCOPE = [
@@ -140,7 +141,7 @@ export default function BusinessPage() {
             {SITE_PHOTOS.map((p, i) => (
               <li key={p.key} {...reveal(i * 90, "wipe")}>
                 <figure>
-                  <div className="relative aspect-[4/3] bg-silver-100">
+                  <div className="photo-card-sm relative aspect-[4/3]">
                     <PhotoFill image={p.key} alt={p.alt} sizes="(min-width: 640px) 32vw, 100vw" />
                   </div>
                   <figcaption className="mt-2 text-xs leading-relaxed text-ink-mute">{p.caption}（当社施工）</figcaption>

@@ -1,4 +1,5 @@
 import { siteConfig, primaryPhone, telIntl, type OfficeKey } from "@/lib/site";
+import { servicePath } from "@/data/services";
 import { SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 /**
@@ -56,7 +57,8 @@ const areaServed: Json[] = [
 
 function sameAs(): string[] {
   const s = siteConfig.social;
-  const all: string[] = [s.instagram, s.threads, s.x, s.youtube, s.line];
+  // LINE（友だち追加の URL）は入れない。会社を説明するプロフィールのページではなく、開くと追加の画面に進むだけのため
+  const all: string[] = [s.instagram, s.threads, s.x, s.youtube];
   return all.filter(Boolean);
 }
 
@@ -128,7 +130,7 @@ export function localBusinessSchema(services: { name: string; slug: string; summ
       name: "住宅設備・リフォームのサービス",
       itemListElement: services.map((s) => ({
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: s.name, description: s.summary, url: url(`/service/${s.slug}`) },
+        itemOffered: { "@type": "Service", name: s.name, description: s.summary, url: url(servicePath(s.slug)) },
       })),
     },
   });
@@ -158,11 +160,11 @@ export function serviceSchema(s: { name: string; slug: string; summary: string; 
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": url(`/service/${s.slug}#service`),
+    "@id": url(`${servicePath(s.slug)}#service`),
     name: s.name,
     serviceType: s.name,
     description: s.summary,
-    url: url(`/service/${s.slug}`),
+    url: url(servicePath(s.slug)),
     image: url(s.image),
     provider: { "@id": OFFICE_ID },
     areaServed,
@@ -209,23 +211,38 @@ export function blogPostingSchema(p: {
 }
 
 /** 施工事例の詳細ページ（会社が書いた施工の記録として Article で表す） */
-export function workArticleSchema(w: { slug: string; title: string; summary: string; image: string; postedAt: string; serviceName: string; serviceSlug: string }): Json {
-  return {
+export function workArticleSchema(w: {
+  slug: string;
+  title: string;
+  summary: string;
+  /** 冒頭の写真と、本文の写真（/images/... の形） */
+  images: string[];
+  postedAt: string;
+  updatedAt: string;
+  serviceName: string;
+  serviceSlug: string;
+  /** 施工地域（確認できている事例だけ。例：横浜市戸塚区） */
+  areaLabel?: string;
+  keyword?: string;
+}): Json {
+  return clean({
     "@context": "https://schema.org",
     "@type": "Article",
     "@id": url(`/works/${w.slug}#article`),
     mainEntityOfPage: url(`/works/${w.slug}`),
     headline: w.title,
     description: w.summary,
-    image: url(w.image),
+    image: w.images.map((src) => url(src)),
     datePublished: w.postedAt,
-    dateModified: w.postedAt,
+    dateModified: w.updatedAt,
     inLanguage: "ja",
     articleSection: "施工事例",
-    about: { "@type": "Service", name: w.serviceName, url: url(`/service/${w.serviceSlug}`) },
+    keywords: w.keyword,
+    about: { "@type": "Service", name: w.serviceName, url: url(servicePath(w.serviceSlug)) },
+    contentLocation: w.areaLabel ? { "@type": "AdministrativeArea", name: w.areaLabel } : undefined,
     author: { "@id": ORG_ID },
     publisher: { "@id": ORG_ID },
-  };
+  });
 }
 
 export function itemListSchema(name: string, items: { name: string; href: string }[]): Json | null {

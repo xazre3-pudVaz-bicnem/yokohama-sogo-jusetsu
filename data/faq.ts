@@ -1,4 +1,5 @@
-import { siteConfig, primaryPhone, receptionHours } from "@/lib/site";
+import { isContactFormShown } from "@/lib/contact";
+import { siteConfig, primaryPhone, lineUrl, receptionHours } from "@/lib/site";
 
 /**
  * 共通のよくある質問（/faq に全件、トップページに pickup の付いたものだけ）。
@@ -34,7 +35,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "どうやって連絡すればよいですか？",
-        a: `お電話${phone ? `（${phone}）` : ""}、お問い合わせフォーム、Instagram のメッセージのいずれでもお受けしています。${hours ? `電話の受付時間は ${hours} です。` : ""}`,
+        a: `お電話${phone ? `（${phone}）` : ""}、${lineUrl() ? "LINE、" : ""}${isContactFormShown() ? "お問い合わせフォーム、" : ""}Instagram のメッセージのいずれでもお受けしています。${hours ? `電話の受付時間は ${hours} です。` : ""}`,
         pickup: true,
       },
       {

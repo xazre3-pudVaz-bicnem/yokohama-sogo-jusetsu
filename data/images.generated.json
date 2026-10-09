@@ -9,6 +9,11 @@
     "width": 2000,
     "height": 1047
   },
+  "brand/line-qr": {
+    "src": "/images/brand/line-qr.png",
+    "width": 540,
+    "height": 540
+  },
   "brand/logo-mark": {
     "src": "/images/brand/logo-mark.png",
     "width": 281,
@@ -28,6 +33,11 @@
     "src": "/images/company/nameplate.webp",
     "width": 820,
     "height": 200
+  },
+  "company/representative": {
+    "src": "/images/company/representative.webp",
+    "width": 1000,
+    "height": 1075
   },
   "company/stickers": {
     "src": "/images/company/stickers.webp",
@@ -389,6 +399,31 @@
     "width": 1200,
     "height": 1600
   },
+  "works/cupboard-before-wall": {
+    "src": "/images/works/cupboard-before-wall.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/cupboard-counter-fitted": {
+    "src": "/images/works/cupboard-counter-fitted.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/cupboard-step-base-cabinets": {
+    "src": "/images/works/cupboard-step-base-cabinets.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/cupboard-step-tall-unit": {
+    "src": "/images/works/cupboard-step-tall-unit.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/cupboard-step-wall-cabinets": {
+    "src": "/images/works/cupboard-step-wall-cabinets.webp",
+    "width": 1030,
+    "height": 1373
+  },
   "works/floor-protection": {
     "src": "/images/works/floor-protection.webp",
     "width": 1200,
@@ -419,6 +454,16 @@
     "width": 1107,
     "height": 830
   },
+  "works/painting-coat-one": {
+    "src": "/images/works/painting-coat-one.webp",
+    "width": 340,
+    "height": 255
+  },
+  "works/painting-coat-two": {
+    "src": "/images/works/painting-coat-two.webp",
+    "width": 340,
+    "height": 255
+  },
   "works/painting-gable-after": {
     "src": "/images/works/painting-gable-after.webp",
     "width": 350,
@@ -448,6 +493,11 @@
     "src": "/images/works/painting-roof-before.webp",
     "width": 312,
     "height": 234
+  },
+  "works/painting-roof-mid": {
+    "src": "/images/works/painting-roof-mid.webp",
+    "width": 368,
+    "height": 276
   },
   "works/wood-deck-1-ground": {
     "src": "/images/works/wood-deck-1-ground.webp",

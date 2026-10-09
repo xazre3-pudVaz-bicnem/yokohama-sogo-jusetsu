@@ -14,13 +14,14 @@ import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getArea, publishedAreas, yokohamaWards } from "@/data/areas";
 import { creditOf } from "@/data/company";
-import { getService } from "@/data/services";
+import { getService, servicePath } from "@/data/services";
 import { subsidies } from "@/data/subsidies";
 import { worksByArea, worksSorted } from "@/data/works";
 import { getPostsByArea, getPostsByCluster } from "@/lib/blog";
 import { img } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
 import { faqSchema } from "@/lib/schema";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata, formatDateJa } from "@/lib/seo";
 import { officeAddressWithPostal, officeMapUrl } from "@/lib/site";
 
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: a.seo.title,
     description: a.seo.description,
     path: `/area/${a.slug}`,
-    keywords: a.seo.keywords,
+    keywords: keywordsFor(`/area/${a.slug}`),
     image: { src: image.src, width: image.width, height: image.height, alt: a.imageAlt },
   });
 }
@@ -225,7 +226,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
                   </h3>
                   <p className="mt-2 text-[0.9375rem] leading-[1.95]">{n.body}</p>
                   <p className="mt-3">
-                    <Link href={`/service/${s.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-900 underline decoration-silver-400 underline-offset-4 transition-colors hover:text-brand-700">
+                    <Link href={servicePath(s)} className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-900 underline decoration-silver-400 underline-offset-4 transition-colors hover:text-brand-700">
                       {s.name}
                       <Icon name="arrowRight" className="size-3.5" />
                     </Link>

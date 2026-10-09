@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
-import { serviceCategories, servicesByCategory } from "@/data/services";
+import { serviceCategories, servicePath, servicesByCategory } from "@/data/services";
 
 export const metadata: Metadata = {
   title: "ページが見つかりません｜横浜総合住設",
@@ -51,7 +51,7 @@ export default function NotFound() {
                   <dt className="font-bold text-ink">{cat.name}</dt>
                   <dd className="flex flex-wrap gap-x-5 gap-y-1">
                     {servicesByCategory(cat.id).map((s) => (
-                      <Link key={s.slug} href={`/service/${s.slug}`} className="inline-flex min-h-10 items-center text-link !font-normal">
+                      <Link key={s.slug} href={servicePath(s)} className="inline-flex min-h-10 items-center text-link !font-normal">
                         {s.shortName}
                       </Link>
                     ))}

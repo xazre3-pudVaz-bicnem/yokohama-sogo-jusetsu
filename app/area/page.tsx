@@ -8,13 +8,14 @@ import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getArea, yokohamaWards } from "@/data/areas";
 import { creditOf } from "@/data/company";
 import { reveal } from "@/lib/reveal";
+import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig, officeAddressWithPostal, officeMapUrl, type OfficeKey } from "@/lib/site";
 
 /**
  * 対応エリア
  * 役割：どこまで来てもらえるかを示し、地域ページ（戸塚区・横浜市）へ送る。
- * 担当する検索意図：横浜総合住設 対応エリア／戸塚区 住宅設備 業者 など
+ * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く。
  * 書かないこと：地域ごとのくわしい話（/area/totsuka・/area/yokohama に任せる）。
  */
 export const metadata: Metadata = buildMetadata({
@@ -22,7 +23,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "横浜総合住設の対応エリアです。横浜市戸塚区を中心に、横浜市の18区すべて、神奈川県・東京都のエリアで住宅設備の工事・リフォームを行っています。戸塚区深谷町にオフィスがあります。",
   path: "/area",
-  keywords: ["横浜総合住設 対応エリア", "戸塚区 住宅設備", "横浜市 住宅設備 業者", "神奈川 リフォーム"],
+  keywords: keywordsFor("/area"),
 });
 
 export default function AreaIndexPage() {
@@ -50,7 +51,7 @@ export default function AreaIndexPage() {
       <section aria-labelledby="area-totsuka" className="section bg-white">
         <div className="container-x grid gap-x-12 gap-y-9 lg:grid-cols-12 lg:items-start">
           <figure className="lg:col-span-6" {...reveal(0, "wipe")}>
-            <div className="relative aspect-[3/2] bg-silver-100">
+            <div className="photo-card relative aspect-[3/2]">
               <PhotoFill image={totsuka.image} alt={totsuka.imageAlt} sizes="(min-width: 1024px) 48vw, 100vw" priority className="object-[50%_40%]" />
             </div>
             {credit && (

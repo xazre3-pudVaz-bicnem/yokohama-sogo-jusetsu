@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Logo } from "@/components/layout/Logo";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { Icon } from "@/components/ui/Icon";
+import { LineIcon } from "@/components/ui/LineIcon";
 import { mainNav, subNav, serviceNav } from "@/lib/nav";
-import { siteConfig, primaryPhone, telHref, receptionHours } from "@/lib/site";
+import { siteConfig, primaryPhone, telHref, lineUrl, receptionHours } from "@/lib/site";
 
 /**
  * ヘッダー。
@@ -23,11 +24,12 @@ const MEGA_COLUMNS: string[][] = [["equipment"], ["energy"], ["exterior", "refor
 export function Header() {
   const phone = primaryPhone();
   const hours = receptionHours();
+  const line = lineUrl();
   const category = (id: string) => serviceNav.find((c) => c.id === id);
 
   return (
     <>
-      <div className="hidden bg-navy-950 text-white lg:block">
+      <nav aria-label="サブメニュー" className="hidden bg-navy-950 text-white lg:block">
         <div className="container-x flex h-9 items-center justify-between text-xs tracking-wider">
           <p className="text-silver-200">
             {siteConfig.primaryArea.city}
@@ -41,6 +43,14 @@ export function Header() {
                 </Link>
               </li>
             ))}
+            {line && (
+              <li>
+                <a href={line} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-silver-200 transition-colors hover:text-white" data-cv="line">
+                  <LineIcon onDark className="size-4" />
+                  LINE
+                </a>
+              </li>
+            )}
             {siteConfig.social.instagram && (
               <li>
                 <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-silver-200 transition-colors hover:text-white">
@@ -51,7 +61,7 @@ export function Header() {
             )}
           </ul>
         </div>
-      </div>
+      </nav>
 
       <header className="sticky top-0 z-50 border-b border-silver-200 bg-white">
         <div className="container-x relative flex h-16 items-center justify-between gap-2 sm:gap-4 lg:h-[4.5rem]">
@@ -141,6 +151,7 @@ export function Header() {
               telHref={telHref(phone)}
               hours={hours}
               instagram={siteConfig.social.instagram}
+              line={line}
             />
           </div>
         </div>
