@@ -52,6 +52,10 @@
 - Next.js 16（App Router）／TypeScript／Tailwind CSS v4。全ページ静的。お問い合わせは Server Action ＋ Resend。
 - メール送信の設定（`RESEND_API_KEY`・`CONTACT_TO_EMAIL`）が無い本番では、フォームを出さない。「お問い合わせフォーム」と書く文やボタンは、
   `isContactFormShown()`（`lib/contact.ts`）で出し分ける（送れないフォームを案内しない）。手元とプレビューでは、確認用にフォームが出る。
+- フォームの迷惑送信の判定（早すぎる送信）は、画面側で測った経過時間（`elapsed`）で行う。端末の時刻をサーバーの時計と比べない
+  （時計が進んでいる端末からの送信が、届かなくなる）。早すぎたときは、成功の表示にせず、もう一度押してもらう。
+  人には見えない欄の名前は、ブラウザの自動入力が埋めない語にする（`website`・`url`・`company` などにしない）。
+- 本番のフォームに、正しい内容で試し送信をしない（受信先に実際に届く）。動きの確認は、手元のビルドか、空のままの送信で行う。
 - 本番ドメインは `lib/site.ts` の `productionUrl`（`https://www.yokohama-sogo-jusetsu.com`）。使われるのは Vercel の本番デプロイだけ。
   手元のビルドとプレビューは、全ページ noindex・sitemap は空（意図した動作）。本番と同じ出力を確かめるときは `NEXT_PUBLIC_SITE_URL` を付けてビルドする。
 - 見出しは `components/ui/Phrase.tsx`（BudouX）で文節ごとに区切る。サーバーコンポーネント専用（`"use client"` から読み込まない）。
@@ -70,6 +74,8 @@
 - 題材は `lib/blog-generator/topics.ts`（1題材＝1検索意図）。数値は、題材の `facts` に挙げた事実シートの節にあるものだけ通る。
 - 検査の規則は `lib/blog-generator/validate.ts` の1か所。生成と点検（`blog:audit`）で同じ関数を使う。
 - 題材は優先度（P0→P1→P2）の順に選ぶ。まだ書けない候補は `lib/blog-generator/backlog.ts`（`needs` に、要る確認を書く）。
+- カテゴリの名前（`lib/blog-clusters.ts` の `name`）は、ほかのページの検索語と重ならない語にする（カテゴリのページは「名前＋コラム」を担当する）。
+  重なると、そのカテゴリに最初の記事が入った日に `seo:audit` で止まり、同じ題材で毎日止まり続ける。`blog:selftest` が、記事を書く前に確かめる。
 - 公開済みの記事の見直しは、理由（事実シートの確認し直し・親ページや施工事例へのリンクが無い）があるときだけ。変更が本文に入らなければ保存しない。
 - 規則・事実シート・題材を変えたら `npm run blog:selftest` と `npm run blog:audit`。
 

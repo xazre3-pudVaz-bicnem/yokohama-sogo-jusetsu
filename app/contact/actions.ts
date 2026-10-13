@@ -13,18 +13,38 @@ import { siteConfig, primaryPhone, lineUrl } from "@/lib/site";
  *     CONTACT_FROM_EMAIL … 差出人（任意）。未設定なら、本番ドメインの noreply@（下の defaultFrom）。
  *                           Resend で、そのドメインを認証しておくこと（yokohama-sogo-jusetsu.com は 2026-10-09 に認証済み）
  *     CONTACT_AUTOREPLY  … "1" にすると、メールアドレスを入力した方へ受付のお知らせを送る（差出人のドメイン認証が必要）
- * - 迷惑送信の対策：人には見えない入力欄（honeypot）と、表示から送信までの時間。
+ * - 迷惑送信の対策：人には見えない入力欄（honeypot。当たったら成功の表示だけ）と、
+ *   ページを開いてから送信までの時間（画面側で測る。早すぎたら、もう一度押してもらう）。
  * - 検査に落ちたときは、入力値をそのまま返す（React 19 のフォームは送信後に入力欄を空にするため）。
  */
+
+/** ページを開いてから、これより早い送信は、人の操作ではないとみなす（ミリ秒）。必須の4項目を、人はこの時間では埋められない */
+const MIN_FILL_MS = 3000;
+
+/**
+ * 人には見えない入力欄の名前（components/contact/ContactForm.tsx と同じにする）。
+ * ブラウザの自動入力が埋める項目（website・url・company・fax など、連絡先カードにある項目）の名前にしない。
+ * 自動入力で埋まると、ふつうのお客様の送信が、成功の表示のまま捨てられる。
+ */
+const TRAP_FIELD = "subject";
+
 export async function submitInquiry(prev: InquiryState, formData: FormData): Promise<InquiryState> {
   const attempt = prev.attempt + 1;
   const raw = Object.fromEntries(INQUIRY_FIELDS.map((k) => [k, String(formData.get(k) ?? "")])) as Record<InquiryField, string>;
 
-  // 迷惑送信：見えない欄に値がある／表示から1.5秒未満の送信は、成功したふりをして何もしない
-  const trap = String(formData.get("website") ?? "");
-  const shownAt = Number(formData.get("shownAt") ?? 0);
-  if (trap || (shownAt > 0 && Date.now() - shownAt < 1500)) {
+  // 迷惑送信 1：人には見えない欄に値がある → 成功したふりをして、何もしない
+  if (String(formData.get(TRAP_FIELD) ?? "").trim()) {
     return { status: "success", attempt };
+  }
+
+  // 迷惑送信 2：ページを開いてから3秒未満の送信 → 送らずに、もう一度押してもらう。
+  // 経過時間（elapsed）は、画面側が送る直前に測った値。空のとき（JS が動かない環境）は、時間の判定をしない。
+  // - サーバーの時計（Date.now()）と比べない。端末の時計が進んでいると、ふつうの送信まで「早すぎる」になる
+  // - 成功したふりはしない。万一、人の送信がここに当たっても、押し直せば届く（そのときには3秒を過ぎている）
+  const elapsedRaw = String(formData.get("elapsed") ?? "").trim();
+  const elapsed = Number(elapsedRaw);
+  if (elapsedRaw !== "" && Number.isFinite(elapsed) && elapsed < MIN_FILL_MS) {
+    return { status: "error", message: "送信を確認できませんでした。お手数ですが、もう一度「この内容で送信する」を押してください。", values: raw, attempt };
   }
 
   const parsed = inquirySchema.safeParse(raw);

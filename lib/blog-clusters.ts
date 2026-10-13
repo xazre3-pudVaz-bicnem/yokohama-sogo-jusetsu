@@ -11,6 +11,11 @@ import type { ImageKey } from "@/lib/images";
  *
  * クラスタを増やすときは、data/services/types.ts の BlogClusterId にも id を足す。
  * このファイルはクライアント側からも読めるよう、fs を使わない。
+ *
+ * name は、コラム全体の名前（住宅設備コラム）や、ほかのページの検索語と同じ語にしない。
+ * カテゴリのページは「name ＋ コラム」を検索語として担当するので（lib/seo-map.ts の categoryKeyword）、
+ * 同じ語だと、そのカテゴリに最初の記事が入った日に npm run seo:audit が誤りを出し、自動投稿が止まる。
+ * まだ記事の無いカテゴリも、seo:audit と blog:selftest が先に確かめる。
  */
 export type BlogCluster = {
   id: BlogClusterId;
@@ -146,8 +151,9 @@ export const blogClusters: BlogCluster[] = [
     imageAlt: "植栽と自然石のある玄関アプローチ",
   },
   {
+    // 専用のカテゴリが無い設備をまとめる。「住宅設備」という名前にすると、コラム全体（/blog＝住宅設備コラム）と同じ検索語になる
     id: "housing-equipment",
-    name: "住宅設備",
+    name: "その他の設備",
     description: "浴室暖房乾燥機、内窓、水栓、電気まわりなど、住まいの設備全般の選び方と手入れについて。",
     pillar: { href: "/service", label: "サービス一覧" },
     image: "photos/house-modern-front",

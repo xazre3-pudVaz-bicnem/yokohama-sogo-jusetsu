@@ -16,20 +16,12 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
   const [state, action, pending] = useActionState(submitInquiry, initialInquiryState);
   const formRef = useRef<HTMLFormElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
-  // フォームを最初に表示した時刻。検査に落ちて作り直しても、この値を使い続ける
-  const firstShownAt = useRef(0);
   const v = state.values ?? {};
   const err = state.errors ?? {};
 
   useEffect(() => {
     const form = formRef.current;
     if (!form) return;
-    // 表示した時刻（迷惑送信の判定に使う。表示から 1.5 秒未満の送信は、サーバー側で受け付けない）。
-    // 検査に落ちるたびに「いま」に直すと、足りない1項目だけを直してすぐ送り直した人が、迷惑送信と判定されて
-    // 「受け付けました」と出るのに届かない、ということが起きる。最初に表示した時刻を使い続ける
-    if (!firstShownAt.current) firstShownAt.current = Date.now();
-    const shownAt = form.elements.namedItem("shownAt") as HTMLInputElement | null;
-    if (shownAt) shownAt.value = String(firstShownAt.current);
     // 法人向けページから来たときの初期選択
     const select = form.elements.namedItem("topic") as HTMLSelectElement | null;
     if (select && !select.value && new URLSearchParams(window.location.search).get("topic") === "business") {
@@ -94,15 +86,36 @@ export function ContactForm({ topics, note, preview = false }: { topics: string[
         </p>
       )}
 
-      <form key={state.attempt} ref={formRef} action={action} noValidate className="space-y-6">
-        {/* 迷惑送信の対策（人には見えない欄）。値が入っていたら送信しない */}
+      <form
+        key={state.attempt}
+        ref={formRef}
+        action={action}
+        noValidate
+        className="space-y-6"
+        onSubmit={(e) => {
+          // このページを開いてから送信するまでの時間（ミリ秒）を、送る直前に書き込む。迷惑送信の判定に使う
+          // （開いてから3秒未満の送信は、サーバー側で受け付けず、もう一度押すよう案内する）。
+          // 時刻そのものは送らない：端末の時計とサーバーの時計を比べると、時計が進んでいる端末からの送信が
+          // 毎回「早すぎる」と判定されて、届かない。経過時間なら、端末の時計のずれに左右されない。
+          // 画面側の準備（ハイドレーション）が終わった時点からではなく、ページを開いた時点から測るのも同じ理由
+          // （準備が遅い回線で、先に入力を済ませた人が、準備が終わった直後に送ると「早すぎる」になる）
+          const elapsed = e.currentTarget.elements.namedItem("elapsed") as HTMLInputElement | null;
+          if (elapsed) elapsed.value = String(Math.round(performance.now()));
+        }}
+      >
+        {/*
+          迷惑送信の対策（人には見えない欄）。値が入っていたら送信しない。
+          名前は、ブラウザの自動入力が埋めない語にする（website・url・company などにすると、連絡先の自動入力で埋まることがある）。
+          app/contact/actions.ts の TRAP_FIELD と同じ名前にする
+        */}
         <div aria-hidden="true" className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
           <label>
             このまま空欄にしてください
-            <input type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+            <input type="text" name="subject" tabIndex={-1} autoComplete="off" defaultValue="" />
           </label>
         </div>
-        <input type="hidden" name="shownAt" defaultValue="0" />
+        {/* 空のまま届いたとき（JS が動かない環境）は、時間の判定をしない */}
+        <input type="hidden" name="elapsed" defaultValue="" />
 
         <div className="grid gap-6 sm:grid-cols-2">
           <div>

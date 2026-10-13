@@ -9,6 +9,8 @@
  *   3. 数値の取り出しと、題材選びが、同じ入力なら同じ結果になる
  *   4. 題材の主キーワードが、固定ページ・公開済みの記事・ほかの題材と重なっていない
  *   5. 見直し（リライト）が、理由のあるときだけ行われ、日付だけの更新にならない
+ *   6. 検索語の取り合いが無い（まだ記事の無いカテゴリに記事が入ったときの重なりを含む）。npm run seo:audit と同じ確認を、
+ *      記事を書く前にしておく（書いたあとのビルドで止まると、その日の記事が捨てられ、同じ題材で毎日止まる）
  * 検査の規則（lib/blog-generator/validate.ts）や事実シートを変えたら、これと npm run blog:audit を実行する。
  */
 import fs from "node:fs";
@@ -20,6 +22,7 @@ import { diceBigram, shingleOverlap } from "@/lib/blog-generator/similarity";
 import { getTopic, topics } from "@/lib/blog-generator/topics";
 import { validateArticle } from "@/lib/blog-generator/validate";
 import { getCluster } from "@/lib/blog-clusters";
+import { fullKeywordMap, keywordConflicts } from "@/lib/seo-map";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword } from "@/data/seo-keyword-map";
 import { getService, servicePath } from "@/data/services";
@@ -189,6 +192,19 @@ console.log("6. 見直し（リライト）");
   check("見直しの保存形式に、値の無い項目を書き出さない", !/: undefined|: null\n/.test(toMarkdown(refreshed)));
   const target = pickRefreshTarget(existing, sheet, "2030-01-01");
   console.log(`      いま見直す理由のある記事：${target ? `${target.post.slug}（${target.reasons.length} 件）` : "なし"}`);
+}
+
+console.log("7. 検索語の取り合い（記事を書く前に確かめる）");
+{
+  const map = fullKeywordMap();
+  const errors = keywordConflicts(map).filter((c) => c.level === "error");
+  check("公開中のページ・これから書く題材・まだ記事の無いカテゴリで、検索語が重なっていない", errors.length === 0, errors.map((e) => e.message).join(" / "));
+  // コラム全体（/blog）と同じ検索語になる名前のカテゴリは、最初の記事が入る前に見つける
+  const hub = map.find((e) => e.url === "/blog");
+  const sameAsHub = hub ? keywordConflicts(map, [{ id: "selftest-dummy", name: hub.primaryKeyword.replace(/\s*コラム$/, "") }]) : [];
+  check("コラム全体と同じ検索語になるカテゴリの名前を見つける", sameAsHub.some((c) => c.level === "error" && c.message.includes("selftest-dummy")));
+  const fine = keywordConflicts(map, [{ id: "selftest-dummy", name: "重ならない名前の確認用" }]);
+  check("重ならない名前のカテゴリは通す", !fine.some((c) => c.message.includes("selftest-dummy")));
 }
 
 console.log(failed ? `\n${failed} 件の確認に失敗しました` : "\nすべての確認に合格しました");

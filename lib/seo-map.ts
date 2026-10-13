@@ -3,6 +3,7 @@ import { normalizeKeyword, seoPages, type SeoPageEntry } from "@/data/seo-keywor
 import { getService, servicePath } from "@/data/services";
 import { serviceSlugsWithWorkList, workListKeyword, workListPath, works, worksByArea, worksByService, worksOfMainService } from "@/data/works";
 import { activeClusters, getAllPosts, getPostsByArea, getPostsByClusters, getPostsByService, getPostsForWork, getRelatedPosts, MIN_POSTS_TO_INDEX } from "@/lib/blog";
+import { blogClusters } from "@/lib/blog-clusters";
 import { backlog } from "@/lib/blog-generator/backlog";
 import { topics } from "@/lib/blog-generator/topics";
 
@@ -28,6 +29,11 @@ export type SeoEntry = SeoPageEntry & {
 };
 
 const slugs = <T extends { slug: string }>(list: T[]) => list.map((x) => x.slug);
+
+/** コラムのカテゴリのページが担当する検索語（カテゴリの名前＋「コラム」） */
+export function categoryKeyword(cluster: { name: string }): string {
+  return `${cluster.name} コラム`;
+}
 
 export function fullKeywordMap(): SeoEntry[] {
   const posts = getAllPosts();
@@ -109,7 +115,7 @@ export function fullKeywordMap(): SeoEntry[] {
   for (const { cluster, count } of activeClusters()) {
     out.push({
       url: `/blog/category/${cluster.id}`,
-      primaryKeyword: `${cluster.name} コラム`,
+      primaryKeyword: categoryKeyword(cluster),
       secondaryKeywords: [],
       searchIntent: `${cluster.name}についての記事を、まとめて読みたい`,
       contentType: "blog-category",
@@ -131,11 +137,15 @@ export type KeywordConflict = { level: "error" | "warning"; message: string };
  *     - 主キーワードが、ほかのページの主キーワード・副キーワードと同じ
  *     - 副キーワードが、ほかのページの副キーワードと同じ
  *     - これから書く題材・候補の主キーワードが、公開済みのページ・ほかの題材や候補と同じ
+ *     - まだ記事の無いカテゴリの検索語（名前＋「コラム」）が、ほかのページ・ほかのカテゴリと同じ
+ *       （そのカテゴリに最初の記事が入った日に、カテゴリのページができて重なる。自動投稿が止まる前に見つける）
  *     - 親ページ（parentTopic）が一覧に無い
  *   注意（warning）
  *     - 「譲った」と書いた検索語（cedes）を、譲り先のページが担当していない
+ *
+ * clusters は、確かめるカテゴリの一覧（既定はすべて。検査の仕組みの確認で、にせのカテゴリを渡すために引数にしている）。
  */
-export function keywordConflicts(map: SeoEntry[] = fullKeywordMap()): KeywordConflict[] {
+export function keywordConflicts(map: SeoEntry[] = fullKeywordMap(), clusters: { id: string; name: string }[] = blogClusters): KeywordConflict[] {
   const out: KeywordConflict[] = [];
   const owner = new Map<string, { url: string; kind: "主" | "副"; raw: string }>();
   const urls = new Set(map.map((e) => e.url));
@@ -187,6 +197,19 @@ export function keywordConflicts(map: SeoEntry[] = fullKeywordMap()): KeywordCon
     const dup = planned.get(k);
     if (dup) out.push({ level: "error", message: `候補「${c.keyword}」（${c.cluster}）は、${dup} と同じ検索語です` });
     planned.set(k, `候補「${c.keyword}」`);
+  }
+
+  /* まだ記事の無いカテゴリ（記事が入ると /blog/category/<id> ができて、その検索語を担当する） */
+  for (const c of clusters) {
+    const url = `/blog/category/${c.id}`;
+    if (urls.has(url)) continue; // すでにページのあるカテゴリは、上で確かめている
+    const raw = categoryKeyword(c);
+    const k = normalizeKeyword(raw);
+    const o = owner.get(k);
+    if (o) out.push({ level: "error", message: `カテゴリ「${c.name}」（${c.id}）に記事が入ると、カテゴリのページの検索語「${raw}」が ${o.url}（${o.kind}）と重なります（lib/blog-clusters.ts の name を直す）` });
+    const dup = planned.get(k);
+    if (dup) out.push({ level: "error", message: `カテゴリ「${c.name}」（${c.id}）の検索語「${raw}」は、${dup} と同じです` });
+    planned.set(k, `カテゴリ ${c.id}`);
   }
   return out;
 }
