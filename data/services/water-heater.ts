@@ -1,4 +1,6 @@
 import type { Service } from "./types";
+import { BOILER_PAGES } from "@/data/specialty";
+import { siteConfig } from "@/lib/site";
 
 /**
  * 給湯器交換（ガス給湯器・エコジョーズ）
@@ -19,11 +21,12 @@ export const waterHeater: Service = {
   summary:
     "ガス給湯器とエコジョーズの交換に対応します。いまの機種の型番と設置の形を確認し、同じ場所に収まり、家族の人数とお湯の使い方に合う一台をご提案します。",
   seo: {
-    title: "戸塚区の給湯器交換・エコジョーズ",
+    // 「戸塚区 給湯器交換」などの地域＋給湯器の検索語は、給湯器専門サイトに任せる（data/specialty.ts）。このページは会社名つきで
+    title: "給湯器交換（ガス給湯器・エコジョーズ）",
     description:
-      "横浜市戸塚区の給湯器交換は横浜総合住設へ。ガス給湯器・エコジョーズの交換時期の目安、号数と機能の選び方、マンションの給湯器、ドレン排水の決まり、費用の考え方をまとめました。見積もり・現地調査は無料です。",
+      "横浜総合住設（ヨコジュウ）の給湯器交換のご案内です。ガス給湯器・エコジョーズの交換時期の目安、号数と機能の選び方、マンションの給湯器、費用の考え方をまとめました。浴室やキッチンの工事とまとめてのご相談もお受けします。",
   },
-  h1: "横浜市戸塚区の給湯器交換",
+  h1: "給湯器交換（ガス給湯器・エコジョーズ）",
   lead: "ガス給湯器の交換は、いまの機種の型番と設置の形が分かれば、合う機種を絞れます。お湯の温度が安定しない、リモコンにエラー番号が出るといった前ぶれの段階でご相談いただければ、機種を比べて選ぶ時間が取れます。壁掛け・据置・マンションのパイプスペース設置のいずれも、現地で配管と排気の向きを確かめてからご提案します。",
   updatedAt: "2026-10-07",
   seeAlso: [
@@ -195,5 +198,11 @@ export const waterHeater: Service = {
   ],
   related: ["ecocute", "ene-farm", "eco-one", "kitchen-equipment"],
   blogClusters: ["water-heater", "yokohama", "subsidy"],
-  specialtySite: null,
+  specialtySite: {
+    name: siteConfig.specialtySites.boiler.name,
+    url: siteConfig.specialtySites.boiler.url,
+    title: "給湯器の機種と補助金は、専門サイトでくわしく",
+    note: "ガス給湯器・エコジョーズの機種と号数の選び方、補助金、戸塚区・横浜市の地域ごとの案内は、当社の給湯器専門サイトにまとめています。",
+    links: [BOILER_PAGES.gas, BOILER_PAGES.ecoJozu, BOILER_PAGES.subsidy],
+  },
 };

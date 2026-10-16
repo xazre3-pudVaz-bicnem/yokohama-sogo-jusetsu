@@ -1,22 +1,39 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
-import { PhotoFill } from "@/components/ui/Photo";
+import { Illust, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { servicePath, type Service } from "@/data/services";
+import { hasImage, type ImageKey } from "@/lib/images";
 
 /**
  * サービスへのリンク。
- *   ServiceTile     … 名称と一言を、1枚ずつ白い角丸のパネルにしたもの（トップページ・関連サービス）
+ *   ServiceTile     … 名称と一言に、工事の小さなイラストを添えた白い角丸のパネル（トップページ・関連サービス）
  *   ServiceThumbRow … 小さな写真つきのパネル（サービス一覧ページ）
- * サービスごとの色分けやアイコンは使わない。
+ * イラストは、全サービスで同じ絵柄・同じ配色（Codex の画像生成で作った ai/svc-<slug>。docs/IMAGE_SOURCES.md）。
+ * サービスごとに色を変えたアイコンは使わない。イラストの無いサービス（下のページなど）は、文字だけで出す。
  */
 type Level = "h3" | "h4";
 
+/** サービスのイラスト（無ければ undefined） */
+export function serviceSpot(service: Pick<Service, "slug">): ImageKey | undefined {
+  const key = `ai/svc-${service.slug}`;
+  return hasImage(key) ? key : undefined;
+}
+
 export function ServiceTile({ service, headingLevel: H = "h3" }: { service: Service; headingLevel?: Level }) {
+  const spot = serviceSpot(service);
   return (
     <Link href={servicePath(service)} className="card card-line card-hover group flex h-full items-center gap-3 px-4 py-3.5 sm:px-5">
+      {spot && (
+        <span className="spot-tile" aria-hidden="true">
+          <Illust image={spot} width={64} className="spot-img transition-transform duration-300 group-hover:-translate-y-0.5" />
+        </span>
+      )}
       <div className="flex-1">
-        <H className="text-[0.9688rem] font-bold leading-snug transition-colors group-hover:text-brand-700">{service.name}</H>
+        {/* イラストの分だけ幅が狭いので、名前は文節で折り返す（「ガ｜ス」のように語の途中で切らない） */}
+        <H className="text-[0.9688rem] font-bold leading-snug transition-colors group-hover:text-brand-700">
+          <Phrase>{service.name}</Phrase>
+        </H>
         <p className="mt-1 text-xs leading-relaxed text-ink-mute">{service.catch}</p>
       </div>
       <span className="arrow-dot">

@@ -58,7 +58,8 @@ const areaServed: Json[] = [
 function sameAs(): string[] {
   const s = siteConfig.social;
   // LINE（友だち追加の URL）は入れない。会社を説明するプロフィールのページではなく、開くと追加の画面に進むだけのため
-  const all: string[] = [s.instagram, s.threads, s.x, s.youtube];
+  // 同じ会社が運営する専門サイト（給湯器）も足す。専門サイトの構造化データも、この会社の @id を使っている
+  const all: string[] = [s.instagram, s.threads, s.x, s.youtube, ...Object.values(siteConfig.specialtySites).map((x) => x.url)];
   return all.filter(Boolean);
 }
 

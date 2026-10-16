@@ -260,6 +260,88 @@ await emit("area/totsuka-aerial", sharp(path.join(ROOT, "assets", "stock", "tots
 await emit("area/yokohama-minatomirai", sharp(path.join(ROOT, "assets", "stock", "minato-mirai-in-blue.jpg")).extract({ left: 0, top: 560, width: 3840, height: 2011 }).resize({ width: 2000 }), { quality: 80 });
 
 /* ------------------------------------------------------------------ */
+/* 4'. Codex（ChatGPT の画像生成）で作ったイラスト（assets/ai/*.png）     */
+/* ------------------------------------------------------------------ */
+// 白い地を透明にして（外周からつながる白だけ。器の中の白は残す）、余白を詰めて書き出す。
+// 何を作ったか・プロンプトは docs/IMAGE_SOURCES.md の「AI で作ったイラスト」の表。作り方の決まりは CLAUDE.md。
+const AI_WIDE = { "house-overview": 1600 };
+const aiDir = path.join(ROOT, "assets", "ai");
+if (fs.existsSync(aiDir)) {
+  for (const file of fs.readdirSync(aiDir).filter((f) => f.endsWith(".png")).sort()) {
+    const name = file.replace(/\.png$/, "");
+    const { data, info } = await sharp(path.join(aiDir, file)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { width: W, height: H } = info;
+    const px = (i) => [data[i * 4], data[i * 4 + 1], data[i * 4 + 2]];
+    const nearWhite = (i) => Math.min(...px(i)) >= 236;
+    // 1) 外周から、白に近い画素をたどる（器の中の白・光の部分は外周とつながっていないので残る）
+    const bg = new Uint8Array(W * H);
+    const stack = [];
+    for (let x = 0; x < W; x++) stack.push(x, (H - 1) * W + x);
+    for (let y = 0; y < H; y++) stack.push(y * W, y * W + W - 1);
+    while (stack.length) {
+      const i = stack.pop();
+      if (bg[i] || !nearWhite(i)) continue;
+      bg[i] = 1;
+      const x = i % W;
+      if (x > 0) stack.push(i - 1);
+      if (x < W - 1) stack.push(i + 1);
+      if (i >= W) stack.push(i - W);
+      if (i < W * (H - 1)) stack.push(i + W);
+    }
+    // 2) 背景は透明に。背景に接する2画素ぶんの縁は、白を抜いた色に直す（色のついた地に置いても白いふちが出ない）
+    const edge = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) {
+      if (bg[i]) continue;
+      const x = i % W;
+      const y = Math.floor(i / W);
+      outer: for (let dy = -2; dy <= 2; dy++)
+        for (let dx = -2; dx <= 2; dx++) {
+          const xx = x + dx;
+          const yy = y + dy;
+          if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+          if (bg[yy * W + xx]) {
+            edge[i] = 1;
+            break outer;
+          }
+        }
+    }
+    for (let i = 0; i < W * H; i++) {
+      if (bg[i]) {
+        data[i * 4 + 3] = 0;
+        continue;
+      }
+      if (!edge[i]) continue;
+      const [r, g, b] = px(i);
+      const a = Math.max(255 - r, 255 - g, 255 - b) / 255;
+      if (a <= 0) {
+        data[i * 4 + 3] = 0;
+        continue;
+      }
+      data[i * 4] = Math.round((r - 255 * (1 - a)) / a);
+      data[i * 4 + 1] = Math.round((g - 255 * (1 - a)) / a);
+      data[i * 4 + 2] = Math.round((b - 255 * (1 - a)) / a);
+      data[i * 4 + 3] = Math.round(a * 255);
+    }
+    const width = AI_WIDE[name] ?? 480;
+    const trimmed = await sharp(data, { raw: { width: W, height: H, channels: 4 } }).trim({ threshold: 1 }).png().toBuffer();
+    await emit(`ai/${name}`, sharp(trimmed).resize({ width, height: width, fit: "inside", withoutEnlargement: true }), { quality: 86 });
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 4''. 給湯器専門サイトの素材（assets/boiler/）                         */
+/* ------------------------------------------------------------------ */
+// 専門サイト（同じ会社。c:\projects\yokohamatotalhousingsolutions-boiler）の public/images/ai/ から写したもの。
+// 案内役の「ゆげまる」と、泡の背景。専門サイトへの案内（components/sections/SpecialtySiteBanner.tsx）だけに使う
+const boilerDir = path.join(ROOT, "assets", "boiler");
+if (fs.existsSync(boilerDir)) {
+  for (const name of ["mascot-wave", "mascot-point", "mascot-ok"]) {
+    await emit(`boiler/${name}`, sharp(path.join(boilerDir, `${name}.webp`)).resize({ width: 320, withoutEnlargement: true }), { quality: 86 });
+  }
+  await emit("boiler/bubbles", sharp(path.join(boilerDir, "hero-bubbles.webp")).resize({ width: 1200, withoutEnlargement: true }), { quality: 72 });
+}
+
+/* ------------------------------------------------------------------ */
 /* 5. SNS 共有用の画像（1200×630）                                      */
 /* ------------------------------------------------------------------ */
 const ogBase = await sharp(path.join(photoDir, photoFiles.find((f) => f.endsWith("17_34_34-1.png"))))

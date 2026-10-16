@@ -1,4 +1,6 @@
 import type { Service } from "./types";
+import { BOILER_PAGES } from "@/data/specialty";
+import { siteConfig } from "@/lib/site";
 
 /**
  * エコキュート交換・設置
@@ -22,11 +24,12 @@ export const ecocute: Service = {
   summary:
     "エコキュートの交換と新設、ガス給湯器や電気温水器からの切り替えに対応します。置き場所・基礎・搬入の経路・電気を現地で確かめ、設置できる機種と工事の内容をご提案します。",
   seo: {
-    title: "戸塚区のエコキュート交換・設置",
+    // 「戸塚区 エコキュート」などの地域＋給湯器の検索語は、給湯器専門サイトに任せる（data/specialty.ts）
+    title: "エコキュート交換・設置",
     description:
-      "横浜市戸塚区のエコキュートの交換・設置は横浜総合住設へ。設置できる条件（置き場所・基礎・搬入の経路・電気）、タンク容量の選び方、ガス給湯器からの切り替え工事、使える補助金をまとめました。見積もり・現地調査は無料です。",
+      "横浜総合住設（ヨコジュウ）のエコキュートの交換・設置のご案内です。設置できる条件（置き場所・基礎・搬入の経路・電気）、ガス給湯器からの切り替え工事、使える補助金をまとめました。太陽光発電とあわせたご相談もお受けします。",
   },
-  h1: "横浜市戸塚区のエコキュート交換・設置",
+  h1: "エコキュート交換・設置",
   lead: "エコキュートを設置できるかどうかは、置き場所・基礎・搬入の経路・電気の4点で決まります。横浜総合住設は、いまお使いのエコキュートの交換から、ガス給湯器や電気温水器からの切り替えまで、現地調査のうえで、基礎・電気・配管の工事をまとめてお引き受けしています。",
   updatedAt: "2026-10-07",
   seeAlso: [
@@ -229,5 +232,11 @@ export const ecocute: Service = {
   related: ["water-heater", "eco-one", "solar", "storage-battery"],
   blogClusters: ["ecocute", "subsidy", "totsuka"],
   subsidyIds: ["kyutou-shoene", "yokohama-gep"],
-  specialtySite: null,
+  specialtySite: {
+    name: siteConfig.specialtySites.boiler.name,
+    url: siteConfig.specialtySites.boiler.url,
+    title: "エコキュートの機種と補助金は、専門サイトでくわしく",
+    note: "エコキュートの機種とタンク容量の比べ方、国と横浜市の補助金の額は、当社の給湯器専門サイトにまとめています。",
+    links: [BOILER_PAGES.ecocute, BOILER_PAGES.subsidyEcocute],
+  },
 };

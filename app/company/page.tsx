@@ -155,6 +155,19 @@ export default function CompanyPage() {
           },
         ]
       : []),
+    // 同じ会社が運営する専門サイト（data/specialty.ts）
+    {
+      label: "関連サイト",
+      value: (
+        <>
+          <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="text-link inline-flex items-center gap-1">
+            {siteConfig.specialtySites.boiler.name}
+            <Icon name="arrowUpRight" className="size-3.5 shrink-0" />
+          </a>
+          <span className="block text-sm text-ink-mute">ガス給湯器・エコキュート・ハイブリッド給湯器の機種と補助金</span>
+        </>
+      ),
+    },
   ];
 
   return (

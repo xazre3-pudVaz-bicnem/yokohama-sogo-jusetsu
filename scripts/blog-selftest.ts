@@ -9,6 +9,7 @@
  *   3. 数値の取り出しと、題材選びが、同じ入力なら同じ結果になる
  *   4. 題材の主キーワードが、固定ページ・公開済みの記事・ほかの題材と重なっていない
  *   5. 見直し（リライト）が、理由のあるときだけ行われ、日付だけの更新にならない
+ *   7. 給湯器の題材は選ばない（給湯器専門サイトの自動投稿が書く）。公開済みの給湯器の記事には、専門サイトの案内が付く
  *   6. 検索語の取り合いが無い（まだ記事の無いカテゴリに記事が入ったときの重なりを含む）。npm run seo:audit と同じ確認を、
  *      記事を書く前にしておく（書いたあとのビルドで止まると、その日の記事が捨てられ、同じ題材で毎日止まる）
  * 検査の規則（lib/blog-generator/validate.ts）や事実シートを変えたら、これと npm run blog:audit を実行する。
@@ -20,9 +21,11 @@ import { loadFactSheet, numericTokens, unknownNumericTokens } from "@/lib/blog-g
 import { ArticleSchema, bodyChanged, dayFraction, decideMode, pickRefreshTarget, pickTopic, refreshReasons, toDraft, toMarkdown, toRefreshedDraft } from "@/lib/blog-generator/generate";
 import { diceBigram, shingleOverlap } from "@/lib/blog-generator/similarity";
 import { getTopic, topics } from "@/lib/blog-generator/topics";
+import { backlog } from "@/lib/blog-generator/backlog";
 import { validateArticle } from "@/lib/blog-generator/validate";
 import { getCluster } from "@/lib/blog-clusters";
 import { fullKeywordMap, keywordConflicts } from "@/lib/seo-map";
+import { boilerLinkForPost, isBoilerTopic } from "@/data/specialty";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword } from "@/data/seo-keyword-map";
 import { getService, servicePath } from "@/data/services";
@@ -142,7 +145,8 @@ console.log("5. 題材");
   const second = pickTopic(existing);
   check("同じ状態なら、同じ題材を選ぶ（ランダムにしない）", first?.slug === second?.slug);
   check("すでに記事のある題材は選ばない", !!first && !existing.some((e) => e.slug === first.slug));
-  const open = topics.filter((t) => !existing.some((e) => e.slug === t.slug));
+  // 給湯器の題材は、給湯器専門サイトが書く（このサイトでは選ばない）
+  const open = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isBoilerTopic(t.cluster, t.keyword));
   const best = open.some((t) => t.priority === "P0") ? "P0" : open.some((t) => t.priority === "P1") ? "P1" : "P2";
   check(`優先度の高い題材から選ぶ（いまは ${best}）`, !first || first.priority === best, first ? `${first.slug} は ${first.priority}` : "");
   // 同じ主キーワードの記事がすでにあると、その題材は選ばれない
@@ -150,7 +154,7 @@ console.log("5. 題材");
     const blocked = pickTopic([...existing, { ...existing[0], slug: "dummy", intent: "まったく別の検索意図のダミー", keywords: [first.keyword, "x"] }]);
     check("主キーワードが同じ記事があると、その題材は選ばない", blocked?.slug !== first.slug, blocked?.slug);
   }
-  const remaining = topics.filter((t) => !existing.some((e) => e.slug === t.slug)).length;
+  const remaining = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isBoilerTopic(t.cluster, t.keyword)).length;
   console.log(`      残りの題材：${remaining} 件／次に書く題材：${first?.slug ?? "なし"}`);
 }
 
@@ -205,6 +209,33 @@ console.log("7. 検索語の取り合い（記事を書く前に確かめる）"
   check("コラム全体と同じ検索語になるカテゴリの名前を見つける", sameAsHub.some((c) => c.level === "error" && c.message.includes("selftest-dummy")));
   const fine = keywordConflicts(map, [{ id: "selftest-dummy", name: "重ならない名前の確認用" }]);
   check("重ならない名前のカテゴリは通す", !fine.some((c) => c.message.includes("selftest-dummy")));
+  // 書いた記事の副キーワードが、候補・ほかの記事・固定ページの検索語と同じなら、保存する前に外す（2026-10-14 に止まった原因）
+  const candidateKw = backlog[0].keyword;
+  const otherPostKw = existing.find((p) => p.slug !== topic.slug)?.keywords[0] ?? "";
+  const d2 = toDraft({ ...fixture("blog-good.json"), keywords: [topic.keyword, candidateKw, otherPostKw, "重ならない確認用の語"] }, topic, sheet, "2026-10-07");
+  const n2 = d2.keywords.map(normalizeKeyword);
+  check(
+    "副キーワードが候補やほかの記事の検索語と重なるときは、保存する前に外す（主キーワードと重ならない語は残す）",
+    n2[0] === normalizeKeyword(topic.keyword) && !n2.includes(normalizeKeyword(candidateKw)) && !n2.includes(normalizeKeyword(otherPostKw)) && d2.keywords.includes("重ならない確認用の語"),
+    d2.keywords.join(" / "),
+  );
+}
+
+console.log("8. 給湯器専門サイトとの分担");
+{
+  const ex = existing.map((p) => ({ slug: p.slug, intent: p.intent, category: p.category, keywords: p.keywords }));
+  const picked: string[] = [];
+  for (let i = 0; i < topics.length; i++) {
+    const t = pickTopic(ex);
+    if (!t) break;
+    if (isBoilerTopic(t.cluster, t.keyword)) picked.push(t.slug);
+    ex.push({ slug: t.slug, intent: t.intent, category: t.cluster, keywords: [t.keyword] });
+  }
+  check("題材を選び尽くしても、給湯器の題材は選ばない（給湯器専門サイトの自動投稿が書く）", picked.length === 0, picked.join(" / "));
+  const boilerPosts = existing.filter((p) => isBoilerTopic(p.category, p.keywords[0] ?? ""));
+  check(`公開済みの給湯器の記事（${boilerPosts.length} 本）には、専門サイトのくわしいページの案内が付く`, boilerPosts.length > 0 && boilerPosts.every((p) => boilerLinkForPost(p) !== null));
+  const others = existing.filter((p) => boilerLinkForPost(p) === null);
+  check("給湯器の話でない記事には、専門サイトの案内を付けない", others.every((p) => !isBoilerTopic(p.category, p.keywords[0] ?? "")), others.length + " 本");
 }
 
 console.log(failed ? `\n${failed} 件の確認に失敗しました` : "\nすべての確認に合格しました");

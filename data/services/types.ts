@@ -157,10 +157,13 @@ export type Service = {
   /** 関連する補助金（data/subsidies.ts の id） */
   subsidyIds?: string[];
   /**
-   * 将来つくる専門サイト。URL を入れると、ページに「専門サイトを見る」の案内が出る。
-   * 公式サイトは会社全体・施工実績・信頼性を担い、専門サイトは分野を深掘りする（同じ文章を載せない）。
+   * この工事をくわしく扱う専門サイト（同じ会社が運営）。入れると、ページの上の方に専門サイトの案内が出る。
+   * 公式サイトは会社全体・施工実績・ほかの工事とのまとめての相談を担い、専門サイトは分野を深掘りする（同じ文章を載せない）。
+   *   title … 案内の一言（見出しの要素にはしない）
+   *   note  … 専門サイトに何があるか（1文）
+   *   links … 専門サイトの、このページに近いページ（data/specialty.ts の BOILER_PAGES から選ぶ）
    */
-  specialtySite: { name: string; url: string; note: string } | null;
+  specialtySite: { name: string; url: string; title: string; note: string; links: { label: string; url: string }[] } | null;
 };
 
 export type ServiceCategory = {

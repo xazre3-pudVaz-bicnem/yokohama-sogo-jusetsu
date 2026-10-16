@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PostRow } from "@/components/cards/PostCard";
 import { ServiceTile } from "@/components/cards/ServiceCard";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { SpecialtySiteBanner } from "@/components/sections/SpecialtySiteBanner";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServiceBlockView, blockLabel, type Tone } from "@/components/service/ServiceBlocks";
 import { FaqList } from "@/components/ui/FaqList";
@@ -31,6 +32,7 @@ import { keywordsFor } from "@/data/seo-keyword-map";
  * 「よくある質問」「関連コラム」「関連するサービス」だけは、どのページでも最後に同じ順で出す。
  *
  * 内部リンク：別のページにまとめた工事（seeAlso）／下のページ（親のとき）／施工事例（同じサービス）／
+ *            給湯器のページだけ、給湯器専門サイト（同じ会社）の案内（specialtySite）／
  *            関連コラム（同じクラスタ）／地域ページ／関連サービス。
  * 構造化データ：Service、BreadcrumbList（パンくず内）、FAQPage（このページに表示している質問だけ）。
  */
@@ -136,6 +138,15 @@ export function ServicePageView({ service: s }: { service: Service }) {
         </aside>
       )}
 
+      {/* 給湯器のページ：機種・補助金をくわしく扱う専門サイト（同じ会社）の案内を、本文の前に出す（data/specialty.ts） */}
+      {s.specialtySite && (
+        <div className="bg-white">
+          <div className="container-x pt-6">
+            <SpecialtySiteBanner title={s.specialtySite.title} note={s.specialtySite.note} links={s.specialtySite.links} />
+          </div>
+        </div>
+      )}
+
       {blocks.map((b, i) => (
         <ServiceBlockView key={`${b.type}-${"id" in b ? b.id : i}`} block={b} service={s} tone={tones[i]} lazy={i > 0} works={works} subsidies={subsidies} />
       ))}
@@ -185,22 +196,6 @@ export function ServicePageView({ service: s }: { service: Service }) {
               </Link>
             </p>
           </SectionSplit>
-
-          {/* 専門サイトの案内（URL が設定されたときだけ出る） */}
-          {s.specialtySite && (
-            <SectionSplit heading={<SectionHeading title="専門サイトのご案内" />}>
-              <div className="card card-line px-6 py-6">
-                <p className="font-heading text-lg font-bold text-navy-900">{s.specialtySite.name}</p>
-                <p className="mt-1.5 text-[0.9375rem] leading-[1.95]">{s.specialtySite.note}</p>
-                <p className="mt-4">
-                  <a href={s.specialtySite.url} target="_blank" rel="noopener noreferrer" className="link-arrow">
-                    専門サイトを見る
-                    <Icon name="arrowUpRight" className="size-4" />
-                  </a>
-                </p>
-              </div>
-            </SectionSplit>
-          )}
 
           <SectionSplit heading={<SectionHeading id="related" eyebrow="あわせて" color="navy" title="関連するサービス" />}>
             <ul className="grid gap-3 sm:grid-cols-2" {...reveal(60)}>

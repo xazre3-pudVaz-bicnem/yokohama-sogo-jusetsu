@@ -1,4 +1,6 @@
 import type { Service } from "./types";
+import { BOILER_PAGES } from "@/data/specialty";
+import { siteConfig } from "@/lib/site";
 
 /**
  * エネファームからの交換
@@ -19,9 +21,9 @@ export const eneFarm: Service = {
   summary:
     "エネファームの撤去と、新しい給湯器への取り替えを一括で行います。ガス・電気・配管の切り替えまでまとめて対応し、床暖房や浴室乾燥機を使い続けるための機種選びもご相談いただけます。",
   seo: {
-    title: "エネファームから給湯器への交換・撤去｜横浜市戸塚区",
+    title: "エネファームから給湯器への交換・撤去",
     description:
-      "エネファームの調子が悪い、修理費が高い、撤去できる業者が見つからない。横浜総合住設は、エネファームの撤去から給湯器の設置、ガス・電気・配管の切り替えまで一括で対応します。横浜市戸塚区ほか神奈川・東京エリア。",
+      "エネファームの調子が悪い、修理費が高い、撤去できる業者が見つからない。横浜総合住設は、エネファームの撤去から給湯器の設置、ガス・電気・配管の切り替えまで一括で対応します。床暖房や浴室乾燥機のつなぎ替えもご相談ください。",
   },
   h1: "エネファームから給湯器への交換・撤去",
   lead: "エネファームの撤去と、新しい給湯器への取り替えをまとめてお引き受けしています。取り替え先は、ガス給湯器、ハイブリッド給湯器、エコキュートから選べます。床暖房や浴室乾燥機を使い続けたい場合は、対応する機種に絞ってご提案します。",
@@ -176,5 +178,11 @@ export const eneFarm: Service = {
   related: ["water-heater", "eco-one", "storage-battery", "other"],
   blogClusters: ["ene-farm", "water-heater", "eco-one"],
   subsidyIds: ["kyutou-shoene"],
-  specialtySite: null,
+  specialtySite: {
+    name: siteConfig.specialtySites.boiler.name,
+    url: siteConfig.specialtySites.boiler.url,
+    title: "替える先の給湯器と補助金は、専門サイトでくわしく",
+    note: "エネファームから替える先（ガス給湯器・ハイブリッド給湯器・エコキュート）の選び方と、替える先ごとの補助金は、当社の給湯器専門サイトにまとめています。",
+    links: [BOILER_PAGES.eneFarm, BOILER_PAGES.subsidyEneFarm],
+  },
 };

@@ -1,4 +1,4 @@
-import type { ImageKey } from "@/lib/images";
+import { hasImage, type ImageKey } from "@/lib/images";
 import { isContactFormShown } from "@/lib/contact";
 import { contactWays, lineUrl } from "@/lib/site";
 
@@ -71,8 +71,17 @@ export type FlowStep = {
   body: string;
   /** お客様にお願いすること・用意するもの */
   prepare?: string[];
-  pose: ImageKey;
 };
+
+/**
+ * 工程のイラスト（Codex の画像生成で作った ai/flow-<id>。記録は docs/IMAGE_SOURCES.md）。
+ * 工程を足したら、同じ絵柄のイラストも足す（無いとビルドが止まる）。
+ */
+export function flowSpot(id: string): ImageKey {
+  const key = `ai/flow-${id}`;
+  if (!hasImage(key)) throw new Error(`工程のイラストがありません：${key}（assets/ai/ に足して npm run images:prepare）`);
+  return key;
+}
 
 export const flowSteps: FlowStep[] = [
   {
@@ -81,7 +90,6 @@ export const flowSteps: FlowStep[] = [
     lead: `電話・${lineUrl() ? "LINE・" : ""}${isContactFormShown() ? "フォーム・" : ""}Instagram から`,
     body: `${contactWays({ form: isContactFormShown() }).join("、")}のいずれかでご連絡ください。「何から聞けばよいか分からない」という段階でかまいません。困っていることを、そのままお聞かせください。`,
     prepare: ["気になっている場所と症状", "ご住所（市区町村まででも可）", "ご希望の連絡方法と時間帯"],
-    pose: "illust/pose-phone",
   },
   {
     id: "hearing",
@@ -89,7 +97,6 @@ export const flowSteps: FlowStep[] = [
     lead: "状況をうかがい、写真を確認",
     body: "いまの設備の種類、使っている年数、症状をうかがいます。機器の型番や設置場所の写真をお送りいただくと、現地調査の前に、おおよその内容をお伝えできます。",
     prepare: ["機器の型番が書かれたシール（銘板）の写真", "設置場所の全体が分かる写真"],
-    pose: "illust/pose-laptop",
   },
   {
     id: "survey",
@@ -97,42 +104,36 @@ export const flowSteps: FlowStep[] = [
     lead: "無料でうかがいます",
     body: "ご都合のよい日時に現地へうかがい、設置場所の寸法、配管や配線の状態、搬入の経路を確認します。この段階で、取り付けられる機種と必要な工事が決まります。",
     prepare: ["工事する場所のまわりの片付け（可能な範囲で）", "マンションの場合は管理規約"],
-    pose: "illust/pose-idea",
   },
   {
     id: "estimate",
     title: "お見積もり・ご提案",
     lead: "内訳の分かる見積書を",
     body: "調査の結果をもとに、機器と工事の内訳が分かる見積書をお出しします。複数の機種で迷う場合は、それぞれの違いをご説明します。補助金が使える工事は、その条件もご案内します。",
-    pose: "illust/pose-calc",
   },
   {
     id: "contract",
     title: "ご契約・日程の調整",
     lead: "内容に納得してから",
     body: "見積もりの内容にご納得いただけたら、ご契約となります。機器の手配にかかる日数を確認し、工事の日時を決めます。補助金を使う場合は、申請の順番に合わせて日程を組みます。",
-    pose: "illust/pose-chart",
   },
   {
     id: "work",
     title: "施工",
     lead: "養生してから、工事へ",
     body: "作業する場所と通路を養生してから、工事に入ります。既存の機器の取り外し、新しい機器の取り付け、配管・配線の接続を行い、動作を確認します。",
-    pose: "illust/pose-fist",
   },
   {
     id: "handover",
     title: "お引き渡し",
     lead: "使い方をご説明",
     body: "仕上がりを一緒にご確認いただき、機器の使い方をご説明します。取扱説明書などの書類をお渡しして、工事は完了です。",
-    pose: "illust/pose-ok",
   },
   {
     id: "after",
     title: "工事のあとも",
     lead: "気になることは、いつでも",
     body: "使い始めてから気になることが出てきたら、ご連絡ください。施工した当社が窓口になります。別の場所の工事のご相談も、同じ窓口でお受けします。",
-    pose: "illust/pose-trust",
   },
 ];
 

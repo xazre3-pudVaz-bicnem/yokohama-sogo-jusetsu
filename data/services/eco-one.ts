@@ -1,4 +1,6 @@
 import type { Service } from "./types";
+import { BOILER_PAGES } from "@/data/specialty";
+import { siteConfig } from "@/lib/site";
 
 /**
  * ECO ONE・ハイブリッド給湯暖房
@@ -21,7 +23,7 @@ export const ecoOne: Service = {
   summary:
     "リンナイのハイブリッド給湯・暖房システム「ECO ONE（エコワン）」の設置に対応します。ガス給湯器やエネファームからの入れ替え、補助金の申請までサポートします。",
   seo: {
-    title: "ECO ONE（エコワン）の設置・交換｜横浜市戸塚区",
+    title: "ECO ONE（エコワン）の設置・交換",
     description:
       "リンナイのハイブリッド給湯・暖房システム ECO ONE（エコワン）の設置は横浜総合住設へ。電気のヒートポンプとガスを組み合わせる仕組み、向いている家、設置前の確認点、補助金の申請サポートまでご案内します。",
   },
@@ -162,5 +164,11 @@ export const ecoOne: Service = {
   related: ["water-heater", "ene-farm", "solar", "storage-battery"],
   blogClusters: ["eco-one", "water-heater", "subsidy"],
   subsidyIds: ["kyutou-shoene"],
-  specialtySite: null,
+  specialtySite: {
+    name: siteConfig.specialtySites.boiler.name,
+    url: siteConfig.specialtySites.boiler.url,
+    title: "ハイブリッド給湯器の機種と補助金は、専門サイトでくわしく",
+    note: "ハイブリッド給湯器の機種の違い、エコキュートとの比べ方、ECO ONE の補助金の額は、当社の給湯器専門サイトにまとめています。",
+    links: [BOILER_PAGES.hybrid, BOILER_PAGES.subsidyEcoOne],
+  },
 };

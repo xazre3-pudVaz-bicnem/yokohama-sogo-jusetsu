@@ -15,6 +15,7 @@ import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
 import { getArea, publishedAreas, yokohamaWards } from "@/data/areas";
 import { creditOf } from "@/data/company";
 import { getService, servicePath } from "@/data/services";
+import { BOILER_SERVICES, boilerLinkForArea } from "@/data/specialty";
 import { subsidies } from "@/data/subsidies";
 import { worksByArea, worksSorted } from "@/data/works";
 import { getPostsByArea, getPostsByCluster } from "@/lib/blog";
@@ -61,6 +62,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
   const areaWorks = worksByArea(a.slug);
   const posts = getPostsByArea(a.slug, 5);
   const isCity = a.kind === "city";
+  const boilerArea = boilerLinkForArea(a.slug);
   const localSubsidies = isCity ? subsidies.filter((s) => s.level === "横浜市") : [];
 
   return (
@@ -225,11 +227,18 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
                     <Phrase>{n.title}</Phrase>
                   </h3>
                   <p className="mt-2 text-[0.9375rem] leading-[1.95]">{n.body}</p>
-                  <p className="mt-3">
+                  <p className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
                     <Link href={servicePath(s)} className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-900 underline decoration-silver-400 underline-offset-4 transition-colors hover:text-brand-700">
                       {s.name}
                       <Icon name="arrowRight" className="size-3.5" />
                     </Link>
+                    {/* 給湯器は、地域ごとの案内を給湯器専門サイト（同じ会社）が受け持つ（data/specialty.ts） */}
+                    {boilerArea && BOILER_SERVICES.includes(s.slug) && (
+                      <a href={boilerArea.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-900 underline decoration-silver-400 underline-offset-4 transition-colors hover:text-brand-700">
+                        給湯器専門サイトの「{boilerArea.label}」
+                        <Icon name="arrowUpRight" className="size-3.5" />
+                      </a>
+                    )}
                   </p>
                 </li>
               );

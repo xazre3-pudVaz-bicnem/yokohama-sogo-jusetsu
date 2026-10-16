@@ -17,10 +17,16 @@
  *   searchIntent      … 検索する人が知りたいこと・したいこと
  *   contentType       … ページの種類
  *   parentTopic       … 上位のページ（Topic Cluster の親）。トップは null
- *   cedes             … このページでは取りにいかない検索語と、その担当のページ（取り合いを避けた記録）
+ *   cedes             … このページでは取りにいかない検索語と、その担当のページ（取り合いを避けた記録）。
+ *                       同じ会社の専門サイト（給湯器専門サイト）に譲るときは、to に専門サイトの URL を書く（data/specialty.ts の BOILER_PAGES）
+ *
+ * 給湯器（ガス給湯器・エコジョーズ・エコキュート・ハイブリッド給湯器・エネファームからの交換）の地域＋工事の検索語は、
+ * 給湯器専門サイト（https://www.yokoju-boiler.com）が担当する。このサイトの給湯器のページは、会社名つきの検索語を担当する。
  *
  * このファイルは、クライアント側のコンポーネントからも読めるよう、fs などサーバー専用のモジュールを import しない。
  */
+import { BOILER_PAGES } from "@/data/specialty";
+
 export type SeoContentType = "home" | "hub" | "service" | "area" | "company" | "support" | "blog-hub" | "works-hub" | "works-list" | "work" | "article" | "blog-category";
 
 export type SeoPageEntry = {
@@ -45,7 +51,7 @@ export const seoPages: SeoPageEntry[] = [
     cedes: [
       { keyword: "戸塚区 住宅設備", to: "/area/totsuka" },
       { keyword: "戸塚区 リフォーム", to: "/service/reform" },
-      { keyword: "戸塚区 給湯器交換", to: "/service/water-heater" },
+      { keyword: "戸塚区 給湯器交換", to: BOILER_PAGES.totsuka.url },
       { keyword: "戸塚区 エアコン工事", to: "/service/air-conditioner" },
     ],
   },
@@ -140,8 +146,8 @@ export const seoPages: SeoPageEntry[] = [
     parentTopic: "/area",
     cedes: [
       { keyword: "戸塚区 リフォーム", to: "/service/reform" },
-      { keyword: "戸塚区 給湯器交換", to: "/service/water-heater" },
-      { keyword: "戸塚区 エコキュート", to: "/service/ecocute" },
+      { keyword: "戸塚区 給湯器交換", to: BOILER_PAGES.totsuka.url },
+      { keyword: "戸塚区 エコキュート", to: BOILER_PAGES.totsuka.url },
       { keyword: "戸塚区 エアコン工事", to: "/service/air-conditioner" },
       { keyword: "戸塚区 外壁塗装", to: "/service/exterior-painting" },
     ],
@@ -154,54 +160,72 @@ export const seoPages: SeoPageEntry[] = [
     contentType: "area",
     parentTopic: "/area",
     cedes: [
-      { keyword: "横浜市 給湯器交換", to: "/service/water-heater" },
+      { keyword: "横浜市 給湯器交換", to: BOILER_PAGES.yokohama.url },
       { keyword: "横浜市 外壁塗装", to: "/service/exterior-painting" },
-      { keyword: "横浜市 エコキュート", to: "/service/ecocute" },
+      { keyword: "横浜市 エコキュート", to: BOILER_PAGES.ecocute.url },
     ],
   },
 
   /* ── サービス（Pillar） ── */
   {
     url: "/service/water-heater",
-    primaryKeyword: "戸塚区 給湯器交換",
-    secondaryKeywords: ["戸塚区 給湯器", "横浜市 給湯器交換", "ガス給湯器 交換", "エコジョーズ 交換", "戸塚区 給湯器 交換 費用"],
-    searchIntent: "戸塚区・横浜市で、ガス給湯器（エコジョーズを含む）の交換を頼める会社と、交換の判断材料を知りたい",
+    primaryKeyword: "横浜総合住設 給湯器",
+    secondaryKeywords: ["ヨコジュウ 給湯器", "給湯器 交換 浴室リフォーム 同時"],
+    searchIntent: "横浜総合住設に、ガス給湯器（エコジョーズを含む）の交換を、ほかの住まいの工事とあわせて頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
     cedes: [
-      { keyword: "戸塚区 エコキュート", to: "/service/ecocute" },
-      { keyword: "エネファーム 交換", to: "/service/ene-farm" },
+      { keyword: "戸塚区 給湯器交換", to: BOILER_PAGES.totsuka.url },
+      { keyword: "横浜市 給湯器交換", to: BOILER_PAGES.yokohama.url },
+      { keyword: "ガス給湯器 交換", to: BOILER_PAGES.gas.url },
+      { keyword: "エコジョーズ 交換", to: BOILER_PAGES.ecoJozu.url },
+      { keyword: "給湯器 補助金", to: BOILER_PAGES.subsidy.url },
+      { keyword: "ヨコジュウ エコキュート", to: "/service/ecocute" },
+      { keyword: "横浜総合住設 エネファーム", to: "/service/ene-farm" },
       { keyword: "給湯器 交換時期", to: "/blog/water-heater-replacement-signs" },
       { keyword: "給湯器 号数", to: "/blog/water-heater-capacity-guide" },
     ],
   },
   {
     url: "/service/ecocute",
-    primaryKeyword: "戸塚区 エコキュート",
-    secondaryKeywords: ["戸塚区 エコキュート交換", "横浜市 エコキュート", "エコキュート 交換", "エコキュート 設置場所", "エコキュート 費用", "エコキュート 故障", "エコキュート 補助金"],
-    searchIntent: "戸塚区・横浜市で、エコキュートの交換・新設を頼める会社と、設置できる条件・補助金を知りたい",
+    primaryKeyword: "横浜総合住設 エコキュート",
+    secondaryKeywords: ["ヨコジュウ エコキュート", "エコキュート 太陽光 同時 設置"],
+    searchIntent: "横浜総合住設に、エコキュートの交換・新設を、基礎・電気の工事や太陽光発電とあわせて頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
     cedes: [
+      { keyword: "戸塚区 エコキュート", to: BOILER_PAGES.totsuka.url },
+      { keyword: "横浜市 エコキュート", to: BOILER_PAGES.ecocute.url },
+      { keyword: "エコキュート 交換", to: BOILER_PAGES.ecocute.url },
+      { keyword: "エコキュート 補助金", to: BOILER_PAGES.subsidyEcocute.url },
       { keyword: "エコキュート 搬入経路", to: "/blog/totsuka-ecocute-carry-in-route" },
       { keyword: "給湯省エネ2026事業", to: "/blog/kyutou-shoene-2026-outline" },
     ],
   },
   {
     url: "/service/ene-farm",
-    primaryKeyword: "エネファーム 交換",
-    secondaryKeywords: ["エネファーム 撤去", "エネファーム 給湯器 交換", "横浜 エネファーム 撤去", "戸塚区 エネファーム", "エネファーム やめる"],
-    searchIntent: "エネファームをやめて、別の給湯器に取り替えたい。撤去まで頼める会社を探している",
+    primaryKeyword: "横浜総合住設 エネファーム",
+    secondaryKeywords: ["エネファーム 撤去 床暖房 つなぎ替え"],
+    searchIntent: "横浜総合住設に、エネファームの撤去と、床暖房・浴室乾燥機のつなぎ替えを含めた取り替えを頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
+    cedes: [
+      { keyword: "エネファーム 交換", to: BOILER_PAGES.eneFarm.url },
+      { keyword: "エネファーム 補助金", to: BOILER_PAGES.subsidyEneFarm.url },
+    ],
   },
   {
     url: "/service/eco-one",
-    primaryKeyword: "ECO ONE 設置",
-    secondaryKeywords: ["エコワン 交換", "ハイブリッド給湯器 横浜", "戸塚区 エコワン", "ECO ONE 補助金", "リンナイ ハイブリッド給湯器 設置"],
-    searchIntent: "ECO ONE（ハイブリッド給湯器）の仕組みと、自分の家に向くか、設置を頼める会社を知りたい",
+    primaryKeyword: "横浜総合住設 ECO ONE",
+    secondaryKeywords: ["ヨコジュウ エコワン", "ECO ONE 床暖房 つなぎ替え"],
+    searchIntent: "横浜総合住設に、ECO ONE（ハイブリッド給湯暖房）の設置を、床暖房や浴室暖房乾燥機とのつなぎ込みまで含めて頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
+    cedes: [
+      { keyword: "ECO ONE 設置", to: BOILER_PAGES.hybrid.url },
+      { keyword: "ハイブリッド給湯器 横浜", to: BOILER_PAGES.hybrid.url },
+      { keyword: "ECO ONE 補助金", to: BOILER_PAGES.subsidyEcoOne.url },
+    ],
   },
   {
     url: "/service/toilet",

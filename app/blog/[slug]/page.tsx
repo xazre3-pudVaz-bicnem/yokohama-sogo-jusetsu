@@ -6,6 +6,8 @@ import { PostRow } from "@/components/cards/PostCard";
 import { ServiceTile } from "@/components/cards/ServiceCard";
 import { WorkCard, WorkFeature } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { SpecialtySiteBanner } from "@/components/sections/SpecialtySiteBanner";
+import { boilerLinkForPost } from "@/data/specialty";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FaqList } from "@/components/ui/FaqList";
@@ -61,6 +63,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!p) notFound();
 
   const relatedServices = p.relatedServices.map(getService).filter((s) => s !== undefined);
+  const boilerLink = boilerLinkForPost(p);
   const relatedAreas = p.relatedAreas.map(getArea).filter((a) => a !== undefined);
   const works = relatedServices.length ? worksByService(relatedServices[0].slug).slice(0, 3) : [];
   const relatedPosts = getRelatedPosts(p, 3);
@@ -180,6 +183,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </section>
             )}
 
+            {/* 給湯器の記事：機種・補助金をくわしく扱う専門サイト（同じ会社）の、近いページの案内（data/specialty.ts） */}
+            {boilerLink && (
+              <SpecialtySiteBanner
+                compact
+                className="mt-10"
+                title="機種と補助金は、給湯器専門サイトでくわしく"
+                note={`この記事に近い「${boilerLink.label}」のページがあります。機種を型番で比べたり、使える補助金を確かめたりできます。`}
+                links={[boilerLink]}
+              />
+            )}
+
             {/* 執筆・更新日・運営会社（「監修」とは書かない。資格のある第三者の監修ではないため） */}
             <aside aria-label="この記事について" className="card card-line mt-10 px-5 py-5 sm:px-6">
               <dl className="grid gap-x-6 gap-y-1.5 text-[0.8125rem] leading-relaxed sm:grid-cols-[6.5rem_1fr]">
@@ -209,7 +223,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <h2 id="post-services" className="h-sub">
                   この記事に関係するサービス
                 </h2>
-                <ul className="rows mt-4">
+                {/* サービスのカードは1枚ずつが白いパネルなので、点線の一覧（.rows）の中に入れない（入れると幅が足りず、名前が細かく折り返す） */}
+                <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                   {relatedServices.map((s) => (
                     <li key={s.slug}>
                       <ServiceTile service={s} />

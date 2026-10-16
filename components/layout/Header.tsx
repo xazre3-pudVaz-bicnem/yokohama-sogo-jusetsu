@@ -43,6 +43,13 @@ export function Header() {
                 </Link>
               </li>
             ))}
+            {/* 同じ会社の給湯器専門サイト（data/specialty.ts） */}
+            <li>
+              <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1 whitespace-nowrap py-2 text-silver-200 transition-colors hover:text-white">
+                {siteConfig.specialtySites.boiler.label}
+                <Icon name="arrowUpRight" className="size-3" />
+              </a>
+            </li>
             {line && (
               <li>
                 <a href={line} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-silver-200 transition-colors hover:text-white" data-cv="line">

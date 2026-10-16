@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type MouseEvent } from "react";
 import { LineIcon } from "@/components/ui/LineIcon";
+import { siteConfig } from "@/lib/site";
 
 type LinkItem = { href: string; label: string };
 
@@ -130,8 +131,15 @@ export function MobileMenu({
             ))}
           </ul>
 
+          {/* 同じ会社の給湯器専門サイト（data/specialty.ts） */}
+          <p className="mt-7">
+            <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="link-arrow !text-sm">
+              {siteConfig.specialtySites.boiler.label}（ガス給湯器・エコキュートの機種と補助金）
+            </a>
+          </p>
+
           {instagram && (
-            <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-arrow mt-7 !text-sm">
+            <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-arrow mt-4 !text-sm">
               Instagram（施工写真）
             </a>
           )}

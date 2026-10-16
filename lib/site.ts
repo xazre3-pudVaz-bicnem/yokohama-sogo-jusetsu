@@ -179,6 +179,21 @@ export const siteConfig = {
     reviewUrl: "",
   },
 
+  /**
+   * 同じ会社が運営する専門サイト（2026-10-16 に依頼者から「給湯器専門サイトも作った」と連絡）。
+   * 給湯器（ガス給湯器・エコジョーズ・エコキュート・ハイブリッド給湯器・エネファームからの交換）の機種・価格の考え方・補助金・
+   * 地域ごとの案内は、専門サイトが受け持つ。このサイトは、会社全体・給湯器以外の工事・まとめての相談を受け持ち、
+   * 専門サイトと同じ内容を書き足さない（どちらで何を扱うかは data/specialty.ts）。
+   * 専門サイトのリポジトリは c:\projects\yokohamatotalhousingsolutions-boiler（別の Vercel）。会社の構造化データの @id は共通。
+   */
+  specialtySites: {
+    boiler: {
+      name: "横浜総合住設 給湯器専門サイト",
+      label: "給湯器専門サイト",
+      url: "https://www.yokoju-boiler.com",
+    },
+  },
+
   /** サイトの文章を最後に見直した日（sitemap.xml の lastmod に使う） */
   contentUpdatedAt: "2026-10-06",
 
@@ -194,6 +209,12 @@ export type OfficeKey = keyof typeof siteConfig.offices;
 /* ------------------------------------------------------------------ */
 /* 連絡先                                                              */
 /* ------------------------------------------------------------------ */
+
+/** 給湯器専門サイトのページの URL（例：boilerSiteUrl("/ecocute")）。トップは末尾のスラッシュを付けない */
+export function boilerSiteUrl(path = "/"): string {
+  const base = siteConfig.specialtySites.boiler.url;
+  return path === "/" || path === "" ? base : `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 /** 画面に出す代表番号。固定電話が空なら携帯電話を使う。どちらも空なら空文字 */
 export function primaryPhone(): string {

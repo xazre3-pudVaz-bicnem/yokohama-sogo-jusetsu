@@ -20,8 +20,9 @@ import path from "node:path";
 import { normalizeKeyword } from "@/data/seo-keyword-map";
 import { getAllPosts } from "@/lib/blog";
 import { blogClusters, getCluster } from "@/lib/blog-clusters";
-import { backlog, backlogCounts } from "@/lib/blog-generator/backlog";
+import { backlog } from "@/lib/blog-generator/backlog";
 import { pickTopic } from "@/lib/blog-generator/generate";
+import { isBoilerTopic } from "@/data/specialty";
 import { diceBigram } from "@/lib/blog-generator/similarity";
 import { topics, type Topic } from "@/lib/blog-generator/topics";
 import { allRoutes } from "@/lib/routes";
@@ -257,6 +258,9 @@ function planNewArticles(limit: number): Topic[] {
   return out;
 }
 const plan = planNewArticles(90);
+// 給湯器の題材・候補は、給湯器専門サイトの自動投稿が書く（data/specialty.ts）。このサイトの計画には入れない
+const boilerTopics = topics.filter((t) => isBoilerTopic(t.cluster, t.keyword)).length;
+const boilerCandidates = backlog.filter((c) => isBoilerTopic(c.cluster, c.keyword)).length;
 const planTable = [
   "| 順 | 優先度 | カテゴリ | 主キーワード | 題名の方向 | 親ページ |",
   "| --- | --- | --- | --- | --- | --- |",
@@ -289,7 +293,9 @@ const topicCount = new Map<string, number>();
 for (const t of topics) topicCount.set(t.cluster, (topicCount.get(t.cluster) ?? 0) + 1);
 const postCount = new Map<string, number>();
 for (const p of getAllPosts()) postCount.set(p.category, (postCount.get(p.category) ?? 0) + 1);
-const candidateCount = backlogCounts();
+// 給湯器専門サイトに任せた候補は数えない
+const candidateCount = new Map<string, number>();
+for (const c of backlog) if (!isBoilerTopic(c.cluster, c.keyword)) candidateCount.set(c.cluster, (candidateCount.get(c.cluster) ?? 0) + 1);
 
 const lines: string[] = [
   "# SEO 監査の結果",
@@ -298,7 +304,7 @@ const lines: string[] = [
   "",
   `- 調べたページ：${pages.length}（検索結果に出すページ：${idx.length}）`,
   `- ビルドの種類：${SITE_URL ? `本番 URL あり（${SITE_URL}）。canonical と index / noindex まで確認` : "本番 URL なし（全ページ noindex のビルド）。canonical と index / noindex は、ページの一覧（lib/routes.ts）の設定で代用"}`,
-  `- 検索語の割り当て：${map.length} ページ／これから書く題材 ${topics.length} 件／候補 ${backlog.length} 件`,
+  `- 検索語の割り当て：${map.length} ページ／これから書く題材 ${topics.length - boilerTopics} 件／候補 ${backlog.length - boilerCandidates} 件（ほかに、給湯器専門サイトに任せた題材 ${boilerTopics} 件・候補 ${boilerCandidates} 件）`,
   `- **誤り：${errors.length} 件**／注意：${warnings.length} 件`,
   "",
   "## 誤り（直すまで公開しない）",
@@ -345,12 +351,13 @@ const lines: string[] = [
   "## コラムのクラスター（カテゴリごとの本数）",
   "",
   "「題材」は、すぐに書ける形で決めてあるもの（`lib/blog-generator/topics.ts`）。「候補」は、検索意図だけを洗い出してあるもの（`lib/blog-generator/backlog.ts`）。",
+  "給湯器の題材と候補は、給湯器専門サイト（https://www.yokoju-boiler.com）の自動投稿が書くので、ここでは数えていません（`data/specialty.ts`）。",
   "",
   "| カテゴリ | 親ページ | 公開済み | 題材（未公開） | 候補 | 合計 |",
   "| --- | --- | --- | --- | --- | --- |",
   ...blogClusters.map((c) => {
     const posted = postCount.get(c.id) ?? 0;
-    const open = topics.filter((t) => t.cluster === c.id && !getAllPosts().some((p) => p.slug === t.slug)).length;
+    const open = topics.filter((t) => t.cluster === c.id && !isBoilerTopic(t.cluster, t.keyword) && !getAllPosts().some((p) => p.slug === t.slug)).length;
     const cand = candidateCount.get(c.id) ?? 0;
     return `| ${c.name} | ${c.pillar.href} | ${posted} | ${open} | ${cand} | ${posted + open + cand} |`;
   }),

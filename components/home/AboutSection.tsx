@@ -3,6 +3,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Illust, PhotoFill } from "@/components/ui/Photo";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { strengths } from "@/data/company";
+import { hasImage } from "@/lib/images";
 import { reveal } from "@/lib/reveal";
 import { siteConfig } from "@/lib/site";
 
@@ -51,14 +52,23 @@ export function AboutSection() {
           </div>
         </div>
 
+        {/* 特徴の一覧。それぞれに、中身を表すイラスト（同じ絵柄・同じ配色。ai/feat-<id>）を添える */}
         <div className="mt-12 lg:mt-16">
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {strengths.map((s, i) => (
-              <li key={s.id} className="card card-line p-5 sm:p-6" {...reveal((i % 4) * 70)}>
-                <h3 className="text-[1.0313rem] font-bold leading-snug">{s.title}</h3>
-                <p className="mt-2.5 text-sm leading-[1.9]">{s.body}</p>
-              </li>
-            ))}
+            {strengths.map((s, i) => {
+              const spot = `ai/feat-${s.id}`;
+              return (
+                <li key={s.id} className="card card-line p-5 sm:p-6" {...reveal((i % 4) * 70)}>
+                  {hasImage(spot) && (
+                    <span className="spot-feature" aria-hidden="true">
+                      <Illust image={spot} width={96} className="spot-img" />
+                    </span>
+                  )}
+                  <h3 className="mt-4 text-[1.0313rem] font-bold leading-snug">{s.title}</h3>
+                  <p className="mt-2.5 text-sm leading-[1.9]">{s.body}</p>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

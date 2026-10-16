@@ -8,9 +8,11 @@ import { z } from "zod";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword, seoPageFor } from "@/data/seo-keyword-map";
 import { servicePath, services } from "@/data/services";
+import { isBoilerTopic } from "@/data/specialty";
 import { serviceSlugsWithWorkList, works } from "@/data/works";
 import { BLOG_DIR, getAllPosts, type Post } from "@/lib/blog";
 import { getCluster } from "@/lib/blog-clusters";
+import { backlog } from "@/lib/blog-generator/backlog";
 import { BASE_SECTIONS, loadFactSheet, type FactSheet } from "@/lib/blog-generator/facts";
 import { diceBigram, shingleOverlap } from "@/lib/blog-generator/similarity";
 import { topics, getTopic, type Topic } from "@/lib/blog-generator/topics";
@@ -110,6 +112,8 @@ export function pickTopic(existing: Pick<Post, "slug" | "intent" | "category" | 
   const candidates = topics
     .map((t, index) => ({ t, index }))
     .filter(({ t }) => !existing.some((e) => e.slug === t.slug))
+    // 給湯器の題材は、給湯器専門サイトの自動投稿が書く（2つのサイトで同じ検索語を取り合わないため。data/specialty.ts）
+    .filter(({ t }) => !isBoilerTopic(t.cluster, t.keyword))
     .filter(({ t }) => !taken.has(normalizeKeyword(t.keyword)) && !fixed.has(normalizeKeyword(t.keyword)))
     .filter(({ t }) => !existing.some((e) => diceBigram(e.intent, t.intent) >= 0.78));
   candidates.sort(
@@ -436,9 +440,35 @@ function toSources(urls: string[], sheet: FactSheet, today: string): ArticleDraf
   });
 }
 
-/** 主キーワードを必ず先頭にした keywords */
-function withPrimary(primary: string, rest: string[]): string[] {
-  return [primary, ...rest.map((k) => k.trim()).filter((k) => k && normalizeKeyword(k) !== normalizeKeyword(primary))].slice(0, 8);
+/**
+ * 副キーワードに使えない検索語：固定ページ・ほかの記事・施工事例・これから書く題材・候補が使っているもの。
+ * 書いた記事の副キーワードがこれと重なると、公開前の検査（npm run seo:audit）で「同じ検索語を2つのページが狙っている」となり、
+ * その日の記事が捨てられる（2026-10-14 に、候補と同じ「エコキュート 排水 膨張水」を副キーワードにして止まった）。
+ * 重なる語は、保存する前に外す（主キーワードは題材で決めた語のまま）。
+ */
+export function reservedKeywords(selfSlug: string): Set<string> {
+  const out = new Set<string>(fixedKeywordOwners().keys());
+  for (const p of getAllPosts()) if (p.slug !== selfSlug) for (const k of p.keywords) out.add(normalizeKeyword(k));
+  for (const w of works) if (w.keyword) out.add(normalizeKeyword(w.keyword));
+  for (const t of topics) if (t.slug !== selfSlug) out.add(normalizeKeyword(t.keyword));
+  for (const c of backlog) out.add(normalizeKeyword(c.keyword));
+  out.delete("");
+  return out;
+}
+
+/** 主キーワードを必ず先頭にした keywords（ほかのページ・題材・候補と重なる副キーワードは外す） */
+function withPrimary(primary: string, rest: string[], reserved: Set<string>): string[] {
+  const p = normalizeKeyword(primary);
+  const seen = new Set([p]);
+  const kept = rest
+    .map((k) => k.trim())
+    .filter((k) => {
+      const n = normalizeKeyword(k);
+      if (!k || seen.has(n) || reserved.has(n)) return false;
+      seen.add(n);
+      return true;
+    });
+  return [primary, ...kept].slice(0, 8);
 }
 
 /** 新しい記事：原稿に、題材で決めた項目（slug・カテゴリ・主キーワード・日付など）を足す */
@@ -448,7 +478,7 @@ export function toDraft(out: ArticleOutput, topic: Topic, sheet: FactSheet, toda
     slug: topic.slug,
     description: out.description.trim(),
     category: topic.cluster,
-    keywords: withPrimary(topic.keyword, out.keywords),
+    keywords: withPrimary(topic.keyword, out.keywords, reservedKeywords(topic.slug)),
     intent: topic.intent,
     publishedAt: today,
     updatedAt: today,
@@ -478,7 +508,7 @@ export function toRefreshedDraft(out: ArticleOutput, post: Post, sheet: FactShee
     ...front,
     title: out.title.trim(),
     description: out.description.trim(),
-    keywords: withPrimary(post.keywords[0], out.keywords),
+    keywords: withPrimary(post.keywords[0], out.keywords, reservedKeywords(post.slug)),
     faq: out.faq.map((f) => ({ q: f.q.trim(), a: f.a.trim() })),
     relatedArticles: out.relatedArticles,
     sources: toSources(out.sources, sheet, today),

@@ -6,7 +6,7 @@ import { Illust, Photo, PhotoFill } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getArea, yokohamaWards } from "@/data/areas";
-import { creditOf, flowSteps, instagramPosts } from "@/data/company";
+import { creditOf, flowSpot, flowSteps, instagramPosts } from "@/data/company";
 import { pickupFaqs } from "@/data/faq";
 import { greeting, representativeLabel } from "@/data/greeting";
 import { getAllPosts } from "@/lib/blog";
@@ -133,8 +133,9 @@ export function FlowSection() {
           {steps.map((s, i) => (
             <li key={s.id} className="card relative flex items-center gap-4 px-5 py-5 lg:block lg:px-4 lg:pb-6 lg:pt-7 lg:text-center" {...reveal(i * 80, "pop")}>
               <span className="num absolute -left-2 -top-2 grid size-8 place-items-center rounded-full bg-brand-600 text-sm font-semibold text-white shadow-card lg:left-3 lg:top-3">{i + 1}</span>
-              <div className="grid size-20 shrink-0 place-items-end overflow-hidden rounded-full bg-cream lg:mx-auto lg:size-24">
-                <Illust image={s.pose} width={96} className="mx-auto h-[88%] w-auto" />
+              {/* 工程のイラスト（同じ絵柄・同じ配色。ai/flow-<id>） */}
+              <div className="grid size-20 shrink-0 place-items-center rounded-full bg-cream p-3 lg:mx-auto lg:size-24">
+                <Illust image={flowSpot(s.id)} width={80} className="spot-img" />
               </div>
               <div className="lg:mt-4">
                 <h3 className="text-[1.0625rem] font-bold leading-snug">{s.title}</h3>

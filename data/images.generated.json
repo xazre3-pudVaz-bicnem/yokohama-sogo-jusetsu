@@ -1,4 +1,164 @@
 {
+  "ai/feat-bundle": {
+    "src": "/images/ai/feat-bundle.webp",
+    "width": 480,
+    "height": 412
+  },
+  "ai/feat-business": {
+    "src": "/images/ai/feat-business.webp",
+    "width": 480,
+    "height": 463
+  },
+  "ai/feat-difficult": {
+    "src": "/images/ai/feat-difficult.webp",
+    "width": 349,
+    "height": 480
+  },
+  "ai/feat-finish": {
+    "src": "/images/ai/feat-finish.webp",
+    "width": 480,
+    "height": 363
+  },
+  "ai/feat-local": {
+    "src": "/images/ai/feat-local.webp",
+    "width": 480,
+    "height": 376
+  },
+  "ai/feat-range": {
+    "src": "/images/ai/feat-range.webp",
+    "width": 480,
+    "height": 391
+  },
+  "ai/feat-subsidy": {
+    "src": "/images/ai/feat-subsidy.webp",
+    "width": 480,
+    "height": 395
+  },
+  "ai/feat-survey": {
+    "src": "/images/ai/feat-survey.webp",
+    "width": 480,
+    "height": 420
+  },
+  "ai/flow-after": {
+    "src": "/images/ai/flow-after.webp",
+    "width": 480,
+    "height": 453
+  },
+  "ai/flow-contact": {
+    "src": "/images/ai/flow-contact.webp",
+    "width": 480,
+    "height": 471
+  },
+  "ai/flow-contract": {
+    "src": "/images/ai/flow-contract.webp",
+    "width": 480,
+    "height": 455
+  },
+  "ai/flow-estimate": {
+    "src": "/images/ai/flow-estimate.webp",
+    "width": 480,
+    "height": 411
+  },
+  "ai/flow-handover": {
+    "src": "/images/ai/flow-handover.webp",
+    "width": 480,
+    "height": 441
+  },
+  "ai/flow-hearing": {
+    "src": "/images/ai/flow-hearing.webp",
+    "width": 480,
+    "height": 452
+  },
+  "ai/flow-survey": {
+    "src": "/images/ai/flow-survey.webp",
+    "width": 468,
+    "height": 480
+  },
+  "ai/flow-work": {
+    "src": "/images/ai/flow-work.webp",
+    "width": 480,
+    "height": 423
+  },
+  "ai/house-overview": {
+    "src": "/images/ai/house-overview.webp",
+    "width": 1432,
+    "height": 946
+  },
+  "ai/svc-air-conditioner": {
+    "src": "/images/ai/svc-air-conditioner.webp",
+    "width": 437,
+    "height": 480
+  },
+  "ai/svc-demolition": {
+    "src": "/images/ai/svc-demolition.webp",
+    "width": 480,
+    "height": 456
+  },
+  "ai/svc-eco-one": {
+    "src": "/images/ai/svc-eco-one.webp",
+    "width": 480,
+    "height": 458
+  },
+  "ai/svc-ecocute": {
+    "src": "/images/ai/svc-ecocute.webp",
+    "width": 451,
+    "height": 480
+  },
+  "ai/svc-ene-farm": {
+    "src": "/images/ai/svc-ene-farm.webp",
+    "width": 480,
+    "height": 380
+  },
+  "ai/svc-exterior-painting": {
+    "src": "/images/ai/svc-exterior-painting.webp",
+    "width": 471,
+    "height": 480
+  },
+  "ai/svc-garden": {
+    "src": "/images/ai/svc-garden.webp",
+    "width": 480,
+    "height": 465
+  },
+  "ai/svc-kitchen-equipment": {
+    "src": "/images/ai/svc-kitchen-equipment.webp",
+    "width": 421,
+    "height": 480
+  },
+  "ai/svc-other": {
+    "src": "/images/ai/svc-other.webp",
+    "width": 459,
+    "height": 480
+  },
+  "ai/svc-reform": {
+    "src": "/images/ai/svc-reform.webp",
+    "width": 480,
+    "height": 475
+  },
+  "ai/svc-roof-painting": {
+    "src": "/images/ai/svc-roof-painting.webp",
+    "width": 480,
+    "height": 390
+  },
+  "ai/svc-solar": {
+    "src": "/images/ai/svc-solar.webp",
+    "width": 480,
+    "height": 431
+  },
+  "ai/svc-storage-battery": {
+    "src": "/images/ai/svc-storage-battery.webp",
+    "width": 384,
+    "height": 480
+  },
+  "ai/svc-toilet": {
+    "src": "/images/ai/svc-toilet.webp",
+    "width": 480,
+    "height": 432
+  },
+  "ai/svc-water-heater": {
+    "src": "/images/ai/svc-water-heater.webp",
+    "width": 358,
+    "height": 480
+  },
   "area/totsuka-aerial": {
     "src": "/images/area/totsuka-aerial.webp",
     "width": 2000,
@@ -8,6 +168,26 @@
     "src": "/images/area/yokohama-minatomirai.webp",
     "width": 2000,
     "height": 1047
+  },
+  "boiler/bubbles": {
+    "src": "/images/boiler/bubbles.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "boiler/mascot-ok": {
+    "src": "/images/boiler/mascot-ok.webp",
+    "width": 320,
+    "height": 316
+  },
+  "boiler/mascot-point": {
+    "src": "/images/boiler/mascot-point.webp",
+    "width": 320,
+    "height": 340
+  },
+  "boiler/mascot-wave": {
+    "src": "/images/boiler/mascot-wave.webp",
+    "width": 320,
+    "height": 337
   },
   "brand/line-qr": {
     "src": "/images/brand/line-qr.png",

@@ -6,7 +6,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Illust } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading, SectionSplit } from "@/components/ui/SectionHeading";
-import { flowSteps } from "@/data/company";
+import { flowSpot, flowSteps } from "@/data/company";
 import { reveal } from "@/lib/reveal";
 import { keywordsFor } from "@/data/seo-keyword-map";
 import { buildMetadata } from "@/lib/seo";
@@ -59,11 +59,17 @@ export default function FlowPage() {
               <li key={s.id} id={s.id} className="relative flex scroll-mt-28 gap-3.5 pb-6 last:pb-0 sm:gap-6" {...reveal()}>
                 {i < flowSteps.length - 1 && <span className="absolute bottom-0 left-[1.3125rem] top-11 w-0.5 bg-brand-200 sm:left-[1.6875rem] sm:top-14" aria-hidden="true" />}
                 <span className="num relative grid size-11 shrink-0 place-items-center rounded-full bg-brand-600 text-lg font-semibold text-white shadow-card sm:size-14 sm:text-xl">{i + 1}</span>
-                <div className="card card-line grid flex-1 gap-x-6 px-5 py-5 sm:grid-cols-[1fr_5.5rem] sm:px-7 sm:py-6">
+                <div className="card card-line grid flex-1 gap-x-6 px-5 py-5 sm:grid-cols-[1fr_7rem] sm:px-7 sm:py-6">
                   <div>
-                    <h2 className="text-[1.25rem] font-black leading-snug sm:text-[1.375rem]">
-                      <Phrase>{s.title}</Phrase>
-                    </h2>
+                    <div className="flex items-start justify-between gap-3">
+                      <h2 className="text-[1.25rem] font-black leading-snug sm:text-[1.375rem]">
+                        <Phrase>{s.title}</Phrase>
+                      </h2>
+                      {/* 狭い画面では、工程のイラストを見出しの右に小さく出す */}
+                      <span className="spot-step sm:hidden" aria-hidden="true">
+                        <Illust image={flowSpot(s.id)} width={64} className="spot-img" />
+                      </span>
+                    </div>
                     <p className="mt-2">
                       <span className="tag tag-blue">{s.lead}</span>
                     </p>
@@ -80,7 +86,9 @@ export default function FlowPage() {
                     )}
                   </div>
                   <div className="hidden self-start sm:block" aria-hidden="true">
-                    <Illust image={s.pose} width={104} className="ml-auto h-auto w-[5.5rem]" />
+                    <span className="spot-step spot-step-lg ml-auto">
+                      <Illust image={flowSpot(s.id)} width={112} className="spot-img" />
+                    </span>
                   </div>
                 </div>
               </li>
