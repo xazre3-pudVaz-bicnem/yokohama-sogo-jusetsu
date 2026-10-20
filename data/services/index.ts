@@ -11,6 +11,8 @@ import { solar } from "./solar";
 import { storageBattery } from "./storage-battery";
 import { kitchenEquipment } from "./kitchen-equipment";
 import { reform } from "./reform";
+import { windows } from "./window";
+import { tatami } from "./tatami";
 import { demolition } from "./demolition";
 import { garden } from "./garden";
 import { other } from "./other";
@@ -41,6 +43,8 @@ export const services: Service[] = [
   storageBattery,
   kitchenEquipment,
   reform,
+  windows,
+  tatami,
   demolition,
   garden,
   other,

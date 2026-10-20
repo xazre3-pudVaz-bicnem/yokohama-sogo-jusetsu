@@ -408,7 +408,7 @@ export const backlog: Candidate[] = [
   c("garden", "P2", "ウッドデッキ 目隠し フェンス", "ウッドデッキに目隠しを付けるときの考え方を知りたい"),
   c("garden", "P2", "庭 工事 外壁塗装 順番", "庭の工事と外壁塗装を、どちらを先にするとよいのかを知りたい"),
 
-  /* ── 住宅設備（親ページ：/service。関連するサービスページは /service/other） ── */
+  /* ── 住宅設備（親ページ：/service。関連するサービスページは /service/other、内窓の候補は /service/window） ── */
   c("housing-equipment", "P0", "浴室暖房乾燥機 交換 工事 流れ", "浴室暖房乾燥機の交換の進み方を知りたい", PHOTO),
   c("housing-equipment", "P0", "浴室暖房乾燥機 天井裏 確認", "浴室暖房乾燥機の交換で天井裏を確かめる理由を知りたい"),
   c("housing-equipment", "P0", "内窓 設置 見積もり 測る", "内窓の見積もりの前に測る場所を知りたい", MAKER),

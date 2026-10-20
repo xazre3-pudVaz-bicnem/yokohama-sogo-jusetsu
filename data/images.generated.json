@@ -149,6 +149,11 @@
     "width": 384,
     "height": 480
   },
+  "ai/svc-tatami": {
+    "src": "/images/ai/svc-tatami.webp",
+    "width": 480,
+    "height": 437
+  },
   "ai/svc-toilet": {
     "src": "/images/ai/svc-toilet.webp",
     "width": 480,
@@ -158,6 +163,11 @@
     "src": "/images/ai/svc-water-heater.webp",
     "width": 358,
     "height": 480
+  },
+  "ai/svc-window": {
+    "src": "/images/ai/svc-window.webp",
+    "width": 480,
+    "height": 428
   },
   "area/totsuka-aerial": {
     "src": "/images/area/totsuka-aerial.webp",
@@ -479,6 +489,11 @@
     "width": 1672,
     "height": 941
   },
+  "photos/window-inner": {
+    "src": "/images/photos/window-inner.webp",
+    "width": 1536,
+    "height": 1024
+  },
   "works/aircon-a-after-indoor": {
     "src": "/images/works/aircon-a-after-indoor.webp",
     "width": 1104,
@@ -519,6 +534,16 @@
     "width": 1104,
     "height": 1472
   },
+  "works/aircon-ceiling-after": {
+    "src": "/images/works/aircon-ceiling-after.webp",
+    "width": 1108,
+    "height": 600
+  },
+  "works/aircon-ceiling-before": {
+    "src": "/images/works/aircon-ceiling-before.webp",
+    "width": 958,
+    "height": 520
+  },
   "works/aircon-cover-after-indoor": {
     "src": "/images/works/aircon-cover-after-indoor.webp",
     "width": 1104,
@@ -543,6 +568,21 @@
     "src": "/images/works/aircon-high-place.webp",
     "width": 1211,
     "height": 1600
+  },
+  "works/attic-wiring": {
+    "src": "/images/works/attic-wiring.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/balcony-wash-after": {
+    "src": "/images/works/balcony-wash-after.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/balcony-wash-before": {
+    "src": "/images/works/balcony-wash-before.webp",
+    "width": 1108,
+    "height": 1477
   },
   "works/bath-dryer-after-remote": {
     "src": "/images/works/bath-dryer-after-remote.webp",
@@ -608,6 +648,21 @@
     "src": "/images/works/floor-protection.webp",
     "width": 1200,
     "height": 1600
+  },
+  "works/gas-aircon-after-outdoor": {
+    "src": "/images/works/gas-aircon-after-outdoor.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/gas-aircon-before-outdoor": {
+    "src": "/images/works/gas-aircon-before-outdoor.webp",
+    "width": 708,
+    "height": 700
+  },
+  "works/gas-aircon-gas-cock": {
+    "src": "/images/works/gas-aircon-gas-cock.webp",
+    "width": 1108,
+    "height": 1477
   },
   "works/lagging-1": {
     "src": "/images/works/lagging-1.webp",
@@ -678,6 +733,41 @@
     "src": "/images/works/painting-roof-mid.webp",
     "width": 368,
     "height": 276
+  },
+  "works/tatami-before": {
+    "src": "/images/works/tatami-before.webp",
+    "width": 1477,
+    "height": 1108
+  },
+  "works/tatami-ryukyu-after": {
+    "src": "/images/works/tatami-ryukyu-after.webp",
+    "width": 1477,
+    "height": 1108
+  },
+  "works/unit-bath-tub-set": {
+    "src": "/images/works/unit-bath-tub-set.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/unit-bath-walls-open": {
+    "src": "/images/works/unit-bath-walls-open.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/washroom-done": {
+    "src": "/images/works/washroom-done.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/washroom-sink-plumbing": {
+    "src": "/images/works/washroom-sink-plumbing.webp",
+    "width": 1108,
+    "height": 1477
+  },
+  "works/water-heater-flue": {
+    "src": "/images/works/water-heater-flue.webp",
+    "width": 1108,
+    "height": 1100
   },
   "works/wood-deck-1-ground": {
     "src": "/images/works/wood-deck-1-ground.webp",

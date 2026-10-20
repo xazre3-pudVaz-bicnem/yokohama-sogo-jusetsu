@@ -127,7 +127,8 @@ Node.js は 20.9 以上。
 
 **施工事例を足す**（Instagram の投稿や、現場の写真から） … 写真を `assets/` に置いて `scripts/prepare-images.mjs` の表に足し、
 `npm run images:prepare` を実行。画像のキー（＝ファイル名）は、`works/water-heater-wall-after` のように内容が分かる英語にします。
-`data/works.ts` に1件足し、`keyword`（その事例が代表になる検索語）を書きます。
+`data/works.ts` に1件足し、`keyword`（その事例が代表になる検索語）と、`source`（Instagram の投稿なら `type: "instagram"` と投稿の URL、
+LINE で受け取った写真なら `type: "line"` と受け取った日）を書きます。
 施工地域（`area`。**市区まで**）・時期・期間・取り替える前の機器（`existing`）・新しい機器（`products`。型番は `model`）・難しかった点（`difficulty`）は、
 分かったものだけ入れてください（空の項目は表示されません。確認できていない地域を、推測で入れないこと）。
 足した事例は、施工事例の一覧・代表サービスのページ・地域ページ（`area.areaSlug` を入れたとき）・関係するコラムの下・サイトマップに自動で出ます。

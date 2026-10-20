@@ -101,7 +101,7 @@ export const subsidies: Subsidy[] = [
       { label: "内窓設置の対象と補助額", url: "https://window-renovation2026.env.go.jp/construction/inner-window.html" },
     ],
     checkedAt: "2026-10-06",
-    services: ["other", "reform"],
+    services: ["window", "reform"],
   },
   {
     id: "mirai-eco",

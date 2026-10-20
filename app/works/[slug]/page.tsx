@@ -268,8 +268,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               </SectionSplit>
             )}
 
-            {/* コメント（公式 Instagram の投稿文） */}
-            {w.comment && (
+            {/* コメント（公式 Instagram の投稿文。LINE で受け取った写真の事例には無い） */}
+            {w.comment && w.source.type === "instagram" && (
               <SectionSplit heading={<SectionHeading id="comment" title="横浜総合住設からのコメント" />}>
                 <figure {...reveal(60)}>
                   <div className="flex items-end gap-3 sm:gap-5">

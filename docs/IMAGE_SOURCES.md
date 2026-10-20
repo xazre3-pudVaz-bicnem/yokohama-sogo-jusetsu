@@ -1,11 +1,14 @@
 # 画像の出典と、AI で作ったイラストの記録
 
-最後に直した日：2026-10-16。
+最後に直した日：2026-10-20。
 
 ## 1. 写真
 
 - 当社の現場の写真（`works/`）… 公式 Instagram の投稿と、会社から LINE で受け取った写真。「当社施工」と添える。
-- イメージ写真（`photos/`）… 依頼者が用意した生成画像。「写真はイメージです」と添え、施工事例のように見せない。
+  2026-10-20 に受け取ったアルバム「工事写真」15枚（代表の説明つき）は、`assets/line/2026-10-20/` に置き、`scripts/prepare-images.mjs` の
+  `ALBUM_2026_10_20` で書き出す。お客様の持ち物・窓の外の街並み・人の手や映り込みが写った部分は切り落とした。どの写真がどの事例かは `data/works.ts`。
+- イメージ写真（`photos/`）… 依頼者が用意した生成画像と、Codex の画像生成で作った写真（`photos/window-inner`。下の 2'）。
+  「写真はイメージです」と添え、施工事例のように見せない。
 - 出典の表示が必要な写真（`area/`）… `data/company.ts` の `photoCredits`（横浜市オープンデータなど）。
 - 元の画像は `assets/`（Git に入れない）。`npm run images:prepare`（`scripts/prepare-images.mjs`）で `public/images/` に書き出す。
 
@@ -54,6 +57,8 @@ Absolutely no text, letters, numbers, logos, brand marks, signage or price tags.
 | `public/images/ai/svc-demolition.webp` | サービスのカード（トップの事業内容・関連サービス・記事の「関係するサービス」） | Interior preparation for a renovation: a section of a room wall opened up to show the vertical wooden studs inside, the floor covered with a light-blue protective sheet, a tidy tool box with a hammer and a crowbar in front. Clean and safe, not destructive; only interior work, no building collapse. |
 | `public/images/ai/svc-garden.webp` | サービスのカード（トップの事業内容・関連サービス・記事の「関係するサービス」） | A small tidy garden: a neatly pruned round tree, a low rounded shrub, a short wooden deck with a few planks, a pair of pruning shears resting on the deck, and a small warm-yellow sun. |
 | `public/images/ai/svc-other.webp` | サービスのカード（トップの事業内容・関連サービス・記事の「関係するサービス」） | A bathroom scene: a flat rectangular heater-dryer panel in the ceiling blowing three gentle warm-air lines down over a simple bathtub, and in the foreground a modern single-lever faucet. A small warm-yellow accent in the warm air. |
+| `public/images/ai/svc-window.webp`（2026-10-20） | サービスのカード（トップの事業内容・関連サービス・記事の「関係するサービス」） | A sliding window set in a slice of light interior wall, with a second white inner window frame (double glazing) installed on the room side just inside the existing window; two short arrows show cold air blocked outside (light blue) and warm air kept inside (warm yellow). A small curtain tie at one side. Clean and simple. |
+| `public/images/ai/svc-tatami.webp`（2026-10-20） | サービスのカード（トップの事業内容・関連サービス・記事の「関係するサービス」） | A corner of a Japanese-style room: a few tatami mats on the floor drawn in pale cream with fine woven texture lines and navy borders, one borderless square tatami mat (Ryukyu-style) in front, and a sliding fusuma door with a plain light-blue paper panel and a small round recessed pull at the side. A small warm-yellow sparkle on the new mat. |
 | `public/images/ai/feat-range.webp` | トップの「横浜総合住設の特徴」 | A small house in the centre with four small round badges floating around it, each containing one simple object: a wrench, a paint roller, a small tree sprig, and a water drop — showing many kinds of home work handled by one company. |
 | `public/images/ai/feat-bundle.webp` | トップの「横浜総合住設の特徴」 | A single clipboard checklist with four checkbox lines (lines only, no writing), three of them ticked, and a small desk calendar behind it with one day highlighted in warm yellow — several jobs planned together in one schedule. |
 | `public/images/ai/feat-survey.webp` | トップの「横浜総合住設の特徴」 | An on-site survey kit: a retractable measuring tape with its tape pulled out, a clipboard with a simple outline sketch of a house, and a pencil, in front of a small house. No text, no numbers on the tape. |
@@ -93,6 +98,24 @@ Absolutely no text, labels, numbers, logos or people. Equipment generic and simp
 
 作り直すときは、同じプロンプトと参照画像（同じ絵柄の1枚）を渡し、出来上がりを目で確かめてから `assets/ai/` を差し替える。
 家の断面図を作り直したら、札の位置（PINS）を合わせ直す。
+
+## 2'. Codex の画像生成で作ったイメージ写真（`public/images/photos/`）
+
+当社の現場の写真が無いサービスの、ページの冒頭に使う。画面には「写真はイメージです」と出る（`photos/` の写真は自動でそうなる）。
+元の PNG は `assets/source/photos-gen/`（Git に入れない）。書き出しは `scripts/prepare-images.mjs` の `PHOTOS_GEN`。
+
+| ファイル | 使う場所 | 作った日 |
+| --- | --- | --- |
+| `public/images/photos/window-inner.webp` | 内窓の設置・窓の交換のページ（`/service/window`）の冒頭 | 2026-10-20 |
+
+```text
+Photorealistic interior photograph for a Japanese home-renovation company website (it will be labelled "image for illustration").
+Subject: a bright, tidy Japanese living room window seen from inside: an existing aluminium sliding window with a newly installed white resin inner window (secondary sliding window) fitted just inside it, creating a double window. Soft natural daylight, a sheer curtain gathered at one side, a light wooden floor and a little of a sofa edge. Calm, clean, modern.
+Composition: landscape 3:2, the window centred and clearly showing the two layers of sashes; eye-level, natural perspective, no fisheye.
+Absolutely no people, no text, no logos, no brand marks, no signage, no price tags. Nothing that identifies a real house or address.
+```
+
+作らないもの：当社の施工事例・スタッフ・お客様・事務所に見える写真、実在の家や住所が分かる写真、特定のメーカーの製品に見える写真。
 
 ## 3. 給湯器専門サイトの素材（`public/images/boiler/`）
 

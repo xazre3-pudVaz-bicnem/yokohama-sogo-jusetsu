@@ -11,7 +11,7 @@ import { reveal } from "@/lib/reveal";
  * 写真つきのパネルを3件。写真で出していない事例は、その下に文字だけの行で並べる（新しい順に5件まで）。
  * 事例が増えたら、PICK を入れ替える。
  */
-const PICK = ["wood-deck-installation", "aircon-replace-decorative-cover", "cupboard-installation"];
+const PICK = ["tatami-ryukyu-replacement", "wood-deck-installation", "aircon-replace-decorative-cover"];
 
 export function WorksSection() {
   const picked = PICK.map(getWork).filter((w): w is Work => w !== undefined);
@@ -22,7 +22,7 @@ export function WorksSection() {
     <section aria-labelledby="home-works" className="cv band band-mist deco-tr deco-bl section">
       <div className="container-x">
         <div className="flex items-end justify-between gap-x-8">
-          <SectionHeading id="home-works" eyebrow="当社の現場から" color="navy" title="施工事例" lead="エアコンの取替、浴室暖房乾燥機、ウッドデッキ、外壁・屋根の塗装など、当社が施工した現場の写真です。" />
+          <SectionHeading id="home-works" eyebrow="当社の現場から" color="navy" title="施工事例" lead="エアコンの取替、ユニットバスや洗面所のリフォーム、琉球畳への張り替え、ウッドデッキ、外壁・屋根の塗装など、当社が施工した現場の写真です。" />
           <div className="hidden shrink-0 sm:block" {...reveal(120, "pop")}>
             <Illust image="illust/people-couple-happy" width={176} className="h-auto w-36 animate-float-slow lg:w-44" />
           </div>

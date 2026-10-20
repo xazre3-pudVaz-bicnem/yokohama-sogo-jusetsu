@@ -303,6 +303,22 @@ export const seoPages: SeoPageEntry[] = [
     ],
   },
   {
+    url: "/service/window",
+    primaryKeyword: "内窓 設置 戸塚区",
+    secondaryKeywords: ["横浜市 内窓 設置", "戸塚区 窓 交換", "横浜市 窓 交換", "窓リフォーム 戸塚区"],
+    searchIntent: "戸塚区・横浜市で、内窓の設置や窓の取り替えを頼める会社と、内窓と取り替えの違い・使える補助制度を知りたい",
+    contentType: "service",
+    parentTopic: "/service",
+  },
+  {
+    url: "/service/tatami",
+    primaryKeyword: "戸塚区 畳 張り替え",
+    secondaryKeywords: ["横浜市 畳 張り替え", "戸塚区 襖 張り替え", "戸塚区 畳 表替え", "琉球畳 張り替え 横浜"],
+    searchIntent: "戸塚区・横浜市で、畳や襖の張り替え（琉球畳への張り替えを含む）を頼める会社と、張り替えの方法の違いを知りたい",
+    contentType: "service",
+    parentTopic: "/service",
+  },
+  {
     url: "/service/demolition",
     primaryKeyword: "リフォーム 解体工事",
     secondaryKeywords: ["内装解体 横浜", "戸塚区 解体 リフォーム", "キッチン 浴室 解体 撤去", "戸塚区 解体工事"],
@@ -321,11 +337,15 @@ export const seoPages: SeoPageEntry[] = [
   {
     url: "/service/other",
     primaryKeyword: "浴室暖房乾燥機 交換 横浜",
-    secondaryKeywords: ["戸塚区 浴室暖房乾燥機", "内窓 設置 戸塚区", "カップボード 設置 横浜", "水栓 交換 戸塚区"],
-    searchIntent: "浴室暖房乾燥機・内窓・水栓など、専用のページが無い設備の工事を頼めるかを知りたい",
+    secondaryKeywords: ["戸塚区 浴室暖房乾燥機", "カップボード 設置 横浜", "水栓 交換 戸塚区"],
+    searchIntent: "浴室暖房乾燥機・カップボード・水栓・配線など、専用のページが無い設備の工事を頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
-    cedes: [{ keyword: "戸塚区 住宅設備工事", to: "/area/totsuka" }],
+    cedes: [
+      { keyword: "戸塚区 住宅設備工事", to: "/area/totsuka" },
+      // 2026-10-20 に、内窓を専用のページに分けた
+      { keyword: "内窓 設置 戸塚区", to: "/service/window" },
+    ],
   },
 ];
 

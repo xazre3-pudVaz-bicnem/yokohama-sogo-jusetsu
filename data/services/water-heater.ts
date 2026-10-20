@@ -28,7 +28,7 @@ export const waterHeater: Service = {
   },
   h1: "給湯器交換（ガス給湯器・エコジョーズ）",
   lead: "ガス給湯器の交換は、いまの機種の型番と設置の形が分かれば、合う機種を絞れます。お湯の温度が安定しない、リモコンにエラー番号が出るといった前ぶれの段階でご相談いただければ、機種を比べて選ぶ時間が取れます。壁掛け・据置・マンションのパイプスペース設置のいずれも、現地で配管と排気の向きを確かめてからご提案します。",
-  updatedAt: "2026-10-07",
+  updatedAt: "2026-10-20",
   seeAlso: [
     { service: "ecocute", text: "電気でお湯を沸かしてためるエコキュートの交換・新設と、ガス給湯器からエコキュートへの切り替え" },
     { service: "ene-farm", text: "エネファームを撤去して、別の給湯器に取り替える工事" },
@@ -192,6 +192,7 @@ export const waterHeater: Service = {
     { type: "guide", id: "choose", variant: "columns", table: true },
     { type: "menu", heading: "給湯器の対応工事", variant: "photo" },
     { type: "guide", id: "work", variant: "steps" },
+    { type: "works" },
     { type: "note" },
     { type: "cost" },
     { type: "local" },

@@ -480,7 +480,7 @@ export const topics: Topic[] = [
     priority: "P1",
     titleHint: "マンションのリフォーム、最初に確かめる3つのこと",
     angle: ["管理規約と工事の申請", "共用部分と専有部分", "搬入の経路と作業できる時間", "内窓は専有部分の工事として行えることが多い"],
-    services: ["reform", "other"],
+    services: ["reform", "window"],
     facts: [],
   },
 
@@ -565,7 +565,7 @@ export const topics: Topic[] = [
     priority: "P1",
     titleHint: "内窓を付けると何が変わる？結露・寒さ・音への効き方",
     angle: ["窓と窓の間の空気の層", "付けられる窓・付けられない窓", "工事は壁を壊さない", "国の補助の対象"],
-    services: ["other", "reform"],
+    services: ["window", "reform"],
     facts: ["先進的窓リノベ2026事業・みらいエコ住宅2026事業"],
   },
 
@@ -578,7 +578,7 @@ export const topics: Topic[] = [
     priority: "P1",
     titleHint: "内窓の補助金。先進的窓リノベ2026事業の額と条件",
     angle: ["窓の大きさと性能で決まる定額", "戸建住宅の性能区分Sの額", "合計5万円以上という条件", "登録された事業者が申請する", "期限と予算"],
-    services: ["other", "reform"],
+    services: ["window", "reform"],
     facts: ["先進的窓リノベ2026事業・みらいエコ住宅2026事業"],
   },
   {

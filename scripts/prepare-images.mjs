@@ -5,11 +5,12 @@
  *
  * 元画像の置き場所
  *   assets/source/photos/         … 受け取ったイメージ写真（ChatGPT 画像 …png）
+ *   assets/source/photos-gen/     … Codex の画像生成で作ったイメージ写真（プロンプトは docs/IMAGE_SOURCES.md）
  *   assets/source/illustrations/  … 受け取った人物イラスト（people-*.webp / pose-*.webp）
  *   assets/source/                … ロゴ・チラシ・看板・表札の写真（担当者の連絡先が載っているため公開しない）
  *   assets/instagram/             … 公式 Instagram の施工写真（index.json に投稿日とキャプション）
  *   assets/stock/                 … 出典の表示が必要な写真（横浜市オープンデータなど。data/credits.ts に出典）
- *   assets/line/                  … 会社から LINE で受け取った素材（代表の写真・LINE の QR コード・施工の工程写真）
+ *   assets/line/                  … 会社から LINE で受け取った素材（代表の写真・LINE の QR コード・施工写真。受け取った日のフォルダもある）
  *
  * 写真を差し替えるときは、下の表の「元ファイル名」を新しいファイルに変えて、このスクリプトを実行する。
  * 表の3つ目に { left, top, width, height } を書くと、元画像のその範囲だけを切り出す
@@ -72,6 +73,13 @@ for (const [stamp, key, region] of PHOTOS) {
   if (!file) throw new Error(`写真が見つかりません: ${stamp}`);
   const source = sharp(path.join(photoDir, file));
   await emit(key, (region ? source.extract(region) : source).resize({ width: 1672, withoutEnlargement: true }), { quality: 86 });
+}
+
+// Codex の画像生成で作ったイメージ写真（当社の現場の写真が無いサービスの冒頭に使う。「写真はイメージです」と添える）
+const PHOTOS_GEN = [["window-inner.png", "photos/window-inner"]];
+const photoGenDir = path.join(ROOT, "assets", "source", "photos-gen");
+for (const [file, key] of PHOTOS_GEN) {
+  await emit(key, sharp(path.join(photoGenDir, file)).resize({ width: 1672, withoutEnlargement: true }), { quality: 86 });
 }
 
 // トップの冒頭の背景に使う、横長の写真。
@@ -238,6 +246,38 @@ const CUPBOARD = [
 for (const [file, key, region] of CUPBOARD) {
   const source = sharp(path.join(lineDir, file)).rotate();
   await emit(key, (region ? source.extract(region) : source).resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }));
+}
+
+// アルバム「工事写真」15枚（2026-10-20 に受領。代表の説明つき）。元のファイル名は「LINE_ALBUM_工事写真_261020_1〜15.jpg」で、
+// assets/line/2026-10-20/album-01〜15.jpg に名前だけ変えて置いた。どの写真がどの工事かは data/works.ts の各事例に書く。
+// 3つ目に切り出す範囲、4つ目に回転の角度。album-08 と album-07 は同じ室外機とガス栓（album-07 は上下が逆さに写っている）
+const ALBUM_2026_10_20 = [
+  ["album-01.jpg", "works/unit-bath-walls-open"],
+  ["album-02.jpg", "works/unit-bath-tub-set"],
+  ["album-04.jpg", "works/tatami-before"],
+  ["album-03.jpg", "works/tatami-ryukyu-after"],
+  // 下の部分に、お客様の持ち物（ちりとり）が写っているため外す
+  ["album-05.jpg", "works/water-heater-flue", { left: 0, top: 0, width: 1108, height: 1100 }],
+  // 左側の植木と空き缶の袋を外す
+  ["album-08.jpg", "works/gas-aircon-before-outdoor", { left: 400, top: 100, width: 708, height: 700 }],
+  ["album-07.jpg", "works/gas-aircon-gas-cock", null, 180],
+  ["album-06.jpg", "works/gas-aircon-after-outdoor"],
+  // 窓の外の街並みと、作業する人の手を外す
+  ["album-10.jpg", "works/aircon-ceiling-before", { left: 150, top: 430, width: 958, height: 520 }],
+  // 干してある洗濯物と、窓ガラスに映った人を外す
+  ["album-09.jpg", "works/aircon-ceiling-after", { left: 0, top: 380, width: 1108, height: 600 }],
+  ["album-12.jpg", "works/washroom-done"],
+  ["album-11.jpg", "works/washroom-sink-plumbing"],
+  ["album-14.jpg", "works/balcony-wash-before"],
+  ["album-13.jpg", "works/balcony-wash-after"],
+  ["album-15.jpg", "works/attic-wiring"],
+];
+for (const [file, key, region, angle] of ALBUM_2026_10_20) {
+  let source = sharp(path.join(lineDir, "2026-10-20", file)).rotate();
+  if (region) source = source.extract(region);
+  // 回転は1つの処理の中で1回しかできないので、向きをそろえて切り出したものを、いったん書き出してから回す
+  if (angle) source = sharp(await source.png().toBuffer()).rotate(angle);
+  await emit(key, source.resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }));
 }
 
 /* ------------------------------------------------------------------ */

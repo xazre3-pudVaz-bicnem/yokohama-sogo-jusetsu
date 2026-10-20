@@ -9,6 +9,9 @@ import { usePathname } from "next/navigation";
  * 1. 登場アニメーション … data-reveal を付けた要素が画面に入ったら data-revealed を付ける。
  *    - 最初の判定が終わるまで html[data-reveal-on] を付けない。つまり「最初から画面内にある要素」は
  *      一度も隠れない（LCP を遅らせない・ちらつかない）。画面外の要素だけが隠れて、入ってきたときに現れる。
+ *    - 最初の判定の時点で、すでに画面より上にある要素（JS が動き出す前に、スクロールして通り過ぎた要素）も
+ *      表示済みにする。通信の遅い端末で読み込み直後に速くスクロールすると、動き出しが遅れ、通り過ぎた本文が
+ *      隠れたまま残っていた（2026-10-20 に WebKit で確認）。
  *    - getBoundingClientRect を全要素に呼ぶと content-visibility:auto の区画まで強制レイアウトされるので、
  *      判定は IntersectionObserver の結果だけで行う。
  *
@@ -37,8 +40,8 @@ export function RevealObserver() {
         const vh = window.innerHeight;
         for (const e of entries) {
           const r = e.boundingClientRect;
-          // 初回だけは「少しでも画面にかかっている」ものを全部表示済みにする
-          const inView = e.isIntersecting || (first && r.height > 0 && r.top < vh && r.bottom > 0);
+          // 初回だけは「少しでも画面にかかっている」ものと「すでに画面より上にある」ものを、全部表示済みにする
+          const inView = e.isIntersecting || (first && r.height > 0 && r.top < vh);
           if (inView) {
             // "0"＝最初から画面内にあった／"1"＝スクロールして入ってきた（CSS の wipe が、後者だけを動かす）
             (e.target as HTMLElement).dataset.revealed = first ? "0" : "1";

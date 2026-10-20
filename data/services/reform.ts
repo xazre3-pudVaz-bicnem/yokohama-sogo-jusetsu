@@ -3,7 +3,8 @@ import type { Service } from "./types";
 /**
  * 住宅リフォーム
  * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く（1つの検索意図は、1つの URL だけが担当する）。
- * 書かないこと：便器の選び方（/service/toilet）、コンロ・レンジフード単体の交換（/service/kitchen-equipment）、塗装（/service/exterior-painting）
+ * 書かないこと：便器の選び方（/service/toilet）、コンロ・レンジフード単体の交換（/service/kitchen-equipment）、塗装（/service/exterior-painting）、
+ *              内窓と窓の交換のくわしい説明（/service/window）、畳・襖の張り替えのくわしい説明（/service/tatami）
  */
 export const reform: Service = {
   slug: "reform",
@@ -24,7 +25,11 @@ export const reform: Service = {
   },
   h1: "横浜市戸塚区の住宅リフォーム",
   lead: "キッチン・浴室・洗面・トイレの水まわりと、内装・収納のリフォームを行っています。解体、配管、電気、仕上げと職種の分かれる工事を、住宅設備の工事を軸に、解体から仕上げまでまとめてお引き受けします。",
-  updatedAt: "2026-10-06",
+  updatedAt: "2026-10-20",
+  seeAlso: [
+    { service: "window", text: "内窓の設置と窓の交換" },
+    { service: "tatami", text: "畳と襖の張り替え（琉球畳への張り替えを含む）" },
+  ],
   worries: [
     "キッチンと浴室を、できれば同じ時期に直したい",
     "設備屋と内装屋を別々に探すのが大変",
@@ -48,7 +53,7 @@ export const reform: Service = {
     },
     {
       title: "内装・収納",
-      body: "壁紙や床材の張り替え、収納の交換や造り付けです。設備の交換で壁や床を開けるタイミングに合わせると、仕上がりが揃います。",
+      body: "壁紙や床材の張り替え、畳・襖の張り替え、収納の交換や造り付けです。設備の交換で壁や床を開けるタイミングに合わせると、仕上がりが揃います。",
     },
     {
       title: "窓の断熱（内窓の設置）",
@@ -167,7 +172,7 @@ export const reform: Service = {
     { type: "subsidy" },
     { type: "local" },
   ],
-  related: ["toilet", "kitchen-equipment", "demolition", "other"],
+  related: ["window", "tatami", "toilet", "kitchen-equipment", "demolition", "other"],
   blogClusters: ["reform", "kitchen", "housing-equipment"],
   subsidyIds: ["mado-reno", "mirai-eco", "yokohama-dannetsu"],
   specialtySite: null,

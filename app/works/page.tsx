@@ -20,9 +20,9 @@ import { siteConfig } from "@/lib/site";
  * 載せるのは、当社が実際に施工した現場だけ（イメージ写真は使わない）。
  */
 export const metadata: Metadata = buildMetadata({
-  title: "施工事例｜エアコン・浴室暖房乾燥機・外壁塗装・ウッドデッキ",
+  title: "施工事例｜エアコン・浴室・畳・外壁塗装・ウッドデッキ",
   description:
-    "横浜総合住設の施工事例です。エアコンの取替、配管の化粧カバー仕上げ、浴室暖房乾燥機、ウッドデッキ、外壁・屋根の塗装など、実際の現場の写真を施工前後とポイントつきでご紹介します。",
+    "横浜総合住設の施工事例です。エアコンの取替、浴室暖房乾燥機、ユニットバスと洗面所のリフォーム、琉球畳への張り替え、ベランダの高圧洗浄、ウッドデッキ、外壁・屋根の塗装など、実際の現場の写真を施工前後とポイントつきでご紹介します。",
   path: "/works",
   keywords: keywordsFor("/works"),
 });
@@ -116,7 +116,7 @@ export default function WorksPage() {
 
           {siteConfig.social.instagram && (
             <p className="card card-line max-w-3xl px-6 py-5 text-[0.9375rem] leading-[1.95]" {...reveal()}>
-              ここに載せている事例は、公式 Instagram に投稿した施工写真をもとにまとめたものです。新しい現場の様子は、
+              ここに載せている事例は、公式 Instagram に投稿した施工写真と、現場で撮影した写真をもとにまとめたものです。新しい現場の様子は、
               <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="text-link">
                 Instagram
               </a>

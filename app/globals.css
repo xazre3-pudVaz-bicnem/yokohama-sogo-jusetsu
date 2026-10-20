@@ -272,9 +272,12 @@
   .band-cream.deco-tr::before {
     background: var(--color-sun-100);
   }
+  /* 中身を飾りの丸より手前に描く（左下の丸 ::after は中身より後ろの順で描かれるので、z-index が無いと、
+     幅の狭い画面で、区画の左下にあるカードや文字の上に重なって薄く見えていた） */
   .band > .container-x,
   .band > .container-narrow {
     position: relative;
+    z-index: 1;
   }
 
   /* ── 見出し ─────────────────────────────────────── */

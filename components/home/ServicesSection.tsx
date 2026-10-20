@@ -48,7 +48,7 @@ const BLOCKS: Block[] = [
     id: "exterior",
     tag: "家の外まわり・内装",
     title: "外装・リフォーム・外構",
-    body: "外壁・屋根の塗装、水まわりと内装のリフォーム、リフォームに伴う解体、庭木の手入れやウッドデッキの設置です。解体・設備・仕上げを同じ窓口でお受けするので、工程ごとに話を伝え直す手間がかかりません。",
+    body: "外壁・屋根の塗装、水まわりと内装のリフォーム、内窓の設置と窓の交換、畳・襖の張り替え、リフォームに伴う解体、庭木の手入れやウッドデッキの設置です。解体・設備・仕上げを同じ窓口でお受けするので、工程ごとに話を伝え直す手間がかかりません。",
     categories: ["exterior", "reform", "site"],
   },
 ];
@@ -62,6 +62,7 @@ const PINS: { slug: string; label: string; x: number; y: number }[] = [
   { slug: "exterior-painting", label: "外壁塗装", x: 13, y: 33 },
   { slug: "other", label: "浴室暖房乾燥機", x: 33, y: 24 },
   { slug: "reform", label: "リフォーム", x: 64, y: 30 },
+  { slug: "window", label: "窓・内窓", x: 85, y: 24 },
   { slug: "kitchen-equipment", label: "コンロ・レンジフード", x: 30, y: 53 },
   { slug: "air-conditioner", label: "エアコン", x: 60, y: 47 },
   { slug: "toilet", label: "トイレ", x: 72, y: 62 },

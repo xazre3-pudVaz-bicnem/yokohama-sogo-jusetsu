@@ -119,7 +119,7 @@ export const siteConfig = {
     capital: null as string | null,
     employees: null as string | null,
     corporateNumber: null as string | null,
-    /** 事業内容（チラシ・看板・Instagram に書かれている工事） */
+    /** 事業内容（チラシ・看板・Instagram に書かれている工事と、代表から載せてよいと連絡を受けた工事。窓・内窓・畳・襖は 2026-10-20 に LINE で） */
     business: [
       "給湯器・エコキュート・ハイブリッド給湯器の設置・交換",
       "エネファームからの給湯器交換",
@@ -129,6 +129,8 @@ export const siteConfig = {
       "太陽光発電・蓄電池の設置",
       "外壁塗装・屋根塗装",
       "住宅リフォーム（リフォームに伴う解体工事を含む）",
+      "内窓の設置・窓の交換",
+      "畳・襖の張り替え",
       "造園・外構工事",
     ],
   },
