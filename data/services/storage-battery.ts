@@ -1,3 +1,4 @@
+import { SOLAR_PAGES } from "@/data/specialty";
 import type { Service } from "./types";
 
 /**
@@ -5,6 +6,7 @@ import type { Service } from "./types";
  * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く（1つの検索意図は、1つの URL だけが担当する）。
  * 書かないこと：太陽光パネルと屋根の話（/service/solar）
  * 容量ごとの「何時間使える」などの数字は書かない（機種と使い方で変わるため）
+ * 東京都練馬区の住宅は、同じ会社の練馬区の太陽光発電・蓄電池のサイトが受け持つ（戸塚区の話のあとに案内する。data/specialty.ts）
  */
 export const storageBattery: Service = {
   slug: "storage-battery",
@@ -23,7 +25,7 @@ export const storageBattery: Service = {
   },
   h1: "横浜市戸塚区の家庭用蓄電池の設置工事",
   lead: "昼に太陽光でつくった電気を夜に使いたいのか、停電に備えたいのか。蓄電池は、目的によって選ぶ機種と容量が変わります。太陽光発電との同時設置にも、すでに太陽光がある家への後付けにも対応します。",
-  updatedAt: "2026-10-06",
+  updatedAt: "2026-10-26",
   worries: [
     "太陽光の売電期間が終わり、余った電気の使い道を考えている",
     "停電のときに冷蔵庫やエアコンを使えるようにしたい",
@@ -156,9 +158,15 @@ export const storageBattery: Service = {
     { type: "signs", heading: "蓄電池の検討でよくある疑問" },
     { type: "cost" },
     { type: "local" },
+    { type: "specialty" },
   ],
   related: ["solar", "eco-one", "water-heater", "ene-farm"],
   blogClusters: ["storage-battery", "solar", "subsidy"],
   subsidyIds: ["yokohama-gep", "kanagawa-solar"],
-  specialtySite: null,
+  specialtySite: {
+    site: "solarNerima",
+    title: "東京都練馬区のお住まいは、専門サイトでくわしく",
+    note: "練馬区の住宅に当てはめた蓄電池の容量・全負荷と特定負荷の選び方と、練馬区と東京都の補助金は、当社の練馬区の太陽光発電・蓄電池のサイトにまとめています。",
+    links: [SOLAR_PAGES.battery, SOLAR_PAGES.subsidy],
+  },
 };

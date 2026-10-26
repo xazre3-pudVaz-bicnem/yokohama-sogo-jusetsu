@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { WorkCard, WorkFeature } from "@/components/cards/WorkCard";
+import { SpecialtySiteBanner } from "@/components/sections/SpecialtySiteBanner";
 import { SubsidyCaution, SubsidyNote } from "@/components/sections/SubsidyNote";
 import { FieldNote } from "@/components/ui/FieldNote";
 import { Icon } from "@/components/ui/Icon";
@@ -32,6 +33,11 @@ const BAND: Record<Tone, string> = {
   cream: "band band-cream deco-bl",
   paper: "band band-paper",
 };
+
+/** 直前の区画の続きとして出す区画（補足・専門サイトの案内）の地色（飾りの丸は付けない） */
+function toneBg(tone: Tone): string {
+  return tone === "white" ? "bg-white" : tone === "mist" ? "bg-mist" : tone === "cream" ? "bg-cream" : "bg-paper-2";
+}
 
 /** 区画の目次用の名前（ページ内の案内に使う） */
 export function blockLabel(block: ServiceBlock, service: Service): { id: string; label: string } | null {
@@ -451,7 +457,7 @@ export function ServiceBlockView({
     case "note":
       // 直前の区画の続きとして読めるよう、上の余白を詰める（地色も直前の区画と同じ）
       return (
-        <div className={`-mt-[clamp(1rem,2.6vw,2.5rem)] pb-[clamp(3rem,6vw,5rem)] ${tone === "white" ? "bg-white" : tone === "mist" ? "bg-mist" : tone === "cream" ? "bg-cream" : "bg-paper-2"}`}>
+        <div className={`-mt-[clamp(1rem,2.6vw,2.5rem)] pb-[clamp(3rem,6vw,5rem)] ${toneBg(tone)}`}>
           <div className="container-x relative">
             <FieldNote label={service.note.label} pose={poseFor(service.note.label)} className="max-w-3xl">
               {service.note.text}
@@ -566,6 +572,16 @@ export function ServiceBlockView({
         </Shell>
       );
     }
+
+    case "specialty":
+      // 同じ会社の専門サイトの案内。直前の区画（太陽光・蓄電池では戸塚区の話）の続きとして、同じ地色で出す
+      return service.specialtySite ? (
+        <div className={`-mt-[clamp(1rem,2.6vw,2.5rem)] pb-[clamp(3rem,6vw,5rem)] ${toneBg(tone)}`}>
+          <div className="container-x relative" {...reveal(60)}>
+            <SpecialtySiteBanner site={service.specialtySite.site} title={service.specialtySite.title} note={service.specialtySite.note} links={service.specialtySite.links} mascot="wave" />
+          </div>
+        </div>
+      ) : null;
 
     case "local":
       return (

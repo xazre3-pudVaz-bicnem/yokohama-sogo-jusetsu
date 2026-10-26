@@ -1,6 +1,5 @@
 import type { Service } from "./types";
 import { BOILER_PAGES } from "@/data/specialty";
-import { siteConfig } from "@/lib/site";
 
 /**
  * エコキュート交換・設置
@@ -233,8 +232,7 @@ export const ecocute: Service = {
   blogClusters: ["ecocute", "subsidy", "totsuka"],
   subsidyIds: ["kyutou-shoene", "yokohama-gep"],
   specialtySite: {
-    name: siteConfig.specialtySites.boiler.name,
-    url: siteConfig.specialtySites.boiler.url,
+    site: "boiler",
     title: "エコキュートの機種と補助金は、専門サイトでくわしく",
     note: "エコキュートの機種とタンク容量の比べ方、国と横浜市の補助金の額は、当社の給湯器専門サイトにまとめています。",
     links: [BOILER_PAGES.ecocute, BOILER_PAGES.subsidyEcocute],

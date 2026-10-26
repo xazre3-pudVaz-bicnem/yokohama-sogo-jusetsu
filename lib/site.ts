@@ -182,17 +182,31 @@ export const siteConfig = {
   },
 
   /**
-   * 同じ会社が運営する専門サイト（2026-10-16 に依頼者から「給湯器専門サイトも作った」と連絡）。
-   * 給湯器（ガス給湯器・エコジョーズ・エコキュート・ハイブリッド給湯器・エネファームからの交換）の機種・価格の考え方・補助金・
-   * 地域ごとの案内は、専門サイトが受け持つ。このサイトは、会社全体・給湯器以外の工事・まとめての相談を受け持ち、
-   * 専門サイトと同じ内容を書き足さない（どちらで何を扱うかは data/specialty.ts）。
-   * 専門サイトのリポジトリは c:\projects\yokohamatotalhousingsolutions-boiler（別の Vercel）。会社の構造化データの @id は共通。
+   * 同じ会社が運営する専門サイト（どちらで何を扱うかは data/specialty.ts）。会社の構造化データの @id は共通。
+   *   name … 正式な名前／label … リンク・メニュー・案内に出す名前／about … 何があるかの一言（フッター・会社案内・スマホのメニュー）
+   *   navLabel … ヘッダーの上の帯に出す短い名前（帯の幅に収めるため）
+   *
+   * boiler … 給湯器専門サイト（2026-10-16 に依頼者から「給湯器専門サイトも作った」）。リポジトリは
+   *   c:\projects\yokohamatotalhousingsolutions-boiler（別の Vercel）。給湯器の機種・価格の考え方・補助金・地域ごとの案内を受け持つ。
+   * solarNerima … 練馬区の太陽光発電・蓄電池のサイト（2026-10-26 に依頼者から「太陽光専門ページも作ったから給湯器のページみたいに繋げて」）。
+   *   リポジトリは c:\projects\yokohama-sogo-jusetsu-solar-nerima（別の Vercel）。東京都練馬区の戸建て住宅に向けたサイトで、
+   *   このサイトの太陽光・蓄電池のページ（戸塚区・横浜市）とは地域が違う。行き先が練馬区のサイトだと分かるよう、
+   *   リンクの文字には「練馬区」を入れる（専門サイトの docs/CORPORATE_LINK.md の提案どおり）。
    */
   specialtySites: {
     boiler: {
       name: "横浜総合住設 給湯器専門サイト",
       label: "給湯器専門サイト",
+      navLabel: "給湯器専門サイト",
+      about: "ガス給湯器・エコキュート・ハイブリッド給湯器の機種と補助金",
       url: "https://www.yokoju-boiler.com",
+    },
+    solarNerima: {
+      name: "横浜総合住設 練馬区の太陽光発電・蓄電池",
+      label: "練馬区の太陽光発電・蓄電池",
+      navLabel: "練馬区の太陽光",
+      about: "東京都練馬区の戸建て住宅の太陽光発電・蓄電池と、練馬区・東京都の補助金",
+      url: "https://www.yokoju-solar.com",
     },
   },
 
@@ -212,10 +226,22 @@ export type OfficeKey = keyof typeof siteConfig.offices;
 /* 連絡先                                                              */
 /* ------------------------------------------------------------------ */
 
-/** 給湯器専門サイトのページの URL（例：boilerSiteUrl("/ecocute")）。トップは末尾のスラッシュを付けない */
-export function boilerSiteUrl(path = "/"): string {
-  const base = siteConfig.specialtySites.boiler.url;
+export type SpecialtySiteId = keyof typeof siteConfig.specialtySites;
+
+/** 同じ会社の専門サイトのページの URL（例：specialtySiteUrl("boiler", "/ecocute")）。トップは末尾のスラッシュを付けない */
+export function specialtySiteUrl(id: SpecialtySiteId, path = "/"): string {
+  const base = siteConfig.specialtySites[id].url;
   return path === "/" || path === "" ? base : `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+/** 給湯器専門サイトのページの URL（例：boilerSiteUrl("/ecocute")） */
+export function boilerSiteUrl(path = "/"): string {
+  return specialtySiteUrl("boiler", path);
+}
+
+/** 練馬区の太陽光発電・蓄電池のサイトのページの URL（例：solarSiteUrl("/subsidy")） */
+export function solarSiteUrl(path = "/"): string {
+  return specialtySiteUrl("solarNerima", path);
 }
 
 /** 画面に出す代表番号。固定電話が空なら携帯電話を使う。どちらも空なら空文字 */

@@ -131,12 +131,17 @@ export function MobileMenu({
             ))}
           </ul>
 
-          {/* 同じ会社の給湯器専門サイト（data/specialty.ts） */}
-          <p className="mt-7">
-            <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="link-arrow !text-sm">
-              {siteConfig.specialtySites.boiler.label}（ガス給湯器・エコキュートの機種と補助金）
-            </a>
-          </p>
+          {/* 同じ会社の専門サイト（給湯器・練馬区の太陽光発電と蓄電池。data/specialty.ts） */}
+          <ul className="mt-7 space-y-3">
+            {Object.values(siteConfig.specialtySites).map((site) => (
+              <li key={site.url}>
+                <a href={site.url} target="_blank" rel="noopener" className="link-arrow !text-sm">
+                  {site.label}
+                </a>
+                <p className="mt-0.5 text-xs leading-relaxed text-ink-mute">{site.about}</p>
+              </li>
+            ))}
+          </ul>
 
           {instagram && (
             <a href={instagram} target="_blank" rel="noopener noreferrer" className="link-arrow mt-4 !text-sm">

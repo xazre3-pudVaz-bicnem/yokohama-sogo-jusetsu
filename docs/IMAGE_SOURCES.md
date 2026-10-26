@@ -126,3 +126,14 @@ Absolutely no people, no text, no logos, no brand marks, no signage, no price ta
 | --- | --- | --- |
 | `boiler/mascot-wave`・`mascot-point`・`mascot-ok` | 専門サイトの案内役「ゆげまる」（湯気の妖精。専門サイトのために作ったオリジナル） | 給湯器専門サイトへの案内（`components/sections/SpecialtySiteBanner.tsx`）だけ |
 | `boiler/bubbles` | 泡の背景（専門サイトのトップの背景と同じ絵） | 同上 |
+
+## 3'. 練馬区の太陽光発電・蓄電池のサイトの素材（`public/images/solar/`）
+
+同じ会社の練馬区の太陽光発電・蓄電池のサイト（https://www.yokoju-solar.com ・リポジトリ `yokohama-sogo-jusetsu-solar-nerima`）の
+`public/images/` から写したもの（2026-10-26）。専門サイトで Codex の画像生成で作った絵。記録は専門サイトの `docs/IMAGE_SOURCES.md`。
+元のファイルは `assets/solar/`（Git に入れない）に置き、`scripts/prepare-images.mjs` の 4''' で書き出す。
+
+| ファイル | 内容 | 使う場所 |
+| --- | --- | --- |
+| `solar/mascot-wave`・`mascot-point`・`mascot-ok`・`mascot-battery` | 専門サイトの案内役「ひなたまる」（頭に太陽光パネルを載せたおひさま。専門サイトのために作ったオリジナル） | 練馬区の太陽光発電・蓄電池のサイトへの案内（`components/sections/SpecialtySiteBanner.tsx`）だけ |
+| `solar/town` | 晴れた住宅地の絵（専門サイトのトップの冒頭と同じ絵。元は `illust/hero-town.jpg`） | 同上 |

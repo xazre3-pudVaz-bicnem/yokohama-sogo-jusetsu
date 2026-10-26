@@ -1,6 +1,5 @@
 import type { Service } from "./types";
 import { BOILER_PAGES } from "@/data/specialty";
-import { siteConfig } from "@/lib/site";
 
 /**
  * ECO ONE・ハイブリッド給湯暖房
@@ -165,8 +164,7 @@ export const ecoOne: Service = {
   blogClusters: ["eco-one", "water-heater", "subsidy"],
   subsidyIds: ["kyutou-shoene"],
   specialtySite: {
-    name: siteConfig.specialtySites.boiler.name,
-    url: siteConfig.specialtySites.boiler.url,
+    site: "boiler",
     title: "ハイブリッド給湯器の機種と補助金は、専門サイトでくわしく",
     note: "ハイブリッド給湯器の機種の違い、エコキュートとの比べ方、ECO ONE の補助金の額は、当社の給湯器専門サイトにまとめています。",
     links: [BOILER_PAGES.hybrid, BOILER_PAGES.subsidyEcoOne],

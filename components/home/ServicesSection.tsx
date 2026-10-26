@@ -6,7 +6,7 @@ import { Photo } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getService, mainServices, servicePath, type ServiceCategoryId } from "@/data/services";
-import { BOILER_PAGES } from "@/data/specialty";
+import { BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
 import { getSubsidy } from "@/data/subsidies";
 import { reveal } from "@/lib/reveal";
 import { formatDateJa } from "@/lib/seo";
@@ -17,7 +17,8 @@ import { formatDateJa } from "@/lib/seo";
  * 最初に、家の断面のイラストで「家の中から外まわりまで頼める」ことを1枚で見せ、
  * そのあと、サービスを3つのまとまりに分けて「短い説明＋サービスへのリンク（工事のイラストつき）」で並べる。
  * くわしい内容は各サービスページに任せる。当社の現場の写真は、すぐ下の「施工事例」で見せる（この区画では使わない）。
- * 写真の無い「省エネ・創エネ設備」には、制度の情報を添える。給湯器のまとまりには、給湯器専門サイトの案内を添える。
+ * 写真の無い「省エネ・創エネ設備」には、制度の情報を添える。給湯器のまとまりには給湯器専門サイト、
+ * 省エネ・創エネ設備のまとまりには練馬区の太陽光発電・蓄電池のサイトの案内を添える（どちらも同じ会社。data/specialty.ts）。
  * 同じサービスの一覧を、ページの中で繰り返さないこと。
  */
 type Block = {
@@ -167,12 +168,26 @@ export function ServicesSection() {
                 {/* 給湯器は、機種・補助金をくわしく扱う専門サイトがある（data/specialty.ts） */}
                 {b.id === "equipment" && (
                   <SpecialtySiteBanner
+                    site="boiler"
                     compact
                     className="mt-5"
                     mascot="wave"
                     title="給湯器の機種と補助金は、専門サイトでくわしく"
                     note="ガス給湯器・エコキュート・ハイブリッド給湯器の機種を、型番と仕様で比べられます。使える補助金もまとめています。"
                     links={[BOILER_PAGES.products, BOILER_PAGES.subsidy]}
+                  />
+                )}
+
+                {/* 東京都練馬区の太陽光発電・蓄電池は、同じ会社の専門サイトが受け持つ（data/specialty.ts） */}
+                {b.id === "energy" && (
+                  <SpecialtySiteBanner
+                    site="solarNerima"
+                    compact
+                    className="mt-5"
+                    mascot="wave"
+                    title="東京都練馬区の太陽光発電・蓄電池は、専門サイトで"
+                    note="東京都練馬区の戸建て住宅に向けた、当社の太陽光発電・蓄電池のサイトです。練馬区と東京都の補助金の申請の順番、太陽光と蓄電池の組み合わせ方をまとめています。"
+                    links={[SOLAR_PAGES.subsidy, SOLAR_PAGES.solarBattery]}
                   />
                 )}
               </div>

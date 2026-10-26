@@ -159,13 +159,17 @@ export default function CompanyPage() {
     {
       label: "関連サイト",
       value: (
-        <>
-          <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="text-link inline-flex items-center gap-1">
-            {siteConfig.specialtySites.boiler.name}
-            <Icon name="arrowUpRight" className="size-3.5 shrink-0" />
-          </a>
-          <span className="block text-sm text-ink-mute">ガス給湯器・エコキュート・ハイブリッド給湯器の機種と補助金</span>
-        </>
+        <ul className="space-y-2">
+          {Object.values(siteConfig.specialtySites).map((site) => (
+            <li key={site.url}>
+              <a href={site.url} target="_blank" rel="noopener" className="text-link inline-flex items-center gap-1">
+                {site.name}
+                <Icon name="arrowUpRight" className="size-3.5 shrink-0" />
+              </a>
+              <span className="block text-sm text-ink-mute">{site.about}</span>
+            </li>
+          ))}
+        </ul>
       ),
     },
   ];

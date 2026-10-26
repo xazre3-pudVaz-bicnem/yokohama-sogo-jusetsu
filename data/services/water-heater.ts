@@ -1,6 +1,5 @@
 import type { Service } from "./types";
 import { BOILER_PAGES } from "@/data/specialty";
-import { siteConfig } from "@/lib/site";
 
 /**
  * 給湯器交換（ガス給湯器・エコジョーズ）
@@ -200,8 +199,7 @@ export const waterHeater: Service = {
   related: ["ecocute", "ene-farm", "eco-one", "kitchen-equipment"],
   blogClusters: ["water-heater", "yokohama", "subsidy"],
   specialtySite: {
-    name: siteConfig.specialtySites.boiler.name,
-    url: siteConfig.specialtySites.boiler.url,
+    site: "boiler",
     title: "給湯器の機種と補助金は、専門サイトでくわしく",
     note: "ガス給湯器・エコジョーズの機種と号数の選び方、補助金、戸塚区・横浜市の地域ごとの案内は、当社の給湯器専門サイトにまとめています。",
     links: [BOILER_PAGES.gas, BOILER_PAGES.ecoJozu, BOILER_PAGES.subsidy],

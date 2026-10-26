@@ -130,14 +130,16 @@ export function Footer() {
             {/* 同じ会社が運営する専門サイト（data/specialty.ts） */}
             <div>
               <p className="eyebrow eyebrow-on-dark border-b border-white/20 pb-2">関連サイト</p>
-              <ul className="mt-3">
-                <li>
-                  <a href={siteConfig.specialtySites.boiler.url} target="_blank" rel="noopener" className="inline-flex min-h-10 items-center gap-1.5 text-sm leading-snug text-silver-200 underline-offset-4 hover:text-white hover:underline">
-                    {siteConfig.specialtySites.boiler.label}
-                    <Icon name="arrowUpRight" className="size-3.5" />
-                  </a>
-                  <p className="text-xs leading-relaxed text-silver-400">ガス給湯器・エコキュート・ハイブリッド給湯器の機種と補助金</p>
-                </li>
+              <ul className="mt-3 space-y-2">
+                {Object.values(siteConfig.specialtySites).map((site) => (
+                  <li key={site.url}>
+                    <a href={site.url} target="_blank" rel="noopener" className="inline-flex min-h-10 items-center gap-1.5 text-sm leading-snug text-silver-200 underline-offset-4 hover:text-white hover:underline">
+                      {site.label}
+                      <Icon name="arrowUpRight" className="size-3.5" />
+                    </a>
+                    <p className="text-xs leading-relaxed text-silver-400">{site.about}</p>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

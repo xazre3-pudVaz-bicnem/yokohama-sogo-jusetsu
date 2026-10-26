@@ -1,4 +1,5 @@
 import type { ImageKey } from "@/lib/images";
+import type { SpecialtySiteId } from "@/lib/site";
 
 /** サービスの分類（トップページと一覧ページの並び） */
 export type ServiceCategoryId = "equipment" | "energy" | "exterior" | "reform" | "site";
@@ -87,7 +88,13 @@ export type ServiceBlock =
   /** このサービスの施工事例（data/works.ts）。事例が無いサービスでは何も出ない */
   | { type: "works" }
   /** 戸塚区・横浜市での工事（local） */
-  | { type: "local" };
+  | { type: "local" }
+  /**
+   * 同じ会社の専門サイトの案内（specialtySite）を、この位置に出す（直前の区画の続きとして、同じ地色で）。
+   * layout に置かないときは、ページの冒頭（目次の下）に出す（給湯器のページ）。
+   * 太陽光・蓄電池のページは、専門サイトが練馬区向けなので、戸塚区の話（local）のあとに置く。
+   */
+  | { type: "specialty" };
 
 export type Service = {
   slug: string;
@@ -157,13 +164,15 @@ export type Service = {
   /** 関連する補助金（data/subsidies.ts の id） */
   subsidyIds?: string[];
   /**
-   * この工事をくわしく扱う専門サイト（同じ会社が運営）。入れると、ページの上の方に専門サイトの案内が出る。
+   * この工事をくわしく扱う専門サイト（同じ会社が運営）。入れると、専門サイトの案内が出る
+   * （出す位置は layout の specialty。置かなければ、ページの上の方）。
    * 公式サイトは会社全体・施工実績・ほかの工事とのまとめての相談を担い、専門サイトは分野を深掘りする（同じ文章を載せない）。
+   *   site  … どの専門サイトか（lib/site.ts の specialtySites）。名前と URL はそこから出す
    *   title … 案内の一言（見出しの要素にはしない）
    *   note  … 専門サイトに何があるか（1文）
-   *   links … 専門サイトの、このページに近いページ（data/specialty.ts の BOILER_PAGES から選ぶ）
+   *   links … 専門サイトの、このページに近いページ（data/specialty.ts の BOILER_PAGES・SOLAR_PAGES から選ぶ）
    */
-  specialtySite: { name: string; url: string; title: string; note: string; links: { label: string; url: string }[] } | null;
+  specialtySite: { site: SpecialtySiteId; title: string; note: string; links: { label: string; url: string }[] } | null;
 };
 
 export type ServiceCategory = {

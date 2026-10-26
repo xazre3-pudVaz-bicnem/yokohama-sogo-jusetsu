@@ -66,14 +66,17 @@ export function ServicePageView({ service: s }: { service: Service }) {
     if (b.type === "subsidy") return subsidies.length > 0;
     if (b.type === "scope") return Boolean(s.scope);
     if (b.type === "guide") return s.guides.some((g) => g.id === b.id);
+    if (b.type === "specialty") return Boolean(s.specialtySite);
     return true;
   });
+  // 専門サイトの案内を layout の中に置いたページ（太陽光・蓄電池）は、冒頭には出さない
+  const specialtyInBody = blocks.some((b) => b.type === "specialty");
   const toc = [...blocks.map((b) => blockLabel(b, s)).filter((x) => x !== null), { id: "faq", label: "よくある質問" }];
 
   // 区画の地色は、白と色つきの帯を交互に（色は 淡い青 → クリーム → 淡いグレー の順に回す）。
-  // 補足だけの短い区画は、直前の区画と同じ色にする
+  // 補足だけの短い区画（補足・専門サイトの案内）は、直前の区画と同じ色にする
   const TINTS: Tone[] = ["mist", "cream", "paper"];
-  const counts = blocks.reduce<number[]>((acc, b) => [...acc, (acc.at(-1) ?? 0) + (b.type === "note" ? 0 : 1)], []);
+  const counts = blocks.reduce<number[]>((acc, b) => [...acc, (acc.at(-1) ?? 0) + (b.type === "note" || b.type === "specialty" ? 0 : 1)], []);
   const tones = counts.map((c): Tone => (c % 2 === 1 ? "white" : TINTS[(c / 2 - 1) % TINTS.length]));
   const total = counts.at(-1) ?? 0;
   // よくある質問は、直前の区画が白ならクリーム、色つきなら白
@@ -138,11 +141,12 @@ export function ServicePageView({ service: s }: { service: Service }) {
         </aside>
       )}
 
-      {/* 給湯器のページ：機種・補助金をくわしく扱う専門サイト（同じ会社）の案内を、本文の前に出す（data/specialty.ts） */}
-      {s.specialtySite && (
+      {/* 給湯器のページ：機種・補助金をくわしく扱う専門サイト（同じ会社）の案内を、本文の前に出す（data/specialty.ts）。
+          layout に specialty を置いたページ（太陽光・蓄電池）は、その位置に出す */}
+      {s.specialtySite && !specialtyInBody && (
         <div className="bg-white">
           <div className="container-x pt-6">
-            <SpecialtySiteBanner title={s.specialtySite.title} note={s.specialtySite.note} links={s.specialtySite.links} />
+            <SpecialtySiteBanner site={s.specialtySite.site} title={s.specialtySite.title} note={s.specialtySite.note} links={s.specialtySite.links} />
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+import { SOLAR_PAGES } from "@/data/specialty";
 import type { Service } from "./types";
 
 /**
@@ -5,6 +6,7 @@ import type { Service } from "./types";
  * 取りにいく検索語と検索意図は data/seo-keyword-map.ts に書く（1つの検索意図は、1つの URL だけが担当する）。
  * 書かないこと：蓄電池の種類と選び方（/service/storage-battery）
  * 売電単価・発電量・回収年数などの数字は書かない（年度と条件で変わるため。見積もりの時点の公式値で説明する）
+ * 東京都練馬区の住宅は、同じ会社の練馬区の太陽光発電・蓄電池のサイトが受け持つ（戸塚区の話のあとに案内する。data/specialty.ts）
  */
 export const solar: Service = {
   slug: "solar",
@@ -25,7 +27,7 @@ export const solar: Service = {
   },
   h1: "横浜市戸塚区の太陽光発電の設置工事",
   lead: "太陽光発電の発電量は、屋根の向き、勾配、まわりの建物や木の影によって変わります。現地で屋根の状態まで確認したうえで、載せるかどうか、どれだけ載せるかをご提案します。蓄電池との組み合わせや、使える補助金についてもご案内します。",
-  updatedAt: "2026-10-06",
+  updatedAt: "2026-10-26",
   worries: [
     "電気代が上がって、対策を考えている",
     "うちの屋根に載せられるのか分からない",
@@ -187,9 +189,15 @@ export const solar: Service = {
     { type: "signs", heading: "太陽光発電の設置で迷うこと" },
     { type: "cost" },
     { type: "local" },
+    { type: "specialty" },
   ],
   related: ["storage-battery", "exterior-painting", "eco-one", "water-heater"],
   blogClusters: ["solar", "storage-battery", "subsidy"],
   subsidyIds: ["yokohama-gep", "kanagawa-solar"],
-  specialtySite: null,
+  specialtySite: {
+    site: "solarNerima",
+    title: "東京都練馬区のお住まいは、専門サイトでくわしく",
+    note: "練馬区の補助金と東京都の助成の申請の順番、練馬区の住宅地で屋根と影を見るときのことは、当社の練馬区の太陽光発電・蓄電池のサイトにまとめています。",
+    links: [SOLAR_PAGES.solar, SOLAR_PAGES.subsidy],
+  },
 };

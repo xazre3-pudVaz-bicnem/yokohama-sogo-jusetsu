@@ -8,7 +8,7 @@ import { z } from "zod";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword, seoPageFor } from "@/data/seo-keyword-map";
 import { servicePath, services } from "@/data/services";
-import { isBoilerTopic } from "@/data/specialty";
+import { isHandedOverTopic } from "@/data/specialty";
 import { serviceSlugsWithWorkList, works } from "@/data/works";
 import { BLOG_DIR, getAllPosts, type Post } from "@/lib/blog";
 import { getCluster } from "@/lib/blog-clusters";
@@ -112,8 +112,9 @@ export function pickTopic(existing: Pick<Post, "slug" | "intent" | "category" | 
   const candidates = topics
     .map((t, index) => ({ t, index }))
     .filter(({ t }) => !existing.some((e) => e.slug === t.slug))
-    // 給湯器の題材は、給湯器専門サイトの自動投稿が書く（2つのサイトで同じ検索語を取り合わないため。data/specialty.ts）
-    .filter(({ t }) => !isBoilerTopic(t.cluster, t.keyword))
+    // 給湯器の題材と、太陽光・蓄電池の一般的な題材は、同じ会社の専門サイトの自動投稿が書く
+    // （2つのサイトで同じ検索語を取り合わないため。data/specialty.ts）
+    .filter(({ t }) => !isHandedOverTopic(t.cluster, t.keyword))
     .filter(({ t }) => !taken.has(normalizeKeyword(t.keyword)) && !fixed.has(normalizeKeyword(t.keyword)))
     .filter(({ t }) => !existing.some((e) => diceBigram(e.intent, t.intent) >= 0.78));
   candidates.sort(

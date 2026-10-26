@@ -186,6 +186,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {/* 給湯器の記事：機種・補助金をくわしく扱う専門サイト（同じ会社）の、近いページの案内（data/specialty.ts） */}
             {boilerLink && (
               <SpecialtySiteBanner
+                site="boiler"
                 compact
                 className="mt-10"
                 title="機種と補助金は、給湯器専門サイトでくわしく"

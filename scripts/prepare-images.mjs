@@ -382,6 +382,19 @@ if (fs.existsSync(boilerDir)) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4'''. 練馬区の太陽光発電・蓄電池のサイトの素材（assets/solar/）      */
+/* ------------------------------------------------------------------ */
+// 専門サイト（同じ会社。c:\projects\yokohama-sogo-jusetsu-solar-nerima）の public/images/ から写したもの（2026-10-26）。
+// 案内役の「ひなたまる」（mascot/*.webp）と、晴れた住宅地の絵（illust/hero-town.jpg）。専門サイトへの案内だけに使う
+const solarDir = path.join(ROOT, "assets", "solar");
+if (fs.existsSync(solarDir)) {
+  for (const name of ["mascot-wave", "mascot-point", "mascot-ok", "mascot-battery"]) {
+    await emit(`solar/${name}`, sharp(path.join(solarDir, `${name}.webp`)).resize({ width: 320, withoutEnlargement: true }), { quality: 86 });
+  }
+  await emit("solar/town", sharp(path.join(solarDir, "hero-town.jpg")).resize({ width: 1200, withoutEnlargement: true }), { quality: 72 });
+}
+
+/* ------------------------------------------------------------------ */
 /* 5. SNS 共有用の画像（1200×630）                                      */
 /* ------------------------------------------------------------------ */
 const ogBase = await sharp(path.join(photoDir, photoFiles.find((f) => f.endsWith("17_34_34-1.png"))))

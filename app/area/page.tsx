@@ -129,6 +129,15 @@ export default function AreaIndexPage() {
             <div className="space-y-4 text-[0.9688rem] leading-[2.05]" {...reveal(60)}>
               <p>戸塚区と接する藤沢市・鎌倉市をはじめ、神奈川県内の各地、東京都内でも工事を行っています。本社は相模原市南区にあります。</p>
               <p>工事の内容と場所によって、うかがえる日程が変わります。対応できるかどうかは、ご住所をお知らせいただければお答えします。</p>
+              {/* 東京都練馬区の太陽光発電・蓄電池は、同じ会社の専門サイトが受け持つ（data/specialty.ts） */}
+              <p>
+                東京都練馬区の戸建て住宅の太陽光発電・蓄電池は、当社の専門サイト「
+                <a href={siteConfig.specialtySites.solarNerima.url} target="_blank" rel="noopener" className="text-link">
+                  {siteConfig.specialtySites.solarNerima.label}
+                  <Icon name="arrowUpRight" className="ml-0.5 inline size-3.5 align-[-0.125em]" />
+                </a>
+                」でご案内しています。練馬区と東京都の補助金も、そちらにまとめています。
+              </p>
             </div>
           </SectionSplit>
 

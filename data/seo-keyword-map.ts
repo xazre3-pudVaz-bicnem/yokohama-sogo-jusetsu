@@ -18,14 +18,17 @@
  *   contentType       … ページの種類
  *   parentTopic       … 上位のページ（Topic Cluster の親）。トップは null
  *   cedes             … このページでは取りにいかない検索語と、その担当のページ（取り合いを避けた記録）。
- *                       同じ会社の専門サイト（給湯器専門サイト）に譲るときは、to に専門サイトの URL を書く（data/specialty.ts の BOILER_PAGES）
+ *                       同じ会社の専門サイトに譲るときは、to に専門サイトの URL を書く（data/specialty.ts の BOILER_PAGES・SOLAR_PAGES）
  *
  * 給湯器（ガス給湯器・エコジョーズ・エコキュート・ハイブリッド給湯器・エネファームからの交換）の地域＋工事の検索語は、
  * 給湯器専門サイト（https://www.yokoju-boiler.com）が担当する。このサイトの給湯器のページは、会社名つきの検索語を担当する。
  *
+ * 太陽光発電・蓄電池は、このサイトが戸塚区・横浜市（「戸塚区 太陽光発電」「戸塚区 蓄電池」）、練馬区の太陽光発電・蓄電池のサイト
+ * （https://www.yokoju-solar.com）が東京都練馬区と、地域に限らない一般的な疑問（しくみ・屋根の向きと影・蓄電池の種類など）を担当する。
+ *
  * このファイルは、クライアント側のコンポーネントからも読めるよう、fs などサーバー専用のモジュールを import しない。
  */
-import { BOILER_PAGES } from "@/data/specialty";
+import { BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
 
 export type SeoContentType = "home" | "hub" | "service" | "area" | "company" | "support" | "blog-hub" | "works-hub" | "works-list" | "work" | "article" | "blog-category";
 
@@ -273,6 +276,12 @@ export const seoPages: SeoPageEntry[] = [
     searchIntent: "戸塚区・横浜市で、太陽光発電の設置を頼める会社と、屋根の条件・制度を知りたい",
     contentType: "service",
     parentTopic: "/service",
+    cedes: [
+      { keyword: "練馬区 太陽光発電", to: SOLAR_PAGES.top.url },
+      { keyword: "練馬区 太陽光 補助金", to: SOLAR_PAGES.subsidy.url },
+      { keyword: "太陽光 屋根 方角 影", to: SOLAR_PAGES.solar.url },
+      { keyword: "太陽光 自家消費 売電", to: SOLAR_PAGES.solar.url },
+    ],
   },
   {
     url: "/service/storage-battery",
@@ -281,6 +290,11 @@ export const seoPages: SeoPageEntry[] = [
     searchIntent: "戸塚区・横浜市で、家庭用蓄電池の設置を頼める会社と、選び方・制度を知りたい",
     contentType: "service",
     parentTopic: "/service",
+    cedes: [
+      { keyword: "練馬区 蓄電池", to: SOLAR_PAGES.battery.url },
+      { keyword: "家庭用蓄電池 全負荷 特定負荷", to: SOLAR_PAGES.battery.url },
+      { keyword: "既設 太陽光 蓄電池 追加", to: SOLAR_PAGES.solarBattery.url },
+    ],
   },
   {
     url: "/service/kitchen-equipment",

@@ -1,6 +1,5 @@
 import type { Service } from "./types";
 import { BOILER_PAGES } from "@/data/specialty";
-import { siteConfig } from "@/lib/site";
 
 /**
  * エネファームからの交換
@@ -179,8 +178,7 @@ export const eneFarm: Service = {
   blogClusters: ["ene-farm", "water-heater", "eco-one"],
   subsidyIds: ["kyutou-shoene"],
   specialtySite: {
-    name: siteConfig.specialtySites.boiler.name,
-    url: siteConfig.specialtySites.boiler.url,
+    site: "boiler",
     title: "替える先の給湯器と補助金は、専門サイトでくわしく",
     note: "エネファームから替える先（ガス給湯器・ハイブリッド給湯器・エコキュート）の選び方と、替える先ごとの補助金は、当社の給湯器専門サイトにまとめています。",
     links: [BOILER_PAGES.eneFarm, BOILER_PAGES.subsidyEneFarm],

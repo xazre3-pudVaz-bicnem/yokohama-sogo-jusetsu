@@ -4,7 +4,7 @@ import { getService, servicePath } from "@/data/services";
 import { serviceSlugsWithWorkList, workListKeyword, workListPath, works, worksByArea, worksByService, worksOfMainService } from "@/data/works";
 import { activeClusters, getAllPosts, getPostsByArea, getPostsByClusters, getPostsByService, getPostsForWork, getRelatedPosts, MIN_POSTS_TO_INDEX } from "@/lib/blog";
 import { blogClusters } from "@/lib/blog-clusters";
-import { isBoilerTopic, isSpecialtySiteUrl } from "@/data/specialty";
+import { isHandedOverTopic, isSpecialtySiteUrl } from "@/data/specialty";
 import { backlog } from "@/lib/blog-generator/backlog";
 import { topics } from "@/lib/blog-generator/topics";
 
@@ -193,7 +193,7 @@ export function keywordConflicts(map: SeoEntry[] = fullKeywordMap(), clusters: {
   const planned = new Map<string, string>();
   for (const t of topics) {
     if (published.has(t.slug)) continue; // すでに記事になっている題材は、記事の側で確かめている
-    if (isBoilerTopic(t.cluster, t.keyword)) continue; // 給湯器の題材は、給湯器専門サイトが書く（このサイトでは書かない）
+    if (isHandedOverTopic(t.cluster, t.keyword)) continue; // 専門サイトに任せた題材（給湯器・太陽光と蓄電池の一般的な話）は、このサイトでは書かない
     const k = normalizeKeyword(t.keyword);
     const o = owner.get(k);
     if (o) out.push({ level: "error", message: `題材 ${t.slug} の主キーワード「${t.keyword}」は、${o.url} が担当しています` });
@@ -202,7 +202,7 @@ export function keywordConflicts(map: SeoEntry[] = fullKeywordMap(), clusters: {
     planned.set(k, `題材 ${t.slug}`);
   }
   for (const c of backlog) {
-    if (isBoilerTopic(c.cluster, c.keyword)) continue;
+    if (isHandedOverTopic(c.cluster, c.keyword)) continue;
     const k = normalizeKeyword(c.keyword);
     const o = owner.get(k);
     if (o) out.push({ level: "error", message: `候補「${c.keyword}」（${c.cluster}）は、${o.url} が担当しています` });

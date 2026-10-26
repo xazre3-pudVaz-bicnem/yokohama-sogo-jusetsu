@@ -25,7 +25,7 @@ import { backlog } from "@/lib/blog-generator/backlog";
 import { validateArticle } from "@/lib/blog-generator/validate";
 import { getCluster } from "@/lib/blog-clusters";
 import { fullKeywordMap, keywordConflicts } from "@/lib/seo-map";
-import { boilerLinkForPost, isBoilerTopic } from "@/data/specialty";
+import { boilerLinkForPost, isBoilerTopic, isHandedOverTopic, isSolarTopic } from "@/data/specialty";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword } from "@/data/seo-keyword-map";
 import { getService, servicePath } from "@/data/services";
@@ -145,8 +145,8 @@ console.log("5. 題材");
   const second = pickTopic(existing);
   check("同じ状態なら、同じ題材を選ぶ（ランダムにしない）", first?.slug === second?.slug);
   check("すでに記事のある題材は選ばない", !!first && !existing.some((e) => e.slug === first.slug));
-  // 給湯器の題材は、給湯器専門サイトが書く（このサイトでは選ばない）
-  const open = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isBoilerTopic(t.cluster, t.keyword));
+  // 専門サイトに任せた題材（給湯器・太陽光と蓄電池の一般的な話）は、このサイトでは選ばない
+  const open = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isHandedOverTopic(t.cluster, t.keyword));
   const best = open.some((t) => t.priority === "P0") ? "P0" : open.some((t) => t.priority === "P1") ? "P1" : "P2";
   check(`優先度の高い題材から選ぶ（いまは ${best}）`, !first || first.priority === best, first ? `${first.slug} は ${first.priority}` : "");
   // 同じ主キーワードの記事がすでにあると、その題材は選ばれない
@@ -154,7 +154,7 @@ console.log("5. 題材");
     const blocked = pickTopic([...existing, { ...existing[0], slug: "dummy", intent: "まったく別の検索意図のダミー", keywords: [first.keyword, "x"] }]);
     check("主キーワードが同じ記事があると、その題材は選ばない", blocked?.slug !== first.slug, blocked?.slug);
   }
-  const remaining = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isBoilerTopic(t.cluster, t.keyword)).length;
+  const remaining = topics.filter((t) => !existing.some((e) => e.slug === t.slug) && !isHandedOverTopic(t.cluster, t.keyword)).length;
   console.log(`      残りの題材：${remaining} 件／次に書く題材：${first?.slug ?? "なし"}`);
 }
 
@@ -236,6 +236,26 @@ console.log("8. 給湯器専門サイトとの分担");
   check(`公開済みの給湯器の記事（${boilerPosts.length} 本）には、専門サイトのくわしいページの案内が付く`, boilerPosts.length > 0 && boilerPosts.every((p) => boilerLinkForPost(p) !== null));
   const others = existing.filter((p) => boilerLinkForPost(p) === null);
   check("給湯器の話でない記事には、専門サイトの案内を付けない", others.every((p) => !isBoilerTopic(p.category, p.keywords[0] ?? "")), others.length + " 本");
+}
+
+console.log("9. 練馬区の太陽光発電・蓄電池のサイトとの分担");
+{
+  const ex = existing.map((p) => ({ slug: p.slug, intent: p.intent, category: p.category, keywords: p.keywords }));
+  const picked: string[] = [];
+  for (let i = 0; i < topics.length; i++) {
+    const t = pickTopic(ex);
+    if (!t) break;
+    if (isSolarTopic(t.cluster, t.keyword)) picked.push(t.slug);
+    ex.push({ slug: t.slug, intent: t.intent, category: t.cluster, keywords: [t.keyword] });
+  }
+  check("題材を選び尽くしても、太陽光・蓄電池の一般的な題材は選ばない（専門サイトの自動投稿が書く）", picked.length === 0, picked.join(" / "));
+  check("太陽光・蓄電池の一般的な題材は、専門サイトに任せる", isSolarTopic("solar", "太陽光 屋根 向き 影") && isSolarTopic("storage-battery", "蓄電池 全負荷 特定負荷 違い"));
+  check(
+    "横浜・神奈川・戸塚に限った題材と、ほかのカテゴリの題材は、このサイトで書く",
+    !isSolarTopic("storage-battery", "横浜市 蓄電池 ポイント 120000") && !isSolarTopic("solar", "神奈川県 太陽光 補助金 受付") && !isSolarTopic("roof-painting", "太陽光パネル 屋根塗装 順番"),
+  );
+  const local = backlog.filter((c) => (c.cluster === "solar" || c.cluster === "storage-battery") && !isSolarTopic(c.cluster, c.keyword));
+  console.log(`      このサイトに残る太陽光・蓄電池の候補：${local.length} 件（${local.map((c) => c.keyword).join("・")}）`);
 }
 
 console.log(failed ? `\n${failed} 件の確認に失敗しました` : "\nすべての確認に合格しました");
