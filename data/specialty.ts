@@ -1,10 +1,11 @@
 import type { BlogClusterId } from "@/data/services/types";
-import { boilerSiteUrl, siteConfig, solarSiteUrl, type SpecialtySiteId } from "@/lib/site";
+import { airconSiteUrl, boilerSiteUrl, siteConfig, solarSiteUrl, type SpecialtySiteId } from "@/lib/site";
 
 /**
  * 同じ会社が運営する専門サイト（lib/site.ts の specialtySites）との分担と、案内のリンク先。
  *   1. 給湯器専門サイト（boiler）… 下の「給湯器」
  *   2. 練馬区の太陽光発電・蓄電池のサイト（solarNerima）… 下の「太陽光発電・蓄電池」
+ *   3. エアコン・空調工事の専門サイト（aircon）… 下の「エアコン」
  * 専門サイトに任せた題材は、このサイトのコラムの自動投稿では書かない（isHandedOverTopic）。
  */
 
@@ -142,12 +143,92 @@ export const SOLAR_PAGES = {
 } satisfies Record<string, SpecialtyLink>;
 
 /* ------------------------------------------------------------------ */
+/* エアコン                                                            */
+/* ------------------------------------------------------------------ */
+/**
+ * エアコン・空調工事の専門サイト（https://www.yokoju-aircon.com）との分担と、案内のリンク先（2026-11-04）。
+ *
+ * 専門サイトが受け持つもの：横浜市（戸塚区を中心）の家庭用・業務用エアコンの取り付け・交換・修理、TESエアコン・ガスエアコンからの交換、
+ *   高所・隠ぺい配管の工事、ガスチャージと、地域＋エアコン工事の検索語（「戸塚区 エアコン工事」「横浜市 エアコン工事」など）、
+ *   エアコン工事の一般的な疑問（専門サイトの柱のページと自動投稿のコラムが書く）。
+ * このサイトが受け持つもの：会社全体の紹介・エアコン以外の工事・エアコンと「ほかの工事」（外壁塗装の足場・リフォームなど）を
+ *   まとめて頼む相談。
+ *
+ * - エアコンのサービスページ（AIRCON_SERVICES）は残し、ページの上の方に専門サイトの案内を出す（給湯器と同じ。読み手も専門サイトも横浜市）。
+ *   主な検索語は「横浜総合住設 エアコン」のように会社名つきにし、地域＋エアコンの検索語は専門サイトに譲る（data/seo-keyword-map.ts の cedes）。
+ * - コラムの自動投稿は、エアコンの題材を書かない（専門サイトの自動投稿が書く。isAirconTopic）。
+ *   公開済みのエアコンの記事は残し、末尾に専門サイトのくわしいページの案内を出す（airconLinkForPost）。
+ * - 専門サイトの URL を変えるときは、ここと lib/site.ts の specialtySites だけを直す。
+ */
+
+/** 専門サイトが受け持つ工事（このサイトのサービスの slug） */
+export const AIRCON_SERVICES: readonly string[] = ["air-conditioner"];
+
+/** 専門サイトが受け持つコラムのカテゴリ */
+export const AIRCON_CLUSTERS: readonly BlogClusterId[] = ["air-conditioner"];
+
+/** エアコンの話かどうかを見分ける語 */
+const AIRCON_WORDS = /エアコン|空調/;
+
+/** エアコンと、このサイトが受け持つほかの工事（外壁塗装・屋根・リフォームなど）をまとめて扱う話は、このサイトで書く */
+const COMBINED_WORDS = /外壁|屋根|塗装|リフォーム|足場/;
+
+/**
+ * 題材（または記事）が、専門サイトの受け持ちか。カテゴリがエアコン、または主キーワードにエアコン・空調の語がある
+ * （ほかの工事とまとめて扱う話は除く。例：「外壁塗装 エアコン 室外機 配管」はこのサイト）
+ */
+export function isAirconTopic(cluster: string, keyword: string): boolean {
+  return (AIRCON_CLUSTERS as readonly string[]).includes(cluster) || (AIRCON_WORDS.test(keyword) && !COMBINED_WORDS.test(keyword));
+}
+
+/** 専門サイトのページ（ラベルは専門サイトの見出しに合わせる。2026-11-04 に確認） */
+export const AIRCON_PAGES = {
+  top: { label: siteConfig.specialtySites.aircon.label, url: airconSiteUrl("/") },
+  yokohama: { label: "横浜のエアコン工事", url: airconSiteUrl("/") },
+  home: { label: "家庭用エアコン工事", url: airconSiteUrl("/home-aircon") },
+  installation: { label: "エアコン取付工事", url: airconSiteUrl("/home-aircon/installation") },
+  replacement: { label: "エアコン交換", url: airconSiteUrl("/home-aircon/replacement") },
+  highPlace: { label: "エアコン高所工事・取り付けにくい場所の工事", url: airconSiteUrl("/home-aircon/difficult-installation") },
+  concealed: { label: "隠蔽配管のエアコン工事", url: airconSiteUrl("/home-aircon/concealed-piping") },
+  tes: { label: "TESエアコンから電気のエアコンへの交換", url: airconSiteUrl("/home-aircon/tes-aircon") },
+  gas: { label: "ガスエアコンから電気のエアコンへの交換", url: airconSiteUrl("/home-aircon/gas-aircon") },
+  business: { label: "業務用エアコン工事", url: airconSiteUrl("/business-aircon") },
+  area: { label: "エアコン工事の対応エリア", url: airconSiteUrl("/area") },
+  coverWork: { label: "エアコンの取り替えと、配管の化粧カバー仕上げ（施工事例）", url: airconSiteUrl("/works/aircon-replace-decorative-cover") },
+  laggingWork: { label: "業務用空調の屋外配管のラッキングカバー（施工事例）", url: airconSiteUrl("/works/air-conditioning-pipe-lagging") },
+  photo: { label: "写真でかんたん見積もり", url: airconSiteUrl("/contact/photo") },
+} satisfies Record<string, SpecialtyLink>;
+
+/** 公開済みの記事ごとの、専門サイトのくわしいページ */
+const AIRCON_POST_LINKS: Record<string, SpecialtyLink> = {
+  "aircon-installation-pre-check": AIRCON_PAGES.installation,
+  "aircon-pipe-tape-or-cover": AIRCON_PAGES.coverWork,
+  "aircon-pipe-lagging-cover": AIRCON_PAGES.laggingWork,
+  "aircon-work-refused-high-place": AIRCON_PAGES.highPlace,
+};
+
+/** 記事の末尾に出す、専門サイトのくわしいページ（エアコンの記事でなければ null。給湯器の記事を先に見分ける） */
+export function airconLinkForPost(p: { slug: string; category: string; keywords: string[] }): SpecialtyLink | null {
+  if (AIRCON_POST_LINKS[p.slug]) return AIRCON_POST_LINKS[p.slug];
+  if (specialtySiteForTopic(p.category, p.keywords[0] ?? "") !== "aircon") return null;
+  return AIRCON_PAGES.yokohama;
+}
+
+/** 地域ページのエアコンの項目から案内する、専門サイトのページ */
+export function airconLinkForArea(areaSlug: string): SpecialtyLink | null {
+  if (areaSlug === "totsuka") return AIRCON_PAGES.area;
+  if (areaSlug === "yokohama") return AIRCON_PAGES.yokohama;
+  return null;
+}
+
+/* ------------------------------------------------------------------ */
 /* 共通                                                                */
 /* ------------------------------------------------------------------ */
 /** 題材（または記事）を受け持つ専門サイト（このサイトで書く題材なら null） */
 export function specialtySiteForTopic(cluster: string, keyword: string): SpecialtySiteId | null {
   if (isBoilerTopic(cluster, keyword)) return "boiler";
   if (isSolarTopic(cluster, keyword)) return "solarNerima";
+  if (isAirconTopic(cluster, keyword)) return "aircon";
   return null;
 }
 

@@ -395,6 +395,19 @@ if (fs.existsSync(solarDir)) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4''''. エアコン・空調工事の専門サイトの素材（assets/aircon/）        */
+/* ------------------------------------------------------------------ */
+// 専門サイト（同じ会社。c:\projects\yokohama-sogo-jusetsu-aircon）の public/images/mascot/ から写したもの（2026-11-04）。
+// 案内役の「そよまる」。背景の絵は無い（専門サイトの淡い水色と浅い波は CSS で描く。app/globals.css の .aircon-banner-bg）。
+// 専門サイトへの案内（components/sections/SpecialtySiteBanner.tsx）だけに使う
+const airconDir = path.join(ROOT, "assets", "aircon");
+if (fs.existsSync(airconDir)) {
+  for (const name of ["mascot-wave", "mascot-point", "mascot-ok"]) {
+    await emit(`aircon/${name}`, sharp(path.join(airconDir, `${name}.webp`)).resize({ width: 320, withoutEnlargement: true }), { quality: 86 });
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* 5. SNS 共有用の画像（1200×630）                                      */
 /* ------------------------------------------------------------------ */
 const ogBase = await sharp(path.join(photoDir, photoFiles.find((f) => f.endsWith("17_34_34-1.png"))))

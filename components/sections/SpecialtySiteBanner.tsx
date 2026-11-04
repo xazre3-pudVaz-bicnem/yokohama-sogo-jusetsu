@@ -12,15 +12,17 @@ import { siteConfig, type SpecialtySiteId } from "@/lib/site";
  * 「さっきの会社の専門サイト」だと分かるようにする。このサイトの青と紺の配色から、あえて外している。
  *   boiler      … 給湯器専門サイト。泡の背景・「ゆげまる」・赤のボタン
  *   solarNerima … 練馬区の太陽光発電・蓄電池のサイト。晴れた住宅地の絵・「ひなたまる」・青緑のボタン・墨色の線
+ *   aircon      … エアコン・空調工事の専門サイト。淡い水色と浅い波（絵ではなく CSS）・「そよまる」・濃い青のボタン・バター色の札
  * 置く場所（data/specialty.ts の分担どおり、その分野の話をしているところだけ）：
  *   - その分野のサービスページ（data/services/*.ts の specialtySite。位置は layout の specialty）
- *   - トップの事業内容（給湯器は住宅設備、太陽光は省エネ・創エネ設備のまとまり）
- *   - 給湯器の記事の末尾（data/specialty.ts の boilerLinkForPost）
+ *   - トップの事業内容（給湯器とエアコンは住宅設備、太陽光は省エネ・創エネ設備のまとまり）
+ *   - 給湯器・エアコンの記事の末尾（data/specialty.ts の boilerLinkForPost・airconLinkForPost）
  * 見出しの要素（h2・h3）は使わない（ページの見出しの並びを変えないため）。
  */
 type Mascot = "point" | "wave" | "ok" | "battery";
 
-const THEMES: Record<SpecialtySiteId, { banner: string; compact: string; bg: string; bgImage: ImageKey; label: string; chip: string; button: string; mascots: Partial<Record<Mascot, ImageKey>> }> = {
+/** bgImage：背景の絵（無い専門サイトは、bg のクラスの CSS だけで描く） */
+const THEMES: Record<SpecialtySiteId, { banner: string; compact: string; bg: string; bgImage?: ImageKey; label: string; chip: string; button: string; mascots: Partial<Record<Mascot, ImageKey>> }> = {
   boiler: {
     banner: "boiler-banner",
     compact: "boiler-banner-compact",
@@ -40,6 +42,15 @@ const THEMES: Record<SpecialtySiteId, { banner: string; compact: string; bg: str
     chip: "solar-chip",
     button: "btn-solar",
     mascots: { point: "solar/mascot-point", wave: "solar/mascot-wave", ok: "solar/mascot-ok", battery: "solar/mascot-battery" },
+  },
+  aircon: {
+    banner: "aircon-banner",
+    compact: "aircon-banner-compact",
+    bg: "aircon-banner-bg",
+    label: "aircon-label",
+    chip: "aircon-chip",
+    button: "btn-aircon",
+    mascots: { point: "aircon/mascot-point", wave: "aircon/mascot-wave", ok: "aircon/mascot-ok" },
   },
 };
 
@@ -67,7 +78,7 @@ export function SpecialtySiteBanner({
   return (
     <aside aria-label={`${site.label}のご案内`} className={`${t.banner} ${compact ? t.compact : ""} ${className}`}>
       {/* 専門サイトのトップと同じ絵。文字の側は白をかぶせて読みやすくする */}
-      <span aria-hidden="true" className={t.bg} style={{ backgroundImage: `url(${img(t.bgImage).src})` }} />
+      <span aria-hidden="true" className={t.bg} style={t.bgImage ? { backgroundImage: `url(${img(t.bgImage).src})` } : undefined} />
       <div className="relative grid items-center gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
         <Illust image={mascotImage} width={compact ? 96 : 120} className={`mx-auto h-auto ${compact ? "w-20 sm:w-24" : "w-24 sm:w-[7.5rem]"}`} />
         <div className="min-w-0">

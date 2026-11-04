@@ -7,7 +7,7 @@ import { ServiceTile } from "@/components/cards/ServiceCard";
 import { WorkCard, WorkFeature } from "@/components/cards/WorkCard";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SpecialtySiteBanner } from "@/components/sections/SpecialtySiteBanner";
-import { boilerLinkForPost } from "@/data/specialty";
+import { airconLinkForPost, boilerLinkForPost } from "@/data/specialty";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FaqList } from "@/components/ui/FaqList";
@@ -64,6 +64,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const relatedServices = p.relatedServices.map(getService).filter((s) => s !== undefined);
   const boilerLink = boilerLinkForPost(p);
+  const airconLink = boilerLink ? null : airconLinkForPost(p);
   const relatedAreas = p.relatedAreas.map(getArea).filter((a) => a !== undefined);
   const works = relatedServices.length ? worksByService(relatedServices[0].slug).slice(0, 3) : [];
   const relatedPosts = getRelatedPosts(p, 3);
@@ -192,6 +193,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 title="機種と補助金は、給湯器専門サイトでくわしく"
                 note={`この記事に近い「${boilerLink.label}」のページがあります。機種を型番で比べたり、使える補助金を確かめたりできます。`}
                 links={[boilerLink]}
+              />
+            )}
+
+            {/* エアコンの記事：エアコン工事をくわしく扱う専門サイト（同じ会社）の、近いページの案内（data/specialty.ts） */}
+            {airconLink && (
+              <SpecialtySiteBanner
+                site="aircon"
+                compact
+                className="mt-10"
+                title="エアコン工事は、専門サイトでくわしく"
+                note={`この記事に近い「${airconLink.label}」のページがあります。工事の前に確かめることや、当社の施工事例を見られます。`}
+                links={[airconLink]}
               />
             )}
 

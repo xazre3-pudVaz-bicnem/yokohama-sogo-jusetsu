@@ -31,12 +31,14 @@ export function Header() {
     <>
       <nav aria-label="サブメニュー" className="hidden bg-navy-950 text-white lg:block">
         <div className="container-x flex h-9 items-center justify-between text-xs tracking-wider">
-          {/* 幅の狭い画面（1280px 未満）では、右の項目が収まるよう、この一言を出さない */}
-          <p className="hidden text-silver-200 xl:block">
+          {/* 幅の狭い画面（1280px 未満）では、右の項目が収まるよう、この一言を出さない。
+              帯の幅は 1280px 以上でも 1104px で止まるので、専門サイトが3つになった 2026-11-04 から「神奈川・東京エリア対応」は外した
+              （フッターと対応エリアのページにある）。それでも入りきらないときは、右の項目を折り返さず、この一言を省略する */}
+          <p className="hidden min-w-0 truncate text-silver-200 xl:block">
             {siteConfig.primaryArea.city}
-            {siteConfig.primaryArea.ward}の住宅設備・リフォーム<span className="mx-2 text-silver-500">｜</span>神奈川・東京エリア対応
+            {siteConfig.primaryArea.ward}の住宅設備・リフォーム
           </p>
-          <ul className="ml-auto flex items-center gap-4">
+          <ul className="ml-auto flex shrink-0 items-center gap-4">
             {subNav.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="inline-flex items-center whitespace-nowrap py-2 text-silver-200 transition-colors hover:text-white">
@@ -44,7 +46,7 @@ export function Header() {
                 </Link>
               </li>
             ))}
-            {/* 同じ会社の専門サイト（給湯器・練馬区の太陽光発電と蓄電池。data/specialty.ts） */}
+            {/* 同じ会社の専門サイト（給湯器・エアコン・練馬区の太陽光発電と蓄電池。data/specialty.ts） */}
             {Object.values(siteConfig.specialtySites).map((site) => (
               <li key={site.url}>
                 <a href={site.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1 whitespace-nowrap py-2 text-silver-200 transition-colors hover:text-white">
@@ -55,7 +57,7 @@ export function Header() {
             ))}
             {line && (
               <li>
-                <a href={line} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-silver-200 transition-colors hover:text-white" data-cv="line">
+                <a href={line} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-silver-200 transition-colors hover:text-white" data-cv="line">
                   <LineIcon onDark className="size-4" />
                   LINE
                 </a>
@@ -63,7 +65,7 @@ export function Header() {
             )}
             {siteConfig.social.instagram && (
               <li>
-                <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-silver-200 transition-colors hover:text-white">
+                <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 whitespace-nowrap py-2 text-silver-200 transition-colors hover:text-white">
                   <Icon name="instagram" className="size-4" />
                   Instagram
                 </a>

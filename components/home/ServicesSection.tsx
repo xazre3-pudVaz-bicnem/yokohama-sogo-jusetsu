@@ -6,7 +6,7 @@ import { Photo } from "@/components/ui/Photo";
 import { Phrase } from "@/components/ui/Phrase";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getService, mainServices, servicePath, type ServiceCategoryId } from "@/data/services";
-import { BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
+import { AIRCON_PAGES, BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
 import { getSubsidy } from "@/data/subsidies";
 import { reveal } from "@/lib/reveal";
 import { formatDateJa } from "@/lib/seo";
@@ -17,8 +17,8 @@ import { formatDateJa } from "@/lib/seo";
  * 最初に、家の断面のイラストで「家の中から外まわりまで頼める」ことを1枚で見せ、
  * そのあと、サービスを3つのまとまりに分けて「短い説明＋サービスへのリンク（工事のイラストつき）」で並べる。
  * くわしい内容は各サービスページに任せる。当社の現場の写真は、すぐ下の「施工事例」で見せる（この区画では使わない）。
- * 写真の無い「省エネ・創エネ設備」には、制度の情報を添える。給湯器のまとまりには給湯器専門サイト、
- * 省エネ・創エネ設備のまとまりには練馬区の太陽光発電・蓄電池のサイトの案内を添える（どちらも同じ会社。data/specialty.ts）。
+ * 写真の無い「省エネ・創エネ設備」には、制度の情報を添える。住宅設備のまとまりには給湯器専門サイトとエアコン専門サイト、
+ * 省エネ・創エネ設備のまとまりには練馬区の太陽光発電・蓄電池のサイトの案内を添える（どれも同じ会社。data/specialty.ts）。
  * 同じサービスの一覧を、ページの中で繰り返さないこと。
  */
 type Block = {
@@ -175,6 +175,19 @@ export function ServicesSection() {
                     title="給湯器の機種と補助金は、専門サイトでくわしく"
                     note="ガス給湯器・エコキュート・ハイブリッド給湯器の機種を、型番と仕様で比べられます。使える補助金もまとめています。"
                     links={[BOILER_PAGES.products, BOILER_PAGES.subsidy]}
+                  />
+                )}
+
+                {/* エアコンは、家庭用・業務用の工事をくわしく扱う専門サイトがある（data/specialty.ts） */}
+                {b.id === "equipment" && (
+                  <SpecialtySiteBanner
+                    site="aircon"
+                    compact
+                    className="mt-5"
+                    mascot="wave"
+                    title="エアコン工事は、専門サイトでくわしく"
+                    note="家庭用・業務用エアコンの取り付け・交換・修理と、TESエアコン・ガスエアコンからの交換をまとめています。写真を送るだけの、かんたん見積もりもできます。"
+                    links={[AIRCON_PAGES.home, AIRCON_PAGES.business]}
                   />
                 )}
 

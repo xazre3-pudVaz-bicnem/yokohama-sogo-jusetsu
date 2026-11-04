@@ -169,6 +169,21 @@
     "width": 480,
     "height": 428
   },
+  "aircon/mascot-ok": {
+    "src": "/images/aircon/mascot-ok.webp",
+    "width": 320,
+    "height": 330
+  },
+  "aircon/mascot-point": {
+    "src": "/images/aircon/mascot-point.webp",
+    "width": 320,
+    "height": 304
+  },
+  "aircon/mascot-wave": {
+    "src": "/images/aircon/mascot-wave.webp",
+    "width": 320,
+    "height": 323
+  },
   "area/totsuka-aerial": {
     "src": "/images/area/totsuka-aerial.webp",
     "width": 2000,

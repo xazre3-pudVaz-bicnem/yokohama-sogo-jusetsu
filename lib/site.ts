@@ -192,6 +192,9 @@ export const siteConfig = {
    *   リポジトリは c:\projects\yokohama-sogo-jusetsu-solar-nerima（別の Vercel）。東京都練馬区の戸建て住宅に向けたサイトで、
    *   このサイトの太陽光・蓄電池のページ（戸塚区・横浜市）とは地域が違う。行き先が練馬区のサイトだと分かるよう、
    *   リンクの文字には「練馬区」を入れる（専門サイトの docs/CORPORATE_LINK.md の提案どおり）。
+   * aircon … エアコン・空調工事の専門サイト（2026-11-04 に依頼者から「給湯器とか太陽光のサイトみたいに公式総合ページにもエアコンのサイトの情報繋げて」）。
+   *   リポジトリは c:\projects\yokohama-sogo-jusetsu-aircon（別の Vercel）。横浜市（戸塚区を中心）の家庭用・業務用エアコンの
+   *   取り付け・交換・修理と、TESエアコン・ガスエアコンからの交換、高所・隠ぺい配管の工事を受け持つ（給湯器と同じく、地域も同じ横浜市）。
    */
   specialtySites: {
     boiler: {
@@ -200,6 +203,13 @@ export const siteConfig = {
       navLabel: "給湯器専門サイト",
       about: "ガス給湯器・エコキュート・ハイブリッド給湯器の機種と補助金",
       url: "https://www.yokoju-boiler.com",
+    },
+    aircon: {
+      name: "横浜総合住設 エアコン・空調工事",
+      label: "エアコン専門サイト",
+      navLabel: "エアコン専門サイト",
+      about: "家庭用・業務用エアコンの取り付け・交換・修理と、TESエアコン・ガスエアコンからの交換",
+      url: "https://www.yokoju-aircon.com",
     },
     solarNerima: {
       name: "横浜総合住設 練馬区の太陽光発電・蓄電池",
@@ -242,6 +252,11 @@ export function boilerSiteUrl(path = "/"): string {
 /** 練馬区の太陽光発電・蓄電池のサイトのページの URL（例：solarSiteUrl("/subsidy")） */
 export function solarSiteUrl(path = "/"): string {
   return specialtySiteUrl("solarNerima", path);
+}
+
+/** エアコン・空調工事の専門サイトのページの URL（例：airconSiteUrl("/business-aircon")） */
+export function airconSiteUrl(path = "/"): string {
+  return specialtySiteUrl("aircon", path);
 }
 
 /** 画面に出す代表番号。固定電話が空なら携帯電話を使う。どちらも空なら空文字 */

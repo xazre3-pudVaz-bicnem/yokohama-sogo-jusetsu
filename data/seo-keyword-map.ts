@@ -26,9 +26,12 @@
  * 太陽光発電・蓄電池は、このサイトが戸塚区・横浜市（「戸塚区 太陽光発電」「戸塚区 蓄電池」）、練馬区の太陽光発電・蓄電池のサイト
  * （https://www.yokoju-solar.com）が東京都練馬区と、地域に限らない一般的な疑問（しくみ・屋根の向きと影・蓄電池の種類など）を担当する。
  *
+ * エアコン（家庭用・業務用の取り付け・交換・修理、TESエアコン・ガスエアコンからの交換など）の地域＋工事の検索語は、
+ * エアコン・空調工事の専門サイト（https://www.yokoju-aircon.com）が担当する（2026-11-04）。このサイトのエアコンのページは、会社名つきの検索語を担当する。
+ *
  * このファイルは、クライアント側のコンポーネントからも読めるよう、fs などサーバー専用のモジュールを import しない。
  */
-import { BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
+import { AIRCON_PAGES, BOILER_PAGES, SOLAR_PAGES } from "@/data/specialty";
 
 export type SeoContentType = "home" | "hub" | "service" | "area" | "company" | "support" | "blog-hub" | "works-hub" | "works-list" | "work" | "article" | "blog-category";
 
@@ -55,7 +58,7 @@ export const seoPages: SeoPageEntry[] = [
       { keyword: "戸塚区 住宅設備", to: "/area/totsuka" },
       { keyword: "戸塚区 リフォーム", to: "/service/reform" },
       { keyword: "戸塚区 給湯器交換", to: BOILER_PAGES.totsuka.url },
-      { keyword: "戸塚区 エアコン工事", to: "/service/air-conditioner" },
+      { keyword: "戸塚区 エアコン工事", to: AIRCON_PAGES.area.url },
     ],
   },
   {
@@ -151,7 +154,7 @@ export const seoPages: SeoPageEntry[] = [
       { keyword: "戸塚区 リフォーム", to: "/service/reform" },
       { keyword: "戸塚区 給湯器交換", to: BOILER_PAGES.totsuka.url },
       { keyword: "戸塚区 エコキュート", to: BOILER_PAGES.totsuka.url },
-      { keyword: "戸塚区 エアコン工事", to: "/service/air-conditioner" },
+      { keyword: "戸塚区 エアコン工事", to: AIRCON_PAGES.area.url },
       { keyword: "戸塚区 外壁塗装", to: "/service/exterior-painting" },
     ],
   },
@@ -241,12 +244,20 @@ export const seoPages: SeoPageEntry[] = [
   },
   {
     url: "/service/air-conditioner",
-    primaryKeyword: "戸塚区 エアコン工事",
-    secondaryKeywords: ["戸塚区 エアコン取り付け", "戸塚区 エアコン交換", "横浜市 エアコン工事", "エアコン 高所 工事", "業務用エアコン 横浜"],
-    searchIntent: "戸塚区・横浜市で、エアコンの取り付け・交換（高所や取り付けにくい場所を含む）を頼める会社を探している",
+    primaryKeyword: "横浜総合住設 エアコン",
+    secondaryKeywords: ["ヨコジュウ エアコン", "エアコン 交換 外壁塗装 同時"],
+    searchIntent: "横浜総合住設に、エアコンの取り付け・交換を、外壁塗装やリフォームなど、ほかの住まいの工事とあわせて頼めるかを知りたい",
     contentType: "service",
     parentTopic: "/service",
-    cedes: [{ keyword: "エアコン 化粧カバー", to: "/blog/aircon-pipe-tape-or-cover" }],
+    cedes: [
+      { keyword: "戸塚区 エアコン工事", to: AIRCON_PAGES.area.url },
+      { keyword: "戸塚区 エアコン取り付け", to: AIRCON_PAGES.area.url },
+      { keyword: "横浜市 エアコン工事", to: AIRCON_PAGES.yokohama.url },
+      { keyword: "戸塚区 エアコン交換", to: AIRCON_PAGES.replacement.url },
+      { keyword: "エアコン 高所 工事", to: AIRCON_PAGES.highPlace.url },
+      { keyword: "業務用エアコン 横浜", to: AIRCON_PAGES.business.url },
+      { keyword: "エアコン 化粧カバー", to: "/blog/aircon-pipe-tape-or-cover" },
+    ],
   },
   {
     url: "/service/exterior-painting",

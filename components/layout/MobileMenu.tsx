@@ -131,7 +131,7 @@ export function MobileMenu({
             ))}
           </ul>
 
-          {/* 同じ会社の専門サイト（給湯器・練馬区の太陽光発電と蓄電池。data/specialty.ts） */}
+          {/* 同じ会社の専門サイト（給湯器・エアコン・練馬区の太陽光発電と蓄電池。data/specialty.ts） */}
           <ul className="mt-7 space-y-3">
             {Object.values(siteConfig.specialtySites).map((site) => (
               <li key={site.url}>

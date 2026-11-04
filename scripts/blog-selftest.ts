@@ -25,7 +25,7 @@ import { backlog } from "@/lib/blog-generator/backlog";
 import { validateArticle } from "@/lib/blog-generator/validate";
 import { getCluster } from "@/lib/blog-clusters";
 import { fullKeywordMap, keywordConflicts } from "@/lib/seo-map";
-import { boilerLinkForPost, isBoilerTopic, isHandedOverTopic, isSolarTopic } from "@/data/specialty";
+import { airconLinkForPost, boilerLinkForPost, isAirconTopic, isBoilerTopic, isHandedOverTopic, isSolarTopic, specialtySiteForTopic } from "@/data/specialty";
 import { publishedAreas } from "@/data/areas";
 import { fixedKeywordOwners, normalizeKeyword } from "@/data/seo-keyword-map";
 import { getService, servicePath } from "@/data/services";
@@ -256,6 +256,25 @@ console.log("9. 練馬区の太陽光発電・蓄電池のサイトとの分担"
   );
   const local = backlog.filter((c) => (c.cluster === "solar" || c.cluster === "storage-battery") && !isSolarTopic(c.cluster, c.keyword));
   console.log(`      このサイトに残る太陽光・蓄電池の候補：${local.length} 件（${local.map((c) => c.keyword).join("・")}）`);
+}
+
+console.log("10. エアコン専門サイトとの分担");
+{
+  const ex = existing.map((p) => ({ slug: p.slug, intent: p.intent, category: p.category, keywords: p.keywords }));
+  const picked: string[] = [];
+  for (let i = 0; i < topics.length; i++) {
+    const t = pickTopic(ex);
+    if (!t) break;
+    if (isAirconTopic(t.cluster, t.keyword)) picked.push(t.slug);
+    ex.push({ slug: t.slug, intent: t.intent, category: t.cluster, keywords: [t.keyword] });
+  }
+  check("題材を選び尽くしても、エアコンの題材は選ばない（エアコン専門サイトの自動投稿が書く）", picked.length === 0, picked.join(" / "));
+  check("エアコンの題材は、ほかのカテゴリでも専門サイトに任せる", isAirconTopic("air-conditioner", "エアコン 室外機 置き方") && isAirconTopic("totsuka", "戸塚区 エアコン 高所 交換"));
+  check("エアコンとほかの工事をまとめて扱う題材は、このサイトで書く", !isAirconTopic("exterior-painting", "外壁塗装 エアコン 室外機 配管"));
+  const airconPosts = existing.filter((p) => specialtySiteForTopic(p.category, p.keywords[0] ?? "") === "aircon");
+  check(`公開済みのエアコンの記事（${airconPosts.length} 本）には、専門サイトのくわしいページの案内が付く`, airconPosts.length > 0 && airconPosts.every((p) => airconLinkForPost(p) !== null));
+  const others = existing.filter((p) => airconLinkForPost(p) === null);
+  check("エアコンの話でない記事には、エアコン専門サイトの案内を付けない", others.every((p) => specialtySiteForTopic(p.category, p.keywords[0] ?? "") !== "aircon"), others.length + " 本");
 }
 
 console.log(failed ? `\n${failed} 件の確認に失敗しました` : "\nすべての確認に合格しました");

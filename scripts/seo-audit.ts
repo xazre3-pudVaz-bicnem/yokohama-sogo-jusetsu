@@ -258,12 +258,14 @@ function planNewArticles(limit: number): Topic[] {
   return out;
 }
 const plan = planNewArticles(90);
-// 給湯器の題材・候補と、太陽光・蓄電池の一般的な題材・候補は、同じ会社の専門サイトの自動投稿が書く（data/specialty.ts）。
+// 給湯器の題材・候補と、太陽光・蓄電池の一般的な題材・候補と、エアコンの題材・候補は、同じ会社の専門サイトの自動投稿が書く（data/specialty.ts）。
 // このサイトの計画には入れない
 const boilerTopics = topics.filter((t) => specialtySiteForTopic(t.cluster, t.keyword) === "boiler").length;
 const boilerCandidates = backlog.filter((c) => specialtySiteForTopic(c.cluster, c.keyword) === "boiler").length;
 const solarTopics = topics.filter((t) => specialtySiteForTopic(t.cluster, t.keyword) === "solarNerima").length;
 const solarCandidates = backlog.filter((c) => specialtySiteForTopic(c.cluster, c.keyword) === "solarNerima").length;
+const airconTopics = topics.filter((t) => specialtySiteForTopic(t.cluster, t.keyword) === "aircon").length;
+const airconCandidates = backlog.filter((c) => specialtySiteForTopic(c.cluster, c.keyword) === "aircon").length;
 const planTable = [
   "| 順 | 優先度 | カテゴリ | 主キーワード | 題名の方向 | 親ページ |",
   "| --- | --- | --- | --- | --- | --- |",
@@ -307,7 +309,7 @@ const lines: string[] = [
   "",
   `- 調べたページ：${pages.length}（検索結果に出すページ：${idx.length}）`,
   `- ビルドの種類：${SITE_URL ? `本番 URL あり（${SITE_URL}）。canonical と index / noindex まで確認` : "本番 URL なし（全ページ noindex のビルド）。canonical と index / noindex は、ページの一覧（lib/routes.ts）の設定で代用"}`,
-  `- 検索語の割り当て：${map.length} ページ／これから書く題材 ${topics.length - boilerTopics - solarTopics} 件／候補 ${backlog.length - boilerCandidates - solarCandidates} 件（ほかに、給湯器専門サイトに任せた題材 ${boilerTopics} 件・候補 ${boilerCandidates} 件、練馬区の太陽光発電・蓄電池のサイトに任せた題材 ${solarTopics} 件・候補 ${solarCandidates} 件）`,
+  `- 検索語の割り当て：${map.length} ページ／これから書く題材 ${topics.length - boilerTopics - solarTopics - airconTopics} 件／候補 ${backlog.length - boilerCandidates - solarCandidates - airconCandidates} 件（ほかに、給湯器専門サイトに任せた題材 ${boilerTopics} 件・候補 ${boilerCandidates} 件、練馬区の太陽光発電・蓄電池のサイトに任せた題材 ${solarTopics} 件・候補 ${solarCandidates} 件、エアコン専門サイトに任せた題材 ${airconTopics} 件・候補 ${airconCandidates} 件）`,
   `- **誤り：${errors.length} 件**／注意：${warnings.length} 件`,
   "",
   "## 誤り（直すまで公開しない）",
@@ -354,7 +356,7 @@ const lines: string[] = [
   "## コラムのクラスター（カテゴリごとの本数）",
   "",
   "「題材」は、すぐに書ける形で決めてあるもの（`lib/blog-generator/topics.ts`）。「候補」は、検索意図だけを洗い出してあるもの（`lib/blog-generator/backlog.ts`）。",
-  "給湯器の題材と候補は給湯器専門サイト（https://www.yokoju-boiler.com）、太陽光発電・蓄電池の一般的な題材と候補は練馬区の太陽光発電・蓄電池のサイト（https://www.yokoju-solar.com）の自動投稿が書くので、ここでは数えていません（`data/specialty.ts`）。",
+  "給湯器の題材と候補は給湯器専門サイト（https://www.yokoju-boiler.com）、太陽光発電・蓄電池の一般的な題材と候補は練馬区の太陽光発電・蓄電池のサイト（https://www.yokoju-solar.com）、エアコンの題材と候補はエアコン専門サイト（https://www.yokoju-aircon.com）の自動投稿が書くので、ここでは数えていません（`data/specialty.ts`）。",
   "",
   "| カテゴリ | 親ページ | 公開済み | 題材（未公開） | 候補 | 合計 |",
   "| --- | --- | --- | --- | --- | --- |",

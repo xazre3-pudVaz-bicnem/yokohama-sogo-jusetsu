@@ -193,7 +193,7 @@ export function keywordConflicts(map: SeoEntry[] = fullKeywordMap(), clusters: {
   const planned = new Map<string, string>();
   for (const t of topics) {
     if (published.has(t.slug)) continue; // すでに記事になっている題材は、記事の側で確かめている
-    if (isHandedOverTopic(t.cluster, t.keyword)) continue; // 専門サイトに任せた題材（給湯器・太陽光と蓄電池の一般的な話）は、このサイトでは書かない
+    if (isHandedOverTopic(t.cluster, t.keyword)) continue; // 専門サイトに任せた題材（給湯器・太陽光と蓄電池の一般的な話・エアコン）は、このサイトでは書かない
     const k = normalizeKeyword(t.keyword);
     const o = owner.get(k);
     if (o) out.push({ level: "error", message: `題材 ${t.slug} の主キーワード「${t.keyword}」は、${o.url} が担当しています` });

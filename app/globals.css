@@ -1348,6 +1348,82 @@
     background: #0e7c86;
     transform: translateY(1px);
   }
+
+  /* ---- エアコン・空調工事の専門サイトへの案内（components/sections/SpecialtySiteBanner.tsx） ----
+     専門サイト（c:\projects\yokohama-sogo-jusetsu-aircon）の目印：淡い水色の地・下の端の浅い白い波・細い輪郭・
+     右下にずらした淡い水色の影・バター色の札・濃い青のボタン（白い文字 4.8:1）。色の値は専門サイトの app/globals.css と同じ */
+  .aircon-banner {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 1.25rem 1.25rem 1.75rem;
+    border: 1.5px solid #cfe3ea;
+    border-radius: 1.25rem;
+    background: #e8f8fc;
+    box-shadow: 5px 5px 0 #c4e4ed;
+  }
+  .aircon-banner-compact {
+    border-radius: 1.125rem;
+  }
+  @media (min-width: 40rem) {
+    .aircon-banner {
+      padding: 1.5rem 2rem 2rem;
+    }
+    .aircon-banner-compact {
+      padding: 1.25rem 1.5rem 1.75rem;
+    }
+  }
+  .aircon-banner-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 22C200 4 400 4 600 20S1000 36 1200 16V40H0Z' fill='%23ffffff'/%3E%3C/svg%3E") center bottom / 100% 1.75rem no-repeat,
+      linear-gradient(180deg, #e8f8fc 0%, #f4fbfd 100%);
+  }
+  .aircon-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.75rem;
+    border-radius: 0.625rem;
+    background: #fff0b8;
+    box-shadow: inset 0 0 0 1.5px #27677a;
+    color: #173b4b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .aircon-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    min-height: 2.5rem;
+    padding-inline: 0.9rem;
+    border: 1.5px solid #bdebf8;
+    border-radius: 9999px;
+    background: #fff;
+    color: #005f8f;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.35;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft);
+  }
+  .aircon-chip:hover {
+    border-color: #0078b4;
+    background: #e8f8fc;
+  }
+  .btn-aircon {
+    border: 2px solid #0078b4;
+    background: #0078b4;
+    color: #fff;
+    box-shadow: 3px 3px 0 #c4e4ed;
+  }
+  .btn-aircon:hover {
+    border-color: #005f8f;
+    background: #005f8f;
+  }
 }
 
 @layer utilities {

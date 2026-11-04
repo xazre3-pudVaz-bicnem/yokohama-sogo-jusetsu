@@ -137,3 +137,14 @@ Absolutely no people, no text, no logos, no brand marks, no signage, no price ta
 | --- | --- | --- |
 | `solar/mascot-wave`・`mascot-point`・`mascot-ok`・`mascot-battery` | 専門サイトの案内役「ひなたまる」（頭に太陽光パネルを載せたおひさま。専門サイトのために作ったオリジナル） | 練馬区の太陽光発電・蓄電池のサイトへの案内（`components/sections/SpecialtySiteBanner.tsx`）だけ |
 | `solar/town` | 晴れた住宅地の絵（専門サイトのトップの冒頭と同じ絵。元は `illust/hero-town.jpg`） | 同上 |
+
+## 3''. エアコン・空調工事の専門サイトの素材（`public/images/aircon/`）
+
+同じ会社のエアコン・空調工事の専門サイト（https://www.yokoju-aircon.com ・リポジトリ `yokohama-sogo-jusetsu-aircon`）の
+`public/images/mascot/` から写したもの（2026-11-04）。専門サイトで Codex の画像生成で作った絵。記録は専門サイトの `docs/IMAGE_SOURCES.md`。
+元のファイルは `assets/aircon/`（Git に入れない。`mascot-wave`・`mascot-point`・`mascot-ok`）に置き、`scripts/prepare-images.mjs` の 4'''' で書き出す。
+背景の絵は写していない（専門サイトの淡い水色と浅い波は、CSS の `.aircon-banner-bg` で描く）。
+
+| ファイル | 内容 | 使う場所 |
+| --- | --- | --- |
+| `aircon/mascot-wave`・`mascot-point`・`mascot-ok` | 専門サイトの案内役「そよまる」（頭に風向きルーバーの帽子をかぶった、そよ風の妖精。専門サイトのために作ったオリジナル） | エアコン専門サイトへの案内（`components/sections/SpecialtySiteBanner.tsx`）だけ |
