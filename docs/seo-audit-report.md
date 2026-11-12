@@ -1,10 +1,10 @@
 # SEO 監査の結果
 
-このファイルは `npm run seo:audit` が書き出します（手で直さない）。作成日：2026-11-11
+このファイルは `npm run seo:audit` が書き出します（手で直さない）。作成日：2026-11-12
 
-- 調べたページ：108（検索結果に出すページ：98）
+- 調べたページ：109（検索結果に出すページ：99）
 - ビルドの種類：本番 URL なし（全ページ noindex のビルド）。canonical と index / noindex は、ページの一覧（lib/routes.ts）の設定で代用
-- 検索語の割り当て：105 ページ／これから書く題材 35 件／候補 218 件（ほかに、給湯器専門サイトに任せた題材 18 件・候補 94 件、練馬区の太陽光発電・蓄電池のサイトに任せた題材 4 件・候補 51 件、エアコン専門サイトに任せた題材 8 件・候補 27 件）
+- 検索語の割り当て：106 ページ／これから書く題材 35 件／候補 218 件（ほかに、給湯器専門サイトに任せた題材 18 件・候補 94 件、練馬区の太陽光発電・蓄電池のサイトに任せた題材 4 件・候補 51 件、エアコン専門サイトに任せた題材 8 件・候補 27 件）
 - **誤り：0 件**／注意：5 件
 
 ## 誤り（直すまで公開しない）
@@ -107,6 +107,7 @@
 | /blog/subsidy-who-applies-comparison | コラム | 住宅設備 補助金 誰が申請 | 給湯省エネ2026事業 登録事業者、先進的窓リノベ2026事業 申請、神奈川県 太陽光 蓄電池 補助金 本人申請、補助金 工事 着手 時期 | 住宅設備の補助金は誰が申請するのかを知りたい | /area/yokohama | ecocute、solar、storage-battery | — | 3 |
 | /blog/toilet-drain-position-check | コラム | トイレ 排水芯 | トイレ 交換 排水 位置、床排水 壁排水 見分け方、リフォーム用 便器 | トイレ交換の前に排水芯を確認する方法と合う便器の選び方を知りたい | /service/toilet | toilet、reform | — | 3 |
 | /blog/toilet-floor-renewal-timing | コラム | トイレ交換 床 張り替え 同時 | トイレ 床 張り替え、便器 跡 床、トイレ 床材 選び方、トイレ 壁紙 同時 | トイレ交換と床の張り替えを同時にするべきか知りたい | /service/toilet | toilet、reform | — | 3 |
+| /blog/toilet-tankless-water-pressure | コラム | タンクレストイレ 設置 条件 | タンクレストイレ 水圧、タンクレストイレ 手洗い器、タンクレストイレ 停電、トイレリフォーム | タンクレストイレが設置できる条件を知りたい | /service/toilet | toilet | — | 3 |
 | /blog/toilet-types-three-kinds | コラム | 便器 種類 違い | 組み合わせ便器、一体型トイレ、タンクレストイレ、トイレ 選び方 | 便器の種類の違いを知りたい | /service/toilet | toilet | — | 3 |
 | /blog/totsuka-ecocute-carry-in-route | コラム | エコキュート 搬入経路 | 戸塚区 エコキュート 搬入、エコキュート 基礎 重さ、エコキュート 階段 搬入 | 戸塚区の家にエコキュートを設置できるかどうかの確認点を知りたい | /area/totsuka | ecocute、eco-one | — | 3 |
 | /blog/water-heater-capacity-guide | コラム | 給湯器 号数 | 給湯器 20号 24号 違い、給湯器 号数 選び方、給湯器 能力 | 給湯器の号数の意味と自分の家に合う号数の選び方を知りたい | /service/water-heater | water-heater | 1 | 3 |
@@ -127,7 +128,7 @@
 | /blog/category/reform（noindex） | コラムのカテゴリ | リフォーム コラム |  | リフォームについての記事を、まとめて読みたい | /blog | reform | — | 2 |
 | /blog/category/roof-painting | コラムのカテゴリ | 屋根塗装 コラム |  | 屋根塗装についての記事を、まとめて読みたい | /blog | roof-painting | — | 4 |
 | /blog/category/subsidy | コラムのカテゴリ | 補助金 コラム |  | 補助金についての記事を、まとめて読みたい | /blog | — | — | 3 |
-| /blog/category/toilet | コラムのカテゴリ | トイレ コラム |  | トイレについての記事を、まとめて読みたい | /blog | toilet | — | 3 |
+| /blog/category/toilet | コラムのカテゴリ | トイレ コラム |  | トイレについての記事を、まとめて読みたい | /blog | toilet | — | 4 |
 | /blog/category/totsuka（noindex） | コラムのカテゴリ | 戸塚区 コラム |  | 戸塚区についての記事を、まとめて読みたい | /blog | — | — | 1 |
 | /blog/category/water-heater（noindex） | コラムのカテゴリ | 給湯器 コラム |  | 給湯器についての記事を、まとめて読みたい | /blog | water-heater | — | 2 |
 | /blog/category/yokohama | コラムのカテゴリ | 横浜市 コラム |  | 横浜市についての記事を、まとめて読みたい | /blog | — | — | 3 |
@@ -197,11 +198,11 @@
 
 | URL | index | title（全角換算の字数） | description の字数 | h1 | h2 | 構造化データ | 本文のリンク | 被リンク | 画像（alt なし） | 本文の字数 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| / | ○ | 横浜総合住設｜横浜市戸塚区の住宅設備・リフォーム会社（26） | 105.5 | 横浜市 戸塚区 の住宅設備・リフォーム 株式会社 横浜総合住設 | 11 | （共通のみ） | 40 | 107 | 59（0） | 6128 |
+| / | ○ | 横浜総合住設｜横浜市戸塚区の住宅設備・リフォーム会社（26） | 105.5 | 横浜市 戸塚区 の住宅設備・リフォーム 株式会社 横浜総合住設 | 11 | （共通のみ） | 40 | 108 | 59（0） | 6134 |
 | /area | ○ | 対応エリア｜横浜市戸塚区を中心に神奈川・東京｜横浜総合住設（29） | 87 | 戸塚区を中心に、 横浜市全域・神奈川・東京へ。 | 5 | BreadcrumbList | 4 | 19 | 5（0） | 1176 |
 | /area/totsuka | ○ | 横浜市戸塚区の住宅設備・リフォーム｜横浜総合住設（24） | 103 | 横浜市戸塚区の 住宅設備・ リフォーム | 10 | BreadcrumbList、FAQPage | 23 | 24 | 9（0） | 4254 |
 | /area/yokohama | ○ | 横浜市の住宅設備・リフォーム｜対応エリアと支援制度（25） | 111 | 横浜市の 住宅設備・ リフォーム | 10 | BreadcrumbList、FAQPage | 19 | 12 | 9（0） | 4061 |
-| /blog | ○ | 住宅設備コラム｜交換時期・選び方・費用の考え方｜横浜総合住設（30） | 95 | 住宅設備コラム | 13 | BreadcrumbList、ItemList | 33 | 61 | 16（0） | 2063 |
+| /blog | ○ | 住宅設備コラム｜交換時期・選び方・費用の考え方｜横浜総合住設（30） | 95 | 住宅設備コラム | 13 | BreadcrumbList、ItemList | 33 | 62 | 16（0） | 2054 |
 | /blog/aircon-installation-pre-check | ○ | エアコン取り付けの事前確認。穴・コンセント・室外機・配管（28） | 93 | エアコン取り付けの 事前確認。 穴・ コンセント・ 室外機・ 配管 | 11 | BlogPosting、BreadcrumbList、FAQPage | 15 | 13 | 9（0） | 3576 |
 | /blog/aircon-pipe-lagging-cover | ○ | 空調配管のラッキングとは。屋外の配管を守る金属のカバー（27） | 90 | 空調配管の ラッキングとは。 屋外の 配管を 守る 金属の カバー | 11 | BlogPosting、BreadcrumbList、FAQPage | 16 | 12 | 9（0） | 3642 |
 | /blog/aircon-pipe-tape-or-cover | ○ | エアコンの配管、化粧テープと化粧カバーの違い｜横浜総合住設（29） | 86 | エアコンの 配管、 化粧テープと 化粧カバーの 違い | 11 | BlogPosting、BreadcrumbList、FAQPage | 14 | 7 | 9（0） | 2643 |
@@ -220,7 +221,7 @@
 | /blog/category/reform | noindex | 「リフォーム」のコラム一覧｜住宅設備コラム｜横浜総合住設（28） | 80.5 | 「 リフォーム 」のコラム | 3 | BreadcrumbList、ItemList | 22 | 23 | 6（0） | 663 |
 | /blog/category/roof-painting | ○ | 「屋根塗装」のコラム一覧｜住宅設備コラム｜横浜総合住設（27） | 84.5 | 「 屋根塗装 」のコラム | 5 | BreadcrumbList、ItemList | 24 | 24 | 8（0） | 926 |
 | /blog/category/subsidy | ○ | 「補助金」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 83.5 | 「 補助金 」のコラム | 4 | BreadcrumbList、ItemList | 23 | 24 | 7（0） | 791 |
-| /blog/category/toilet | ○ | 「トイレ」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 83.5 | 「 トイレ 」のコラム | 4 | BreadcrumbList、ItemList | 23 | 23 | 7（0） | 779 |
+| /blog/category/toilet | ○ | 「トイレ」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 83.5 | 「 トイレ 」のコラム | 5 | BreadcrumbList、ItemList | 24 | 24 | 8（0） | 918 |
 | /blog/category/totsuka | noindex | 「戸塚区」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 74.5 | 「 戸塚区 」のコラム | 2 | BreadcrumbList、ItemList | 21 | 21 | 5（0） | 504 |
 | /blog/category/water-heater | noindex | 「給湯器」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 83.5 | 「 給湯器 」のコラム | 3 | BreadcrumbList、ItemList | 22 | 23 | 6（0） | 632 |
 | /blog/category/yokohama | ○ | 「横浜市」のコラム一覧｜住宅設備コラム｜横浜総合住設（26） | 74.5 | 「 横浜市 」のコラム | 4 | BreadcrumbList、ItemList | 23 | 23 | 7（0） | 800 |
@@ -233,16 +234,16 @@
 | /blog/exterior-wall-chalking-check | ○ | 外壁を触ると白い粉、チョーキングの確かめ方と塗り替えの判断（29） | 89 | 外壁を 触ると 白い 粉、 チョーキングの 確かめ方と 塗り替えの 判断 | 12 | BlogPosting、BreadcrumbList、FAQPage | 13 | 6 | 7（0） | 3460 |
 | /blog/exterior-wall-crack-repair-needed | ○ | 外壁のひび割れ補修は必要か。様子を見てよいひびと補修が要るひび（31） | 85 | 外壁の ひび割れ補修は 必要か。 様子を 見てよい ひびと 補修が 要る ひび | 11 | BlogPosting、BreadcrumbList、FAQPage | 14 | 7 | 7（0） | 3574 |
 | /blog/garden-tree-pruning-season | ○ | 庭木の剪定時期はいつ？落葉樹は冬、常緑樹は春から初夏か秋（28） | 93 | 庭木の 剪定時期は いつ？ 落葉樹は 冬、 常緑樹は 春から 初夏か 秋 | 11 | BlogPosting、BreadcrumbList、FAQPage | 13 | 6 | 6（0） | 3168 |
-| /blog/gas-stove-safety-sensor-check | ○ | ガスコンロの安全装置を確認する方法、2008年10月が境目（26） | 94 | ガスコンロの 安全装置を 確認する 方法、 2008年10月が 境目 | 12 | BlogPosting、BreadcrumbList、FAQPage | 12 | 7 | 6（0） | 3570 |
+| /blog/gas-stove-safety-sensor-check | ○ | ガスコンロの安全装置を確認する方法、2008年10月が境目（26） | 94 | ガスコンロの 安全装置を 確認する 方法、 2008年10月が 境目 | 12 | BlogPosting、BreadcrumbList、FAQPage | 12 | 6 | 6（0） | 3570 |
 | /blog/gas-to-ecocute-switch-work | ○ | ガス給湯器からエコキュートへの切り替え工事で行う5つのこと（28.5） | 97 | ガス給湯器から エコキュートへの 切り替え工事で 行う 5つの こと | 13 | BlogPosting、BreadcrumbList、FAQPage | 11 | 7 | 7（0） | 3909 |
-| /blog/housing-equipment-ten-year-check | ○ | 住宅設備の10年点検。給湯器・エアコン・コンロの見直し目安（28） | 95 | 住宅設備の 10年点検。 給湯器・ エアコン・ コンロの 見直し目安 | 12 | BlogPosting、BreadcrumbList、FAQPage | 15 | 15 | 8（0） | 3841 |
+| /blog/housing-equipment-ten-year-check | ○ | 住宅設備の10年点検。給湯器・エアコン・コンロの見直し目安（28） | 95 | 住宅設備の 10年点検。 給湯器・ エアコン・ コンロの 見直し目安 | 12 | BlogPosting、BreadcrumbList、FAQPage | 15 | 14 | 8（0） | 3841 |
 | /blog/inner-window-subsidy-2026 | ○ | 内窓の補助金2026、先進的窓リノベ2026事業の額と条件（25） | 82.5 | 内窓の 補助金2026、 先進的窓リノベ2026事業の 額と 条件 | 12 | BlogPosting、BreadcrumbList、FAQPage | 11 | 11 | 6（0） | 3502 |
 | /blog/inner-window-what-changes | ○ | 内窓の効果とは？結露・寒さ・音が変わる仕組みと付けられる窓（29） | 88 | 内窓の 効果とは？ 結露・ 寒さ・ 音が 変わる 仕組みと 付けられる 窓 | 12 | BlogPosting、BreadcrumbList、FAQPage | 11 | 11 | 6（0） | 3654 |
 | /blog/kyutou-shoene-2026-outline | ○ | 給湯省エネ2026事業の補助額と、申請の前に知っておくこと（27） | 91 | 給湯省エネ2026事業の 補助額と、 申請の 前に 知って おく こと | 11 | BlogPosting、BreadcrumbList、FAQPage | 12 | 12 | 8（0） | 2941 |
-| /blog/mansion-reform-rules-check | ○ | マンションのリフォーム、管理規約で最初に確認する3つのこと（28.5） | 96.5 | マンションの リフォーム、 管理規約で 最初に 確認する 3つの こと | 10 | BlogPosting、BreadcrumbList、FAQPage | 15 | 14 | 9（0） | 3668 |
-| /blog/page/2 | noindex | 住宅設備コラム（2ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 2 ページ目 | 13 | BreadcrumbList、ItemList | 33 | 2 | 16（0） | 2053 |
-| /blog/page/3 | noindex | 住宅設備コラム（3ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 3 ページ目 | 13 | BreadcrumbList、ItemList | 33 | 2 | 16（0） | 1954 |
-| /blog/page/4 | noindex | 住宅設備コラム（4ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 4 ページ目 | 6 | BreadcrumbList、ItemList | 25 | 3 | 9（0） | 995 |
+| /blog/mansion-reform-rules-check | ○ | マンションのリフォーム、管理規約で最初に確認する3つのこと（28.5） | 96.5 | マンションの リフォーム、 管理規約で 最初に 確認する 3つの こと | 10 | BlogPosting、BreadcrumbList、FAQPage | 15 | 13 | 9（0） | 3668 |
+| /blog/page/2 | noindex | 住宅設備コラム（2ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 2 ページ目 | 13 | BreadcrumbList、ItemList | 33 | 2 | 16（0） | 2061 |
+| /blog/page/3 | noindex | 住宅設備コラム（3ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 3 ページ目 | 13 | BreadcrumbList、ItemList | 33 | 2 | 16（0） | 1964 |
+| /blog/page/4 | noindex | 住宅設備コラム（4ページ目）｜横浜総合住設（20.5） | 65.5 | 住宅設備コラム 4 ページ目 | 7 | BreadcrumbList、ItemList | 26 | 3 | 10（0） | 1125 |
 | /blog/range-hood-deep-or-slim | ○ | レンジフードの深型と薄型の違い、替えるときに要る幕板と確認点（30） | 96 | レンジフードの 深型と 薄型の 違い、 替える ときに 要る 幕板と 確認点 | 10 | BlogPosting、BreadcrumbList、FAQPage | 12 | 5 | 6（0） | 3230 |
 | /blog/reform-asbestos-pre-survey | ○ | リフォームでも石綿の事前調査は必要。報告が要る工事と調査する人（31） | 90 | リフォームでも 石綿の 事前調査は 必要。 報告が 要る 工事と 調査する 人 | 11 | BlogPosting、BreadcrumbList、FAQPage | 12 | 6 | 6（0） | 3121 |
 | /blog/reform-priority-order | ○ | リフォームの優先順位はどう決める？急ぐ工事とあとでよい工事（29） | 103 | リフォームの 優先順位は どう 決める？ 急ぐ 工事と あとで よい 工事 | 11 | BlogPosting、BreadcrumbList、FAQPage | 15 | 12 | 8（0） | 3946 |
@@ -252,21 +253,22 @@
 | /blog/roof-painting-engiri-taspacer | ○ | 屋根塗装の縁切りとタスペーサー、スレートの重なり目をふさがない理由（33） | 93 | 屋根塗装の 縁切りと タスペーサー、 スレートの 重なり目を ふさが ない 理由 | 12 | BlogPosting、BreadcrumbList、FAQPage | 12 | 5 | 6（0） | 3295 |
 | /blog/stove-and-range-hood-together | ○ | コンロとレンジフードの同時交換、連動機能と工事が一度で済む利点（31） | 101 | コンロと レンジフードの 同時交換、 連動機能と 工事が 一度で 済む利点 | 11 | BlogPosting、BreadcrumbList、FAQPage | 12 | 7 | 6（0） | 3238 |
 | /blog/subsidy-who-applies-comparison | ○ | 住宅設備の補助金は誰が申請する？国・神奈川県・横浜市で違う決まり（32） | 102 | 住宅設備の 補助金は 誰が 申請する？ 国・ 神奈川県・ 横浜市で 違う 決まり | 11 | BlogPosting、BreadcrumbList、FAQPage | 12 | 10 | 7（0） | 3998 |
-| /blog/toilet-drain-position-check | ○ | トイレ交換の前に確かめる排水芯とは？合う便器の見分け方（27） | 78 | トイレ交換の 前に 確かめる 排水芯とは？ 合う 便器の 見分け方 | 11 | BlogPosting、BreadcrumbList、FAQPage | 10 | 6 | 6（0） | 2446 |
+| /blog/toilet-drain-position-check | ○ | トイレ交換の前に確かめる排水芯とは？合う便器の見分け方（27） | 78 | トイレ交換の 前に 確かめる 排水芯とは？ 合う 便器の 見分け方 | 11 | BlogPosting、BreadcrumbList、FAQPage | 10 | 7 | 6（0） | 2448 |
 | /blog/toilet-floor-renewal-timing | ○ | トイレ交換と床の張り替えは同時に。便器の下は外したときだけ張れる（32） | 86 | トイレ交換と 床の 張り替えは 同時に。 便器の 下は 外した ときだけ 張れる | 10 | BlogPosting、BreadcrumbList、FAQPage | 10 | 7 | 6（0） | 3056 |
-| /blog/toilet-types-three-kinds | ○ | 便器の種類の違い。組み合わせ・一体型・タンクレスの選び方（28） | 106 | 便器の 種類の 違い。 組み合わせ・ 一体型・ タンクレスの 選び方 | 11 | BlogPosting、BreadcrumbList、FAQPage | 11 | 6 | 5（0） | 3440 |
+| /blog/toilet-tankless-water-pressure | ○ | タンクレストイレの設置条件、水圧と手洗い器と停電時の確認（28） | 98 | タンクレストイレの 設置条件、 水圧と 手洗い器と 停電時の 確認 | 11 | BlogPosting、BreadcrumbList、FAQPage | 12 | 7 | 5（0） | 3151 |
+| /blog/toilet-types-three-kinds | ○ | 便器の種類の違い。組み合わせ・一体型・タンクレスの選び方（28） | 106 | 便器の 種類の 違い。 組み合わせ・ 一体型・ タンクレスの 選び方 | 11 | BlogPosting、BreadcrumbList、FAQPage | 11 | 7 | 5（0） | 3436 |
 | /blog/totsuka-ecocute-carry-in-route | ○ | エコキュートの搬入経路。戸塚区の高低差のある家で確かめること（30） | 83 | エコキュートの 搬入経路。 戸塚区の 高低差の ある 家で 確かめる こと | 11 | BlogPosting、BreadcrumbList、FAQPage | 11 | 9 | 7（0） | 2808 |
 | /blog/water-heater-capacity-guide | ○ | 給湯器の号数とは？16号・20号・24号の違いと選び方｜横浜総合住設（31） | 79 | 給湯器の 号数とは？ 16号・ 20号・ 24号の 違いと 選び方 | 11 | BlogPosting、BreadcrumbList、FAQPage | 11 | 8 | 7（0） | 2567 |
 | /blog/water-heater-replacement-signs | ○ | 給湯器の交換時期はいつ？故障の前に出る5つのサイン（24.5） | 85.5 | 給湯器の 交換時期は いつ？ 故障の 前に 出る 5つの サイン | 12 | BlogPosting、BreadcrumbList、FAQPage | 13 | 11 | 8（0） | 2710 |
 | /blog/weed-control-sheet-and-gravel | ○ | 庭の雑草対策は光をさえぎること。防草シートと砂利の敷き方（28） | 93 | 庭の 雑草対策は 光を さえぎる こと。 防草シートと 砂利の 敷き方 | 12 | BlogPosting、BreadcrumbList、FAQPage | 12 | 7 | 6（0） | 3400 |
 | /blog/wood-deck-foundation-steps | ○ | ウッドデッキは下地で決まる。整地・防草シート・束石の役割（28） | 76.5 | ウッドデッキは 下地で 決まる。 整地・ 防草シート・ 束石の 役割 | 10 | BlogPosting、BreadcrumbList、FAQPage | 11 | 6 | 6（0） | 2305 |
 | /blog/yokohama-energy-point-program-2026 | ○ | 横浜グリーンエネルギーパートナーシップのポイント還元額と条件（30） | 112 | 横浜グリーンエネルギーパートナーシップの ポイント還元額と 条件 | 12 | BlogPosting、BreadcrumbList、FAQPage | 13 | 8 | 7（0） | 3611 |
-| /blog/yokohama-insulation-renovation-support | ○ | 横浜市の断熱改修の補助、対象になる工事とならない工事（26） | 108 | 横浜市の 断熱改修の 補助、 対象に なる 工事とならない 工事 | 12 | BlogPosting、BreadcrumbList、FAQPage | 15 | 17 | 8（0） | 3898 |
+| /blog/yokohama-insulation-renovation-support | ○ | 横浜市の断熱改修の補助、対象になる工事とならない工事（26） | 108 | 横浜市の 断熱改修の 補助、 対象に なる 工事とならない 工事 | 12 | BlogPosting、BreadcrumbList、FAQPage | 15 | 16 | 8（0） | 3898 |
 | /business | ○ | 法人・工務店・ハウスメーカーの方へ｜設備工事の協力先（26） | 111 | 法人・ 工務店・ ハウスメーカーの 方へ | 6 | BreadcrumbList、FAQPage | 4 | 2 | 8（0） | 1961 |
-| /company | ○ | 会社案内｜株式会社 横浜総合住設（15.5） | 98.5 | 会社案内 | 7 | BreadcrumbList | 23 | 42 | 9（0） | 2753 |
-| /contact | ○ | お問い合わせ・無料見積もり｜横浜総合住設（20） | 112 | お問い合わせ・ 無料見積もり | 1 | BreadcrumbList | 3 | 107 | 4（0） | 1051 |
+| /company | ○ | 会社案内｜株式会社 横浜総合住設（15.5） | 98.5 | 会社案内 | 7 | BreadcrumbList | 23 | 43 | 9（0） | 2753 |
+| /contact | ○ | お問い合わせ・無料見積もり｜横浜総合住設（20） | 112 | お問い合わせ・ 無料見積もり | 1 | BreadcrumbList | 3 | 108 | 4（0） | 1051 |
 | /faq | ○ | よくある質問｜見積もり・対応エリア・補助金｜横浜総合住設（28） | 92 | よく ある 質問 | 7 | BreadcrumbList、FAQPage | 19 | 19 | 4（0） | 2202 |
-| /flow | ○ | 工事の流れ｜お問い合わせから完了まで｜横浜総合住設（25） | 96 | 工事の 流れ | 10 | BreadcrumbList | 4 | 14 | 20（0） | 1427 |
+| /flow | ○ | 工事の流れ｜お問い合わせから完了まで｜横浜総合住設（25） | 96 | 工事の 流れ | 10 | BreadcrumbList | 4 | 15 | 20（0） | 1427 |
 | /privacy | ○ | プライバシーポリシー｜横浜総合住設（17） | 88.5 | プライバシーポリシー | 11 | BreadcrumbList | 2 | 1 | 2（0） | 1331 |
 | /service | ○ | 事業内容・サービス一覧｜住宅設備からリフォームまで（25） | 105.5 | 事業内容・ サービス一覧 | 6 | BreadcrumbList、ItemList | 19 | 24 | 22（0） | 2020 |
 | /service/air-conditioner | ○ | エアコン取り付け・交換・修理｜横浜総合住設（21） | 103 | エアコン取り付け・ 交換・ 修理 | 13 | BreadcrumbList、FAQPage、Service | 21 | 23 | 19（0） | 5673 |
@@ -278,12 +280,12 @@
 | /service/garden | ○ | 戸塚区の造園・外構工事｜剪定・伐採・ウッドデッキ｜横浜総合住設（31） | 91 | 横浜市戸塚区の 造園・ 外構工事 | 12 | BreadcrumbList、FAQPage、Service | 17 | 12 | 16（0） | 3059 |
 | /service/kitchen-equipment | ○ | 戸塚区のビルトインコンロ・レンジフード交換｜横浜総合住設（28） | 98 | 横浜市戸塚区の ビルトインコンロ・ レンジフード交換 | 11 | BreadcrumbList、FAQPage、Service | 18 | 17 | 14（0） | 3289 |
 | /service/other | ○ | 浴室暖房乾燥機の交換・カップボード・水栓の工事｜横浜市戸塚区（30） | 108 | 横浜市戸塚区の 浴室暖房乾燥機の 交換・ カップボード・ 水栓の 工事 | 11 | BreadcrumbList、FAQPage、Service | 19 | 15 | 17（0） | 3099 |
-| /service/reform | ○ | 戸塚区の住宅リフォーム｜キッチン・浴室・洗面・内装（25） | 92 | 横浜市戸塚区の 住宅リフォーム | 13 | BreadcrumbList、FAQPage、Service | 23 | 35 | 19（0） | 5394 |
+| /service/reform | ○ | 戸塚区の住宅リフォーム｜キッチン・浴室・洗面・内装（25） | 92 | 横浜市戸塚区の 住宅リフォーム | 13 | BreadcrumbList、FAQPage、Service | 23 | 36 | 19（0） | 5394 |
 | /service/roof-painting | ○ | 戸塚区の屋根塗装・屋根の塗り替え｜横浜総合住設（23） | 103 | 横浜市戸塚区の 屋根塗装 | 14 | BreadcrumbList、FAQPage、Service | 18 | 17 | 17（0） | 5183 |
 | /service/solar | ○ | 戸塚区の太陽光発電の設置工事｜横浜総合住設（21） | 92 | 横浜市戸塚区の 太陽光発電の 設置工事 | 13 | BreadcrumbList、FAQPage、Service | 15 | 14 | 14（0） | 4918 |
 | /service/storage-battery | ○ | 戸塚区の家庭用蓄電池の設置工事｜横浜総合住設（22） | 90 | 横浜市戸塚区の 家庭用蓄電池の 設置工事 | 11 | BreadcrumbList、FAQPage、Service | 15 | 12 | 13（0） | 4589 |
 | /service/tatami | ○ | 畳・襖の張り替え｜横浜市戸塚区・琉球畳への張り替えも（26） | 98 | 横浜市戸塚区の 畳・ 襖の 張り替え | 10 | BreadcrumbList、FAQPage、Service | 15 | 7 | 13（0） | 2549 |
-| /service/toilet | ○ | 戸塚区のトイレ交換・トイレリフォーム｜横浜総合住設（25） | 84 | 横浜市戸塚区の トイレ交換・ トイレリフォーム | 11 | BreadcrumbList、FAQPage、Service | 16 | 12 | 13（0） | 3803 |
+| /service/toilet | ○ | 戸塚区のトイレ交換・トイレリフォーム｜横浜総合住設（25） | 84 | 横浜市戸塚区の トイレ交換・ トイレリフォーム | 11 | BreadcrumbList、FAQPage、Service | 16 | 13 | 13（0） | 3799 |
 | /service/water-heater | ○ | 給湯器交換（ガス給湯器・エコジョーズ）｜横浜総合住設（26） | 108 | 給湯器交換 （ガス給湯器・ エコジョーズ） | 11 | BreadcrumbList、FAQPage、Service | 18 | 23 | 14（0） | 5107 |
 | /service/window | ○ | 内窓の設置・窓の交換｜横浜市戸塚区の窓リフォーム｜横浜総合住設（31） | 93 | 横浜市戸塚区の 内窓の 設置・ 窓の 交換 | 11 | BreadcrumbList、FAQPage、Service | 16 | 11 | 12（0） | 3595 |
 | /works | ○ | 施工事例｜エアコン・浴室・畳・外壁塗装・ウッドデッキ（26） | 113 | 施工事例 | 4 | BreadcrumbList、ItemList | 22 | 58 | 20（0） | 1914 |
@@ -302,7 +304,7 @@
 | /works/service/reform | ○ | 住宅リフォームの施工事例（3件）｜横浜総合住設（22.5） | 110 | 住宅リフォームの 施工事例 | 6 | BreadcrumbList、ItemList | 11 | 5 | 6（0） | 909 |
 | /works/tatami-ryukyu-replacement | ○ | 縁のある畳から、琉球畳への張り替え｜施工事例｜横浜総合住設（29） | 63 | 縁の ある 畳から、 琉球畳への 張り替え | 7 | Article、BreadcrumbList | 11 | 16 | 9（0） | 1088 |
 | /works/unit-bath-reform | ○ | ユニットバスリフォーム｜壁と天井を外し、新しい浴槽を据えるまで｜施工事例（36） | 82 | ユニットバスリフォーム ── 壁と 天井を 外し、 新しい 浴槽を 据えるまで | 7 | Article、BreadcrumbList | 11 | 11 | 8（0） | 1202 |
-| /works/washroom-creation | ○ | 洗面所をつくる工事｜木のカウンターと角形の洗面ボウル｜施工事例（31） | 72 | 洗面所を つくる 工事 ── 木の カウンターと 角形の 洗面ボウル | 7 | Article、BreadcrumbList | 11 | 20 | 8（0） | 1180 |
+| /works/washroom-creation | ○ | 洗面所をつくる工事｜木のカウンターと角形の洗面ボウル｜施工事例（31） | 72 | 洗面所を つくる 工事 ── 木の カウンターと 角形の 洗面ボウル | 7 | Article、BreadcrumbList | 11 | 21 | 8（0） | 1177 |
 | /works/water-heater-flue-replacement | ○ | 煙突（排気筒）付きの給湯器の交換｜施工事例｜横浜総合住設（28） | 83 | 煙突 （排気筒） 付きの 給湯器の 交換 | 6 | Article、BreadcrumbList | 10 | 7 | 7（0） | 1009 |
 | /works/wood-deck-installation | ○ | ウッドデッキの設置｜整地から完成まで｜施工事例｜横浜総合住設（30） | 67 | ウッドデッキの 設置 ── 整地から 完成まで | 9 | Article、BreadcrumbList | 10 | 6 | 12（0） | 1287 |
 
@@ -320,7 +322,7 @@
 | エネファーム | /service/ene-farm | 1 | 0 | 0 | 1 |
 | ECO ONE | /service/eco-one | 0 | 0 | 0 | 0 |
 | エアコン | /service/air-conditioner | 4 | 0 | 0 | 4 |
-| トイレ | /service/toilet | 3 | 1 | 27 | 31 |
+| トイレ | /service/toilet | 4 | 0 | 27 | 31 |
 | キッチン | /service/kitchen-equipment | 3 | 0 | 15 | 18 |
 | レンジフード | /service/kitchen-equipment | 2 | 0 | 11 | 13 |
 | 外壁塗装 | /service/exterior-painting | 4 | 3 | 26 | 33 |
@@ -342,13 +344,12 @@
 
 | 順 | 優先度 | カテゴリ | 主キーワード | 題名の方向 | 親ページ |
 | --- | --- | --- | --- | --- | --- |
-| 1 | P1 | トイレ | タンクレストイレ 設置 条件 | タンクレストイレは、どの家にも付く？水圧と手洗いの確認 | /service/toilet |
-| 2 | P1 | 補助金 | みらいエコ住宅2026 リフォーム 条件 | みらいエコ住宅2026事業、給湯器の交換だけでは使えない理由 | /area/yokohama |
-| 3 | P1 | 外壁塗装 | 外壁塗装 塗料 種類 | 外壁の塗料の選び方。次の塗り替えをいつにしたいかで決める | /service/exterior-painting |
-| 4 | P1 | 屋根塗装 | 太陽光パネル 屋根塗装 順番 | 太陽光パネルを載せる前に、屋根は塗るべき？順番の考え方 | /service/roof-painting |
-| 5 | P1 | 屋根塗装 | 棟板金 釘 浮き | 屋根のてっぺんの板金の釘が浮いていると言われたら | /service/roof-painting |
-| 6 | P1 | 外壁塗装 | 外壁 シーリング 打ち替え 増し打ち | 外壁の目地（シーリング）の打ち替えと増し打ちの違い | /service/exterior-painting |
-| 7 | P1 | 屋根塗装 | 屋根 点検 自分で | 屋根に上らずに、屋根の状態を確かめる方法 | /service/roof-painting |
-| 8 | P1 | 外壁塗装 | 外壁塗装 付帯部 破風 雨どい | 外壁塗装の「付帯部」とは。破風・軒天・雨どいを一緒に塗る理由 | /service/exterior-painting |
-| 9 | P2 | 解体 | リフォーム 解体 範囲 | リフォームの解体は、どこまで壊す？取れる壁と取れない壁 | /service/demolition |
+| 1 | P1 | 補助金 | みらいエコ住宅2026 リフォーム 条件 | みらいエコ住宅2026事業、給湯器の交換だけでは使えない理由 | /area/yokohama |
+| 2 | P1 | 外壁塗装 | 外壁塗装 塗料 種類 | 外壁の塗料の選び方。次の塗り替えをいつにしたいかで決める | /service/exterior-painting |
+| 3 | P1 | 屋根塗装 | 太陽光パネル 屋根塗装 順番 | 太陽光パネルを載せる前に、屋根は塗るべき？順番の考え方 | /service/roof-painting |
+| 4 | P1 | 屋根塗装 | 棟板金 釘 浮き | 屋根のてっぺんの板金の釘が浮いていると言われたら | /service/roof-painting |
+| 5 | P1 | 外壁塗装 | 外壁 シーリング 打ち替え 増し打ち | 外壁の目地（シーリング）の打ち替えと増し打ちの違い | /service/exterior-painting |
+| 6 | P1 | 屋根塗装 | 屋根 点検 自分で | 屋根に上らずに、屋根の状態を確かめる方法 | /service/roof-painting |
+| 7 | P1 | 外壁塗装 | 外壁塗装 付帯部 破風 雨どい | 外壁塗装の「付帯部」とは。破風・軒天・雨どいを一緒に塗る理由 | /service/exterior-painting |
+| 8 | P2 | 解体 | リフォーム 解体 範囲 | リフォームの解体は、どこまで壊す？取れる壁と取れない壁 | /service/demolition |
 
